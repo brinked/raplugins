@@ -789,6 +789,34 @@
 				});
 		});
 
+		// Build Improvement Plan: one click from "here is what matters" to
+		// changes waiting in the review queue. Runs the normal analysis and
+		// follows its redirect there.
+		$(document).on('click', '.ecp-build-plan', function () {
+			var $button = $(this);
+			var $status = $button.closest('.ecp-priority-card').find('.ecp-priority-status');
+
+			$button.prop('disabled', true);
+			$status.attr('class', 'ecp-priority-status').text(t('analyzing'));
+
+			post('analyze', { post_id: $button.data('post') })
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.count > 0 && data.redirect) {
+						window.setTimeout(function () {
+							window.location.href = data.redirect;
+						}, 1200);
+					} else {
+						$button.prop('disabled', false);
+					}
+				})
+				.fail(function (message) {
+					$status.attr('class', 'ecp-priority-status is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
 		// Today's Priority card: postpone and dismiss act on the underlying
 		// opportunity through the existing endpoints, then retire the card.
 		$(document).on('click', '.ecp-priority-snooze, .ecp-priority-dismiss', function () {

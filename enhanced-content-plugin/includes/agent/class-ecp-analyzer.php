@@ -880,6 +880,8 @@ class ECP_Analyzer {
         $out[] = '- image_alt: the image src as given in the issue list.';
         $out[] = '- faq_add, source_add: leave target empty.';
         $out[] = '';
+        $out[] = 'For meta_title and meta_description changes, set "style" to the tag that best describes the copy\'s angle (benefit_driven, question, how_to, list, year_fresh, brand, or plain). For every other change type set it to not_applicable. Tag honestly — this site measures which styles actually win clicks here and learns from it.';
+        $out[] = '';
         $out[] = 'For rewrites and additions, "content" is the complete replacement HTML for that whole section, heading included.';
         $out[] = 'For internal_link_add, "content" is the complete replacement HTML for the section, with exactly one new <a href> added.';
         $out[] = 'For faq_add, "content" is a JSON array of {"question","answer"} objects.';
@@ -995,6 +997,11 @@ class ECP_Analyzer {
                                 'type' => 'integer',
                                 'description' => '0-100. How much this single change is likely to matter for this page.',
                             ),
+                            'style' => array(
+                                'type' => 'string',
+                                'enum' => array('benefit_driven', 'question', 'how_to', 'list', 'year_fresh', 'brand', 'plain', 'not_applicable'),
+                                'description' => 'For meta_title and meta_description changes only: the copy\'s angle. benefit_driven leads with the payoff; question mirrors the search; how_to promises steps; list promises N items; year_fresh leads with currency; brand leads with the site name; plain is none of those. Everything else: not_applicable.',
+                            ),
                             'needs_fact_check' => array(
                                 'type' => 'boolean',
                                 'description' => 'True if this contains anything you could not verify from the supplied material.',
@@ -1007,7 +1014,7 @@ class ECP_Analyzer {
                         ),
                         'required' => array(
                             'type', 'target', 'title', 'content', 'rationale',
-                            'addresses_issue', 'confidence', 'impact',
+                            'addresses_issue', 'style', 'confidence', 'impact',
                             'needs_fact_check', 'unverified_claims',
                         ),
                         'additionalProperties' => false,
@@ -1102,6 +1109,14 @@ class ECP_Analyzer {
                     'addresses_issue'   => isset($change['addresses_issue']) ? $change['addresses_issue'] : '',
                     'unverified_claims' => isset($change['unverified_claims']) ? (array) $change['unverified_claims'] : array(),
                     'summary'           => isset($data['summary']) ? $data['summary'] : '',
+                    // Site Memory's raw material: what STYLE of copy this
+                    // was. Measurement attaches the outcome later, and the
+                    // aggregate — "benefit-driven titles outperform on this
+                    // site, 4 of 5 tests" — is the institutional memory a
+                    // generic tool can never have. Recorded from day one
+                    // because outcomes cannot be backfilled onto changes
+                    // that never noted their style.
+                    'style'             => isset($change['style']) && 'not_applicable' !== $change['style'] ? $change['style'] : '',
                 ),
                 'before_value' => $verdict['before'],
                 'after_value'  => $verdict['after'],

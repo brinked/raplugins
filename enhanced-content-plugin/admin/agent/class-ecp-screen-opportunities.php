@@ -145,6 +145,31 @@ class ECP_Screen_Opportunities {
                         ?>
                     <?php endif; ?>
                 </div>
+                <?php
+                // WHY this page was picked, in one evidence-bearing sentence.
+                // The reason label names the category; the worst issue's
+                // detail carries the actual numbers, which is what makes a
+                // recommendation checkable rather than an assertion.
+                $why = '';
+
+                foreach ($issues as $issue) {
+                    if (empty($issue['detail'])) {
+                        continue;
+                    }
+
+                    if ('' === $why) {
+                        $why = $issue['detail'];   // Fallback: first detail found.
+                    }
+
+                    if (isset($issue['severity']) && 'high' === $issue['severity']) {
+                        $why = $issue['detail'];   // First high-severity detail wins outright.
+                        break;
+                    }
+                }
+                ?>
+                <?php if ($why) : ?>
+                    <div class="ecp-row-why"><?php echo esc_html(wp_html_excerpt($why, 180, '…')); ?></div>
+                <?php endif; ?>
             </td>
 
             <td>

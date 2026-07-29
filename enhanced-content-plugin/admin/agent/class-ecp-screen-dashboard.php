@@ -254,8 +254,9 @@ class ECP_Screen_Dashboard {
     }
 
     /**
-     * Today's Priority: the one action most worth taking, with the reason
-     * and the evidence, and the right to say "not today".
+     * Today's Priority: the one action most worth taking — what is wrong,
+     * what the agent would do about it, what it costs and what it is
+     * worth, and one click from here to changes awaiting approval.
      */
     private static function render_priority() {
         $priority = ECP_Opportunity_Engine::top_priority();
@@ -265,6 +266,9 @@ class ECP_Screen_Dashboard {
         }
 
         $metrics = ECP_Search_Data::page_metrics((int) $priority['post_id']);
+        $issues = is_array($priority['reasons']) ? $priority['reasons'] : array();
+        $actions = self::priority_actions($issues);
+        $chips = self::priority_chips($priority, $issues, $metrics);
         ?>
         <div class="ecp-panel ecp-priority-card">
             <h2><?php esc_html_e("Today's priority", 'enhanced-content-plugin'); ?></h2>
@@ -288,6 +292,23 @@ class ECP_Screen_Dashboard {
                 </p>
             <?php endif; ?>
 
+            <?php if ($actions) : ?>
+                <p class="ecp-priority-plan-label"><?php esc_html_e('What the agent would do:', 'enhanced-content-plugin'); ?></p>
+                <ul class="ecp-priority-plan">
+                    <?php foreach ($actions as $action) : ?>
+                        <li><?php echo esc_html($action); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php endif; ?>
+
+            <p class="ecp-priority-chips">
+                <?php foreach ($chips as $chip) : ?>
+                    <span class="ecp-chip ecp-chip-<?php echo esc_attr($chip['tone']); ?>">
+                        <?php echo esc_html($chip['label']); ?>
+                    </span>
+                <?php endforeach; ?>
+            </p>
+
             <?php if ((float) $priority['potential_clicks'] > 0) : ?>
                 <p class="ecp-muted">
                     <?php
@@ -301,9 +322,14 @@ class ECP_Screen_Dashboard {
             <?php endif; ?>
 
             <p class="ecp-priority-actions">
-                <a class="button button-primary"
+                <?php if (ECP_Capabilities::can_analyze((int) $priority['post_id']) && ECP_Agent_Settings::is_ready()) : ?>
+                    <button type="button" class="button button-primary ecp-build-plan" data-post="<?php echo esc_attr($priority['post_id']); ?>">
+                        <?php esc_html_e('Build improvement plan', 'enhanced-content-plugin'); ?>
+                    </button>
+                <?php endif; ?>
+                <a class="button"
                    href="<?php echo esc_url(add_query_arg(array('page' => 'ecp-opportunities', 's' => rawurlencode($priority['post_title'])), admin_url('admin.php'))); ?>">
-                    <?php esc_html_e('Review this opportunity', 'enhanced-content-plugin'); ?>
+                    <?php esc_html_e('See details', 'enhanced-content-plugin'); ?>
                 </a>
                 <button type="button" class="button ecp-priority-snooze" data-post="<?php echo esc_attr($priority['post_id']); ?>">
                     <?php esc_html_e('Postpone a week', 'enhanced-content-plugin'); ?>
@@ -313,8 +339,91 @@ class ECP_Screen_Dashboard {
                 </button>
                 <span class="ecp-priority-status" aria-live="polite"></span>
             </p>
+            <p class="description">
+                <?php esc_html_e('Building the plan runs one AI analysis and puts the resulting changes in your review queue — nothing touches the page until you approve.', 'enhanced-content-plugin'); ?>
+            </p>
         </div>
         <?php
+    }
+
+    /**
+     * The stored issues turned into the plan's plain-language steps,
+     * highest severity first.
+     *
+     * @return string[]
+     */
+    private static function priority_actions(array $issues, $limit = 4) {
+        $rank = array('high' => 0, 'medium' => 1, 'low' => 2);
+
+        usort($issues, function ($a, $b) use ($rank) {
+            $sa = isset($rank[$a['severity']]) ? $rank[$a['severity']] : 3;
+            $sb = isset($rank[$b['severity']]) ? $rank[$b['severity']] : 3;
+
+            return $sa <=> $sb;
+        });
+
+        $actions = array();
+
+        foreach ($issues as $issue) {
+            if (count($actions) >= $limit) {
+                break;
+            }
+
+            if (!empty($issue['label'])) {
+                $actions[] = $issue['label'];
+            }
+        }
+
+        return $actions;
+    }
+
+    /**
+     * Effort / confidence / value chips, derived honestly from what is
+     * known rather than invented for decoration.
+     *
+     * Effort reads the fix types the issues call for: metadata and links
+     * are an approval each; section work means reading real diffs.
+     * Confidence is about the diagnosis: measured search behaviour beats
+     * on-page inference. Value tiers the modelled click upside.
+     *
+     * @return array[] { label, tone }
+     */
+    private static function priority_chips(array $priority, array $issues, $metrics) {
+        $light = array('meta_title', 'meta_description', 'image_alt', 'internal_link_add', 'source_add', 'faq_add', 'schema_fix');
+        $heavy = false;
+        $any = false;
+
+        foreach ($issues as $issue) {
+            foreach ((array) (isset($issue['fix_types']) ? $issue['fix_types'] : array()) as $type) {
+                $any = true;
+
+                if (!in_array($type, $light, true)) {
+                    $heavy = true;
+                }
+            }
+        }
+
+        $effort = !$any || !$heavy
+            ? array('label' => __('Effort: low — quick approvals', 'enhanced-content-plugin'), 'tone' => 'safe')
+            : array('label' => __('Effort: medium — section edits to review', 'enhanced-content-plugin'), 'tone' => 'moderate');
+
+        $measured = in_array($priority['primary_reason'], array('low_ctr', 'zero_clicks', 'striking_distance', 'traffic_decline', 'query_gap'), true) && $metrics;
+
+        $confidence = $measured
+            ? array('label' => __('Confidence: high — based on measured search data', 'enhanced-content-plugin'), 'tone' => 'safe')
+            : array('label' => __('Confidence: medium — based on on-page signals', 'enhanced-content-plugin'), 'tone' => 'moderate');
+
+        $clicks = (float) $priority['potential_clicks'];
+
+        if ($clicks >= 50) {
+            $value = array('label' => __('Value: high', 'enhanced-content-plugin'), 'tone' => 'safe');
+        } elseif ($clicks >= 10) {
+            $value = array('label' => __('Value: medium', 'enhanced-content-plugin'), 'tone' => 'moderate');
+        } else {
+            $value = array('label' => __('Value: modest', 'enhanced-content-plugin'), 'tone' => 'moderate');
+        }
+
+        return array($effort, $confidence, $value);
     }
 
     /**

@@ -1639,3 +1639,34 @@ a.ecp-band-badge:hover {
 	color: #b32d2e;
 	font-size: 12px;
 }
+
+/* Priority card v2: plan list and chips ---------------------------------- */
+
+.ecp-priority-plan-label {
+	margin: 0 0 4px;
+	font-weight: 600;
+	font-size: 13px;
+}
+
+.ecp-priority-plan {
+	margin: 0 0 10px 18px;
+	list-style: disc;
+}
+
+.ecp-priority-plan li {
+	margin-bottom: 2px;
+}
+
+.ecp-priority-chips {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin: 0 0 10px;
+}
+
+.ecp-row-why {
+	margin-top: 3px;
+	font-size: 12px;
+	color: #646970;
+	max-width: 640px;
+}

@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.9.0';
+    const SCHEMA_VERSION = '2.9.1';
 
     /* --------------------------------------------------------------------
      * Table names
