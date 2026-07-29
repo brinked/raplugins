@@ -76,9 +76,13 @@ class ECP_Topical_Map {
         $queries = self::measured_queries($seed);
         $excluded = (array) ECP_Site_Profile::get('excluded_topics');
 
+        // Licensed third-party demand data, when connected. Empty when
+        // not — the map is GSC-first and never depends on it.
+        $ideas = ECP_Serp::is_connected() ? ECP_Serp::keyword_ideas($seed, 40) : array();
+
         $response = ECP_AI_Client::request(
             self::system_prompt(),
-            self::user_prompt($seed, $pages, $queries, $excluded),
+            self::user_prompt($seed, $pages, $queries, $excluded, $ideas),
             self::schema(),
             array(
                 'job_type'       => 'map',
@@ -98,7 +102,12 @@ class ECP_Topical_Map {
             ? $response['data']['topics']
             : array();
 
-        $result = self::store($seed, $topics, $pages, $excluded);
+        $volumes = array();
+        foreach ($ideas as $idea) {
+            $volumes[strtolower($idea['keyword'])] = (int) $idea['volume'];
+        }
+
+        $result = self::store($seed, $topics, $pages, $excluded, $volumes);
 
         ECP_Log::info(ECP_Log::MAP_BUILT, sprintf(
             /* translators: 1: seed topic, 2: topics kept, 3: topics judged not worth writing */
@@ -253,7 +262,7 @@ class ECP_Topical_Map {
         return implode("\n", $lines);
     }
 
-    private static function user_prompt($seed, array $pages, array $queries, array $excluded) {
+    private static function user_prompt($seed, array $pages, array $queries, array $excluded, array $ideas = array()) {
         $out = array();
 
         $profile = ECP_Site_Profile::prompt_context();
@@ -309,6 +318,20 @@ class ECP_Topical_Map {
             $out[] = 'Search Console is not providing query data. Every proposed topic is a hypothesis; be conservative and say so in evidence_needs.';
         }
 
+        if ($ideas) {
+            $out[] = '';
+            $out[] = '## Third-party search volume estimates (licensed data)';
+            $out[] = 'Monthly search volumes from a licensed keyword database. These are estimates, not this site\'s own measurements — useful for topics the site does not rank for yet. Prefer main queries from this list or the measured list over invented ones.';
+
+            foreach ($ideas as $idea) {
+                $out[] = sprintf(
+                    '- "%s" — ~%d searches/month',
+                    $idea['keyword'],
+                    (int) $idea['volume']
+                );
+            }
+        }
+
         $out[] = '';
         $out[] = '## What to return';
         $out[] = 'The topic map: 15 to 25 topics in clusters, each fully classified.';
@@ -361,7 +384,7 @@ class ECP_Topical_Map {
      *
      * @return array { seed, total, restrained, created, updated }
      */
-    private static function store($seed, array $topics, array $pages, array $excluded) {
+    private static function store($seed, array $topics, array $pages, array $excluded, array $volumes = array()) {
         global $wpdb;
 
         $table = ECP_DB::topics_table();
@@ -401,7 +424,7 @@ class ECP_Topical_Map {
                 continue;
             }
 
-            $judgement = self::judge($topic, $entry, $pages);
+            $judgement = self::judge($topic, $entry, $pages, $volumes);
 
             if (self::SKIP === $judgement['verdict']) {
                 $restrained++;
@@ -458,12 +481,22 @@ class ECP_Topical_Map {
      *
      * @return array { coverage, verdict, reason, post_id, score, basis }
      */
-    private static function judge($topic, array $entry, array $pages) {
+    private static function judge($topic, array $entry, array $pages, array $volumes = array()) {
         global $wpdb;
 
         $main_query = trim((string) $entry['main_query']);
         $basis = array();
         $score = 0.0;
+
+        // Third-party volume, when known. Weighted down against measured
+        // impressions and recorded separately so the UI never presents an
+        // estimate as a measurement.
+        $volume = isset($volumes[strtolower($main_query)]) ? (int) $volumes[strtolower($main_query)] : 0;
+
+        if ($volume > 0) {
+            $basis['volume'] = $volume;
+            $score += $volume / 10;
+        }
 
         // --- Who already earns the main query? ---------------------------
         $owner_id = 0;
@@ -599,12 +632,22 @@ class ECP_Topical_Map {
             );
         }
 
+        if ($owner_impressions > 0) {
+            $reason = __('Nothing on the site covers this, and there is measured demand.', 'enhanced-content-plugin');
+        } elseif ($volume > 0) {
+            $reason = sprintf(
+                /* translators: %s: estimated monthly searches */
+                __('Nothing on the site covers this. A licensed database estimates roughly %s monthly searches — an estimate, not your own measurement.', 'enhanced-content-plugin'),
+                number_format_i18n($volume)
+            );
+        } else {
+            $reason = __('Nothing on the site covers this. No measured demand yet — the case rests on business relevance.', 'enhanced-content-plugin');
+        }
+
         return array(
             'coverage' => self::MISSING,
             'verdict'  => self::WRITE,
-            'reason'   => $score > 0
-                ? __('Nothing on the site covers this, and there is measured demand.', 'enhanced-content-plugin')
-                : __('Nothing on the site covers this. No measured demand yet — the case rests on business relevance.', 'enhanced-content-plugin'),
+            'reason'   => $reason,
             'post_id'  => 0,
             'score'    => $score,
             'basis'    => $basis,

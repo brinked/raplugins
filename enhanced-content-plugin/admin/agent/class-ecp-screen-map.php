@@ -199,12 +199,23 @@ class ECP_Screen_Map {
                 <?php if ($row['main_query']) : ?>
                     <p class="ecp-muted">
                         <?php
-                        if ((float) $row['score'] > 0) {
+                        $basis = is_array($row['match_basis']) ? $row['match_basis'] : array();
+                        $measured = isset($basis['query_owner']['impressions']) ? (int) $basis['query_owner']['impressions'] : 0;
+                        $estimated = isset($basis['volume']) ? (int) $basis['volume'] : 0;
+
+                        if ($measured > 0) {
                             printf(
                                 /* translators: 1: query, 2: impressions */
                                 esc_html__('Main query: "%1$s" — %2$s measured monthly impressions.', 'enhanced-content-plugin'),
                                 esc_html($row['main_query']),
-                                esc_html(number_format_i18n((int) round((float) $row['score'])))
+                                esc_html(number_format_i18n($measured))
+                            );
+                        } elseif ($estimated > 0) {
+                            printf(
+                                /* translators: 1: query, 2: estimated searches */
+                                esc_html__('Main query: "%1$s" — roughly %2$s monthly searches (licensed estimate, not your own data).', 'enhanced-content-plugin'),
+                                esc_html($row['main_query']),
+                                esc_html(number_format_i18n($estimated))
                             );
                         } else {
                             printf(
