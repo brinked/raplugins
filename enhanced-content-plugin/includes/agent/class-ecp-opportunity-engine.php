@@ -458,6 +458,42 @@ class ECP_Opportunity_Engine {
     }
 
     /**
+     * The single action most worth doing today.
+     *
+     * The top open opportunities by score, with one deliberate thumb on
+     * the scale: when a CTR-shaped problem scores close to the leader, it
+     * wins. A snippet fix is an afternoon's approval for the same upside a
+     * restructure buys with days — cheapest win first is the whole point
+     * of a "do this today" card.
+     *
+     * @return array|null Opportunity row (with post_title) or null.
+     */
+    public static function top_priority() {
+        $result = self::query(array(
+            'status'   => self::STATUS_OPEN,
+            'limit'    => 5,
+            'orderby'  => 'score',
+            'order'    => 'DESC',
+        ));
+
+        if (empty($result['items'])) {
+            return null;
+        }
+
+        $items = $result['items'];
+        $top = $items[0];
+        $cheap = array('low_ctr', 'zero_clicks');
+
+        foreach ($items as $item) {
+            if (in_array($item['primary_reason'], $cheap, true) && (float) $item['score'] >= 0.8 * (float) $top['score']) {
+                return $item;
+            }
+        }
+
+        return $top;
+    }
+
+    /**
      * The next N posts that should be analyzed.
      *
      * Skips anything already analyzed since its content last changed, so

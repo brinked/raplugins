@@ -37,6 +37,10 @@ class ECP_Screen_Dashboard {
                 <?php self::render_checklist($steps, $done); ?>
             <?php endif; ?>
 
+            <?php self::render_narrative($opportunities, $counts); ?>
+
+            <?php self::render_priority(); ?>
+
             <div class="ecp-stat-grid">
                 <?php
                 self::stat(
@@ -64,7 +68,7 @@ class ECP_Screen_Dashboard {
                     '',
                     '',
                     ECP_Search_Data::is_connected()
-                        ? __('Modelled from your Search Console impressions and positions. An estimate, not a promise.', 'enhanced-content-plugin')
+                        ? __('Directional estimate · medium confidence · modelled from your Search Console impressions and positions over the last 28 days. Not a promise.', 'enhanced-content-plugin')
                         : __('Connect Search Console for a real figure here.', 'enhanced-content-plugin')
                 );
                 ?>
@@ -202,6 +206,117 @@ class ECP_Screen_Dashboard {
      * lead time — it asks here instead of guessing. Answer once and it
      * becomes a verified fact the agent may use from then on.
      */
+    /**
+     * One honest sentence about where things stand.
+     *
+     * Templated from real numbers, never generated — a greeting that costs
+     * an AI call would be this product arguing against itself.
+     */
+    private static function render_narrative(array $opportunities, array $counts) {
+        $pending = isset($counts['pending']) ? (int) $counts['pending'] : 0;
+        $open = (int) $opportunities['open'];
+
+        if (0 === $open && 0 === $pending) {
+            return;
+        }
+
+        $parts = array();
+
+        if ($open > 0) {
+            $parts[] = sprintf(
+                /* translators: %s: count */
+                _n(
+                    'RankAudit sees %s page with a meaningful opportunity',
+                    'RankAudit sees %s pages with meaningful opportunities',
+                    $open,
+                    'enhanced-content-plugin'
+                ),
+                number_format_i18n($open)
+            );
+        }
+
+        if ($pending > 0) {
+            $parts[] = sprintf(
+                /* translators: %s: count */
+                _n(
+                    '%s prepared change is waiting for your decision',
+                    '%s prepared changes are waiting for your decision',
+                    $pending,
+                    'enhanced-content-plugin'
+                ),
+                number_format_i18n($pending)
+            );
+        }
+
+        ?>
+        <p class="ecp-narrative"><?php echo esc_html(implode(__(', and ', 'enhanced-content-plugin'), $parts) . '.'); ?></p>
+        <?php
+    }
+
+    /**
+     * Today's Priority: the one action most worth taking, with the reason
+     * and the evidence, and the right to say "not today".
+     */
+    private static function render_priority() {
+        $priority = ECP_Opportunity_Engine::top_priority();
+
+        if (!$priority || !ECP_Capabilities::can_review((int) $priority['post_id'])) {
+            return;
+        }
+
+        $metrics = ECP_Search_Data::page_metrics((int) $priority['post_id']);
+        ?>
+        <div class="ecp-panel ecp-priority-card">
+            <h2><?php esc_html_e("Today's priority", 'enhanced-content-plugin'); ?></h2>
+
+            <p class="ecp-priority-headline">
+                <strong><?php echo esc_html($priority['post_title']); ?></strong>
+                — <?php echo esc_html(ECP_Opportunity_Engine::reason_label($priority['primary_reason'])); ?>
+            </p>
+
+            <?php if ($metrics) : ?>
+                <p class="ecp-muted">
+                    <?php
+                    printf(
+                        /* translators: 1: impressions, 2: clicks, 3: position */
+                        esc_html__('Last 28 days: %1$s impressions, %2$s clicks, average position %3$s.', 'enhanced-content-plugin'),
+                        esc_html(number_format_i18n((int) $metrics['impressions'])),
+                        esc_html(number_format_i18n((int) $metrics['clicks'])),
+                        esc_html(number_format_i18n((float) $metrics['position'], 1))
+                    );
+                    ?>
+                </p>
+            <?php endif; ?>
+
+            <?php if ((float) $priority['potential_clicks'] > 0) : ?>
+                <p class="ecp-muted">
+                    <?php
+                    printf(
+                        /* translators: %s: click estimate */
+                        esc_html__('Roughly %s additional monthly clicks within reach. Directional estimate, modelled from Search Console impressions and positions — not a promise.', 'enhanced-content-plugin'),
+                        esc_html(number_format_i18n((int) round((float) $priority['potential_clicks'])))
+                    );
+                    ?>
+                </p>
+            <?php endif; ?>
+
+            <p class="ecp-priority-actions">
+                <a class="button button-primary"
+                   href="<?php echo esc_url(add_query_arg(array('page' => 'ecp-opportunities', 's' => rawurlencode($priority['post_title'])), admin_url('admin.php'))); ?>">
+                    <?php esc_html_e('Review this opportunity', 'enhanced-content-plugin'); ?>
+                </a>
+                <button type="button" class="button ecp-priority-snooze" data-post="<?php echo esc_attr($priority['post_id']); ?>">
+                    <?php esc_html_e('Postpone a week', 'enhanced-content-plugin'); ?>
+                </button>
+                <button type="button" class="button-link ecp-priority-dismiss" data-post="<?php echo esc_attr($priority['post_id']); ?>">
+                    <?php esc_html_e('Dismiss', 'enhanced-content-plugin'); ?>
+                </button>
+                <span class="ecp-priority-status" aria-live="polite"></span>
+            </p>
+        </div>
+        <?php
+    }
+
     /**
      * Did the approved changes actually work?
      *

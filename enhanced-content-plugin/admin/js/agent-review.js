@@ -789,6 +789,31 @@
 				});
 		});
 
+		// Today's Priority card: postpone and dismiss act on the underlying
+		// opportunity through the existing endpoints, then retire the card.
+		$(document).on('click', '.ecp-priority-snooze, .ecp-priority-dismiss', function () {
+			var $button = $(this);
+			var $card = $button.closest('.ecp-priority-card');
+			var $status = $card.find('.ecp-priority-status');
+			var snooze = $button.hasClass('ecp-priority-snooze');
+			var payload = { post_id: $button.data('post') };
+
+			if (snooze) {
+				payload.days = 7;
+			}
+
+			$card.find('button').prop('disabled', true);
+
+			post(snooze ? 'snooze' : 'dismiss', payload)
+				.done(function () {
+					$card.fadeOut(200);
+				})
+				.fail(function (message) {
+					$status.attr('class', 'ecp-priority-status is-error').text(message);
+					$card.find('button').prop('disabled', false);
+				});
+		});
+
 		$('#ecp-classify-now').on('click', function () {
 			var $button = $(this);
 			var $result = $('#ecp-classify-result');

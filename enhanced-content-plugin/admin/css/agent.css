@@ -1602,3 +1602,40 @@ a.ecp-band-badge:hover {
 .ecp-health-list li:last-child {
 	border-bottom: none;
 }
+
+/* Growth dashboard: narrative + Today's Priority ------------------------- */
+
+.ecp-narrative {
+	font-size: 15px;
+	margin: 4px 0 16px;
+}
+
+.ecp-priority-card {
+	border-left: 4px solid #2271b1;
+	margin-bottom: 20px;
+}
+
+.ecp-priority-card h2 {
+	margin-top: 0;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #50575e;
+}
+
+.ecp-priority-headline {
+	font-size: 15px;
+	margin: 0 0 8px;
+}
+
+.ecp-priority-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 0;
+}
+
+.ecp-priority-status.is-error {
+	color: #b32d2e;
+	font-size: 12px;
+}
