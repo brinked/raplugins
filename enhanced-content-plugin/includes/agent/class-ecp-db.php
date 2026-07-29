@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.11.0';
+    const SCHEMA_VERSION = '2.12.0';
 
     /* --------------------------------------------------------------------
      * Table names
@@ -76,6 +76,11 @@ class ECP_DB {
         return $wpdb->prefix . 'ecp_facts';
     }
 
+    public static function topics_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'ecp_topics';
+    }
+
     /**
      * All table names, for uninstall.
      *
@@ -92,6 +97,7 @@ class ECP_DB {
             self::inventory_table(),
             self::roadmap_table(),
             self::facts_table(),
+            self::topics_table(),
         );
     }
 
@@ -121,6 +127,7 @@ class ECP_DB {
         $inventory = self::inventory_table();
         $roadmap = self::roadmap_table();
         $facts = self::facts_table();
+        $topics = self::topics_table();
 
         // ---- Runs -------------------------------------------------------
         // job_type: scan | analyze | measure | manual
@@ -405,6 +412,47 @@ class ECP_DB {
             KEY post_status (post_id,status),
             KEY status_verified (status,verified_at),
             KEY topic (topic)
+        ) {$charset};");
+
+        // ---- Topical map ----------------------------------------------------
+        // Proposed topics grown from a seed (Phase 4), each carrying the
+        // Content Restraint Engine's verdict: write it, expand an existing
+        // page, fold it into one as a subsection, or skip it because it
+        // already exists or is not this site's to write. `topic_key` is
+        // md5(seed|topic), so re-running a seed updates rows in place and
+        // owner decisions survive.
+        //
+        // coverage: strong | partial | weak | missing
+        // verdict:  write | expand | subsection | skip
+        // status:   proposed | approved | dismissed
+        dbDelta("CREATE TABLE {$topics} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            topic_key char(32) NOT NULL,
+            seed varchar(191) NOT NULL,
+            parent varchar(191) NOT NULL DEFAULT '',
+            topic varchar(191) NOT NULL,
+            intent varchar(24) NOT NULL DEFAULT '',
+            funnel_stage varchar(24) NOT NULL DEFAULT '',
+            page_type varchar(32) NOT NULL DEFAULT '',
+            main_query varchar(191) NOT NULL DEFAULT '',
+            supporting_queries longtext NULL,
+            business_relevance text NULL,
+            evidence_needs text NULL,
+            coverage varchar(20) NOT NULL DEFAULT 'missing',
+            matched_post_id bigint(20) unsigned NOT NULL DEFAULT 0,
+            match_basis longtext NULL,
+            verdict varchar(24) NOT NULL DEFAULT 'write',
+            verdict_reason text NULL,
+            score decimal(10,2) NOT NULL DEFAULT 0.00,
+            status varchar(20) NOT NULL DEFAULT 'proposed',
+            decided_by bigint(20) unsigned NOT NULL DEFAULT 0,
+            decided_at datetime NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY topic_key (topic_key),
+            KEY seed_status (seed,status),
+            KEY verdict (verdict)
         ) {$charset};");
     }
 

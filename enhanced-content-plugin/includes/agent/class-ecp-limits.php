@@ -44,6 +44,12 @@ class ECP_Limits {
                 'period'  => 'day',
                 'label'   => __('Pages classified per day', 'enhanced-content-plugin'),
             ),
+            'maps' => array(
+                'setting' => 'maps_per_month',
+                'default' => 10,
+                'period'  => 'month',
+                'label'   => __('Topical maps per month', 'enhanced-content-plugin'),
+            ),
             // Reserved for later phases.
             'briefs' => array(
                 'setting' => 'briefs_per_month',
