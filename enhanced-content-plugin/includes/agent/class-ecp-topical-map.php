@@ -615,9 +615,10 @@ class ECP_Topical_Map {
      * Word-overlap ratio between a topic and a title/topic string,
      * ignoring short stop-ish words. Cheap, explainable, language-naive
      * on purpose — a semantic model can replace this behind the same
-     * signature later.
+     * signature later. Public: the briefs engine reuses it to check
+     * required facts against the vault.
      */
-    private static function overlap($a, $b) {
+    public static function overlap($a, $b) {
         $tokenize = function ($text) {
             $words = preg_split('/[^a-z0-9]+/', strtolower(remove_accents((string) $text)));
 

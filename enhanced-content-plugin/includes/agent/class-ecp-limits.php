@@ -50,13 +50,13 @@ class ECP_Limits {
                 'period'  => 'month',
                 'label'   => __('Topical maps per month', 'enhanced-content-plugin'),
             ),
-            // Reserved for later phases.
             'briefs' => array(
                 'setting' => 'briefs_per_month',
-                'default' => 0,
+                'default' => 20,
                 'period'  => 'month',
                 'label'   => __('Content briefs per month', 'enhanced-content-plugin'),
             ),
+            // Reserved for later phases.
             'drafts' => array(
                 'setting' => 'drafts_per_month',
                 'default' => 0,

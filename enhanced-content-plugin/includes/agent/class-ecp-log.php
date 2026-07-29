@@ -34,6 +34,8 @@ class ECP_Log {
     const SETTINGS_CHANGED  = 'settings.changed';
     const ROADMAP_DECIDED   = 'roadmap.decided';
     const MAP_BUILT         = 'map.built';
+    const BRIEF_CREATED     = 'brief.created';
+    const BRIEF_DECIDED     = 'brief.decided';
 
     /**
      * Write an event.
@@ -199,6 +201,8 @@ class ECP_Log {
             self::SETTINGS_CHANGED  => __('Settings changed', 'enhanced-content-plugin'),
             self::ROADMAP_DECIDED   => __('Roadmap decision', 'enhanced-content-plugin'),
             self::MAP_BUILT         => __('Topical map built', 'enhanced-content-plugin'),
+            self::BRIEF_CREATED     => __('Brief written', 'enhanced-content-plugin'),
+            self::BRIEF_DECIDED     => __('Brief decision', 'enhanced-content-plugin'),
         );
 
         return isset($labels[$event]) ? $labels[$event] : $event;

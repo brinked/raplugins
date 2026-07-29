@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.12.0';
+    const SCHEMA_VERSION = '2.13.0';
 
     /* --------------------------------------------------------------------
      * Table names
@@ -81,6 +81,11 @@ class ECP_DB {
         return $wpdb->prefix . 'ecp_topics';
     }
 
+    public static function briefs_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'ecp_briefs';
+    }
+
     /**
      * All table names, for uninstall.
      *
@@ -98,6 +103,7 @@ class ECP_DB {
             self::roadmap_table(),
             self::facts_table(),
             self::topics_table(),
+            self::briefs_table(),
         );
     }
 
@@ -128,6 +134,7 @@ class ECP_DB {
         $roadmap = self::roadmap_table();
         $facts = self::facts_table();
         $topics = self::topics_table();
+        $briefs = self::briefs_table();
 
         // ---- Runs -------------------------------------------------------
         // job_type: scan | analyze | measure | manual
@@ -453,6 +460,34 @@ class ECP_DB {
             UNIQUE KEY topic_key (topic_key),
             KEY seed_status (seed,status),
             KEY verdict (verdict)
+        ) {$charset};");
+
+        // ---- Content briefs -------------------------------------------------
+        // One row per strategic brief (Phase 5), tied to an approved topic.
+        // `brief` holds the full structured plan the drafting phase will
+        // execute; `info_gain_ok` is the information-gain gate — 0 means
+        // the brief could not name a real unique contribution and the UI
+        // warns against drafting it. Nothing is ever drafted from a brief
+        // whose status is not approved.
+        //
+        // status: proposed | approved | rejected
+        dbDelta("CREATE TABLE {$briefs} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            topic_id bigint(20) unsigned NOT NULL,
+            seed varchar(191) NOT NULL DEFAULT '',
+            wave smallint(5) unsigned NOT NULL DEFAULT 0,
+            brief longtext NULL,
+            info_gain text NULL,
+            info_gain_ok tinyint(1) NOT NULL DEFAULT 0,
+            facts_outstanding smallint(5) unsigned NOT NULL DEFAULT 0,
+            status varchar(20) NOT NULL DEFAULT 'proposed',
+            decided_by bigint(20) unsigned NOT NULL DEFAULT 0,
+            decided_at datetime NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY topic_id (topic_id),
+            KEY seed_status (seed,status)
         ) {$charset};");
     }
 
