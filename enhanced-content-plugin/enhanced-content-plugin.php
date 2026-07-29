@@ -94,6 +94,7 @@ class Enhanced_Content_Plugin {
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-agent-settings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-capabilities.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-map.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-inventory.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-signals.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-search-data.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-opportunity-engine.php';

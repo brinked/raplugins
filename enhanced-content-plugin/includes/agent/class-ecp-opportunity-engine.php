@@ -149,6 +149,11 @@ class ECP_Opportunity_Engine {
         $search = ECP_Search_Data::context($post_id);
         $issues = ECP_Signals::issues($signals, $search);
 
+        // The inventory rides the scan: the signals collected for scoring
+        // are exactly what the inventory stores, so refreshing here costs
+        // no extra parsing and inherits the scan's batching and resume.
+        ECP_Inventory::refresh($post, $signals);
+
         $metrics = $search ? $search['page'] : null;
         $striking = $search ? $search['striking'] : array();
 

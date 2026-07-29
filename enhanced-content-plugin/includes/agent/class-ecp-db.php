@@ -61,6 +61,11 @@ class ECP_DB {
         return $wpdb->prefix . 'ecp_clusters';
     }
 
+    public static function inventory_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'ecp_inventory';
+    }
+
     /**
      * All table names, for uninstall.
      *
@@ -74,6 +79,7 @@ class ECP_DB {
             self::events_table(),
             self::metrics_table(),
             self::clusters_table(),
+            self::inventory_table(),
         );
     }
 
@@ -100,6 +106,7 @@ class ECP_DB {
         $events = self::events_table();
         $metrics = self::metrics_table();
         $clusters = self::clusters_table();
+        $inventory = self::inventory_table();
 
         // ---- Runs -------------------------------------------------------
         // job_type: scan | analyze | measure | manual
@@ -246,6 +253,50 @@ class ECP_DB {
             UNIQUE KEY post_window_date_query (post_id,window_days,metric_date,query),
             KEY window_date (window_days,metric_date),
             KEY post_window_query (post_id,window_days,query)
+        ) {$charset};");
+
+        // ---- Site inventory --------------------------------------------------
+        // One row per post the agent may work on: the structured facts of the
+        // page (Phase 1 of the growth system). The classification block is
+        // written only by the classifier; classified_hash records which
+        // version of the content the classification describes, so staleness
+        // is a comparison, not a guess. `locked` marks a human-corrected
+        // topic the classifier must never overwrite — user corrections are
+        // ground truth.
+        dbDelta("CREATE TABLE {$inventory} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            post_id bigint(20) unsigned NOT NULL,
+            url varchar(255) NOT NULL DEFAULT '',
+            post_type varchar(32) NOT NULL DEFAULT 'post',
+            post_status varchar(20) NOT NULL DEFAULT 'publish',
+            title varchar(255) NOT NULL DEFAULT '',
+            meta_description varchar(255) NOT NULL DEFAULT '',
+            word_count int(10) unsigned NOT NULL DEFAULT 0,
+            heading_json longtext NULL,
+            taxonomy_json longtext NULL,
+            author_id bigint(20) unsigned NOT NULL DEFAULT 0,
+            internal_links_out smallint(5) unsigned NOT NULL DEFAULT 0,
+            internal_links_in smallint(5) unsigned NOT NULL DEFAULT 0,
+            external_links smallint(5) unsigned NOT NULL DEFAULT 0,
+            image_count smallint(5) unsigned NOT NULL DEFAULT 0,
+            schema_types varchar(191) NOT NULL DEFAULT '',
+            content_hash char(40) NOT NULL DEFAULT '',
+            topic varchar(191) NOT NULL DEFAULT '',
+            subtopic varchar(191) NOT NULL DEFAULT '',
+            intent varchar(24) NOT NULL DEFAULT '',
+            funnel_stage varchar(24) NOT NULL DEFAULT '',
+            confidence tinyint(3) unsigned NOT NULL DEFAULT 0,
+            locked tinyint(1) NOT NULL DEFAULT 0,
+            classified_hash char(40) NOT NULL DEFAULT '',
+            classified_at datetime NULL,
+            scanned_at datetime NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY post_id (post_id),
+            KEY topic (topic),
+            KEY intent (intent),
+            KEY post_type_status (post_type,post_status)
         ) {$charset};");
 
         // ---- Clusters -------------------------------------------------------
