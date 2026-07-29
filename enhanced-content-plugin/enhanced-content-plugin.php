@@ -131,6 +131,7 @@ class Enhanced_Content_Plugin {
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-opportunities.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-rankings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-clusters.php';
+            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-intelligence.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-history.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-agent-settings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-ajax.php';

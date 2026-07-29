@@ -45,6 +45,8 @@ class ECP_Ajax {
             'sync_search'      => 'sync_search',
             'repair_search'    => 'repair_search',
             'set_sitekit_user' => 'set_sitekit_user',
+            'classify_now'     => 'classify_now',
+            'save_topic'       => 'save_topic',
             'detect_clusters'  => 'detect_clusters',
             'analyze_cluster'  => 'analyze_cluster',
             'cluster_status'   => 'cluster_status',
@@ -539,6 +541,58 @@ class ECP_Ajax {
                 $user ? $user->display_name : (string) $user_id
             ),
             'reload'  => true,
+        ));
+    }
+
+    /**
+     * Run one classification batch on demand.
+     */
+    public function classify_now() {
+        $this->guard(ECP_Capabilities::MANAGE);
+
+        $result = ECP_Classifier::run_batch('manual');
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        if (0 === (int) $result['classified']) {
+            wp_send_json_success(array(
+                'message' => __('Everything is already classified.', 'enhanced-content-plugin'),
+            ));
+        }
+
+        wp_send_json_success(array(
+            'message' => sprintf(
+                /* translators: 1: pages classified, 2: pages remaining */
+                __('Classified %1$d pages. %2$d remaining.', 'enhanced-content-plugin'),
+                (int) $result['classified'],
+                (int) $result['remaining']
+            ),
+            'reload'  => 0 === (int) $result['remaining'],
+        ));
+    }
+
+    /**
+     * A human corrected a page's topic. Locked from then on.
+     */
+    public function save_topic() {
+        $this->guard(ECP_Capabilities::MANAGE);
+
+        $post_id = isset($_POST['post_id']) ? absint($_POST['post_id']) : 0;
+        $topic = isset($_POST['topic']) ? sanitize_text_field(wp_unslash($_POST['topic'])) : '';
+
+        if (!$post_id || '' === $topic) {
+            wp_send_json_error(array('message' => __('A page and a topic are both needed.', 'enhanced-content-plugin')));
+        }
+
+        if (!ECP_Inventory::override_topic($post_id, $topic)) {
+            wp_send_json_error(array('message' => __('Could not save the topic.', 'enhanced-content-plugin')));
+        }
+
+        wp_send_json_success(array(
+            'message' => __('Saved. The classifier will never overwrite your label.', 'enhanced-content-plugin'),
+            'topic'   => $topic,
         ));
     }
 

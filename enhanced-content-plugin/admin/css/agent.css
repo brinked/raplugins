@@ -1542,3 +1542,63 @@ a.ecp-band-badge:hover {
 	margin-top: 0;
 	font-size: 14px;
 }
+
+/* Site Intelligence ------------------------------------------------------ */
+
+.ecp-intel-progress p:first-child {
+	margin-top: 0;
+}
+
+.ecp-intel-filters {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+	margin-bottom: 12px;
+}
+
+.ecp-intel-topic {
+	cursor: pointer;
+	border-bottom: 1px dashed #c3c4c7;
+}
+
+.ecp-intel-topic-input {
+	width: 180px;
+}
+
+.ecp-mix-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-bottom: 6px;
+}
+
+.ecp-mix-label {
+	flex: 0 0 130px;
+	font-size: 12px;
+}
+
+.ecp-mix-row .ecp-meter {
+	flex: 1;
+	margin: 0;
+}
+
+.ecp-mix-count {
+	flex: 0 0 36px;
+	text-align: right;
+	font-size: 12px;
+	color: #50575e;
+}
+
+.ecp-health-list {
+	margin: 0;
+}
+
+.ecp-health-list li {
+	padding: 6px 0;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.ecp-health-list li:last-child {
+	border-bottom: none;
+}

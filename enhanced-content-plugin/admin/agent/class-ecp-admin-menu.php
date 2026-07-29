@@ -104,6 +104,15 @@ class ECP_Admin_Menu {
             );
         }
 
+        $this->hooks['intelligence'] = add_submenu_page(
+            'ecp-dashboard',
+            __('Site Intelligence', 'enhanced-content-plugin'),
+            __('Site Intelligence', 'enhanced-content-plugin'),
+            self::CAP,
+            'ecp-intelligence',
+            array('ECP_Screen_Intelligence', 'render')
+        );
+
         $this->hooks['history'] = add_submenu_page(
             'ecp-dashboard',
             __('History', 'enhanced-content-plugin'),
@@ -312,6 +321,7 @@ class ECP_Admin_Menu {
             $tabs['ecp-clusters'] = __('Competing Pages', 'enhanced-content-plugin');
         }
 
+        $tabs['ecp-intelligence'] = __('Site Intelligence', 'enhanced-content-plugin');
         $tabs['ecp-history'] = __('History', 'enhanced-content-plugin');
 
         if (ECP_Capabilities::can_manage()) {

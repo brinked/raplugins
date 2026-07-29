@@ -789,6 +789,86 @@
 				});
 		});
 
+		$('#ecp-classify-now').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-classify-result');
+
+			$button.prop('disabled', true);
+			$result.attr('class', '').text(t('testing'));
+
+			post('classify_now')
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+					$button.prop('disabled', false);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1200);
+					}
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		// Inline topic correction on the Site Intelligence inventory. Click
+		// the topic, type, Enter saves, Escape cancels. A saved topic is
+		// locked: the classifier never overwrites a human's label.
+		$(document).on('click', '.ecp-intel-topic', function () {
+			var $span = $(this);
+
+			if ($span.data('editing')) {
+				return;
+			}
+
+			$span.data('editing', true);
+
+			var current = $span.text().replace(' 🔒', '').trim();
+			var $input = $('<input type="text" class="ecp-intel-topic-input">').val('—' === current ? '' : current);
+
+			$span.hide().after($input);
+			$input.focus();
+
+			var close = function () {
+				$input.remove();
+				$span.show().data('editing', false);
+			};
+
+			$input.on('keydown', function (e) {
+				if ('Escape' === e.key) {
+					close();
+					return;
+				}
+
+				if ('Enter' !== e.key) {
+					return;
+				}
+
+				e.preventDefault();
+
+				var topic = $input.val().trim();
+
+				if (!topic) {
+					close();
+					return;
+				}
+
+				post('save_topic', { post_id: $span.data('post'), topic: topic })
+					.done(function (data) {
+						$span.text(data.topic + ' 🔒');
+						close();
+					})
+					.fail(function (message) {
+						window.alert(message);
+						close();
+					});
+			});
+
+			$input.on('blur', close);
+		});
+
 		$('#ecp-send-digest').on('click', function () {
 			var $button = $(this);
 			var $result = $('#ecp-digest-result');
