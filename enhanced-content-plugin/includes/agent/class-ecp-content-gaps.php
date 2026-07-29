@@ -580,12 +580,25 @@ class ECP_Content_Gaps {
      * workable rather than merely safe: it asks once, you answer once, and
      * from then on it is a verified fact rather than a blocked question.
      *
+     * Since 2.11.0 the facts live in the Knowledge Vault, so an answer
+     * given on this page — or site-wide, or for this page's topic — is
+     * visible here. The return shape is kept from the meta era.
+     *
      * @return array[] { question, answer, answered_at, answered_by }
      */
     public static function owner_facts($post_id) {
-        $facts = get_post_meta((int) $post_id, self::FACTS_META, true);
+        $out = array();
 
-        return is_array($facts) ? $facts : array();
+        foreach (ECP_Vault::for_post((int) $post_id) as $fact) {
+            $out[] = array(
+                'question'    => (string) $fact['question'],
+                'answer'      => (string) $fact['fact'],
+                'answered_at' => (string) $fact['verified_at'],
+                'answered_by' => (int) $fact['created_by'],
+            );
+        }
+
+        return $out;
     }
 
     /**
@@ -607,24 +620,23 @@ class ECP_Content_Gaps {
             return new WP_Error('ecp_no_question', __('No question was given.', 'enhanced-content-plugin'));
         }
 
-        $facts = self::owner_facts($post_id);
-
-        // Answering the same question again replaces the old answer rather
-        // than stacking a contradiction the agent would have to choose from.
-        $facts = array_values(array_filter($facts, function ($fact) use ($question) {
-            return isset($fact['question']) && 0 !== strcasecmp(trim($fact['question']), $question);
-        }));
-
-        if ('' !== $answer) {
-            $facts[] = array(
-                'question'    => $question,
-                'answer'      => $answer,
-                'answered_at' => current_time('mysql'),
-                'answered_by' => get_current_user_id(),
-            );
+        if ('' === $answer) {
+            return new WP_Error('ecp_no_answer', __('The answer is empty.', 'enhanced-content-plugin'));
         }
 
-        update_post_meta($post_id, self::FACTS_META, $facts);
+        // Into the Knowledge Vault: same question replaces rather than
+        // stacking a contradiction, and the fact becomes visible to the
+        // owner (and, via topic and site scope, to other pages).
+        $id = ECP_Vault::add(array(
+            'fact'     => $answer,
+            'question' => $question,
+            'post_id'  => $post_id,
+            'source'   => 'owner_answer',
+        ));
+
+        if (is_wp_error($id)) {
+            return $id;
+        }
 
         ECP_Log::info('gaps.fact_answered', sprintf(
             /* translators: 1: question, 2: post title */

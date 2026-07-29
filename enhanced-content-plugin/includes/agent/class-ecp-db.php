@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.10.0';
+    const SCHEMA_VERSION = '2.11.0';
 
     /* --------------------------------------------------------------------
      * Table names
@@ -71,6 +71,11 @@ class ECP_DB {
         return $wpdb->prefix . 'ecp_roadmap';
     }
 
+    public static function facts_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'ecp_facts';
+    }
+
     /**
      * All table names, for uninstall.
      *
@@ -86,6 +91,7 @@ class ECP_DB {
             self::clusters_table(),
             self::inventory_table(),
             self::roadmap_table(),
+            self::facts_table(),
         );
     }
 
@@ -114,6 +120,7 @@ class ECP_DB {
         $clusters = self::clusters_table();
         $inventory = self::inventory_table();
         $roadmap = self::roadmap_table();
+        $facts = self::facts_table();
 
         // ---- Runs -------------------------------------------------------
         // job_type: scan | analyze | measure | manual
@@ -371,6 +378,33 @@ class ECP_DB {
             UNIQUE KEY item_key (item_key),
             KEY status_order (status,step_order),
             KEY post_id (post_id)
+        ) {$charset};");
+
+        // ---- Knowledge Vault ------------------------------------------------
+        // Facts the site owner has supplied and verified (Phase 3). The
+        // agent quotes these into prompts; it never writes them. post_id 0
+        // means site-wide; `topic` optionally scopes a fact to every page
+        // classified under that topic. `verified_at` is when a human last
+        // said "still true" — staleness is derived from it, never assumed.
+        //
+        // source: owner_answer | manual | import
+        // status: active | retired
+        dbDelta("CREATE TABLE {$facts} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            post_id bigint(20) unsigned NOT NULL DEFAULT 0,
+            question text NULL,
+            fact text NOT NULL,
+            topic varchar(191) NOT NULL DEFAULT '',
+            source varchar(24) NOT NULL DEFAULT 'manual',
+            status varchar(20) NOT NULL DEFAULT 'active',
+            verified_at datetime NULL,
+            created_by bigint(20) unsigned NOT NULL DEFAULT 0,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            KEY post_status (post_id,status),
+            KEY status_verified (status,verified_at),
+            KEY topic (topic)
         ) {$charset};");
     }
 

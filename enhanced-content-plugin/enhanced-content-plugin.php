@@ -101,6 +101,7 @@ class Enhanced_Content_Plugin {
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-search-data.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-opportunity-engine.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-roadmap.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-vault.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-clusters.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-rankings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-gaps.php';
@@ -272,6 +273,12 @@ class Enhanced_Content_Plugin {
                 $saved['enabled_change_types'][] = 'section_trim';
                 update_option('ecp_agent_settings', $saved);
             }
+        }
+
+        // 2.11.0: owner answers move from per-post meta into the Knowledge
+        // Vault, where every page (and the owner) can see them.
+        if (version_compare($installed, '2.11.0', '<')) {
+            ECP_Vault::migrate_meta();
         }
 
         update_option('ecp_db_version', ECP_DB::SCHEMA_VERSION, false);
