@@ -873,6 +873,17 @@ class ECP_Analyzer {
             }
         }
 
+        // --- Knowledge Vault --------------------------------------------------
+        // Owner-verified facts for this page, its topic, and the whole
+        // site. Rewrites that touch a price, a policy or a spec now have
+        // the owner's own words to quote instead of a reason to guess.
+        $vault = ECP_Vault::prompt_context((int) $post->ID);
+
+        if ($vault) {
+            $out[] = '';
+            $out[] = $vault;
+        }
+
         // --- The ask ----------------------------------------------------------
         $out[] = '';
         $out[] = '## What to return';
