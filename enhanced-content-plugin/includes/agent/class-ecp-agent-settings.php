@@ -681,6 +681,15 @@ class ECP_Agent_Settings {
             ),
         );
 
+        // Phase 1 growth-system steps ride the same checklist.
+        $steps[] = array(
+            'key'   => 'profile',
+            'label' => __('Tell the agent about your business', 'enhanced-content-plugin'),
+            'done'  => ECP_Site_Profile::completeness() >= 100,
+            'action_url' => $settings_url . '&tab=profile',
+            'help'  => __('Who you are, who you serve, and which topics are in and out of bounds. Strategic features stay generic without it.', 'enhanced-content-plugin'),
+        );
+
         return $steps;
     }
 

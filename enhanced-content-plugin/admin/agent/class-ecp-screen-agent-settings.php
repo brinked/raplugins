@@ -43,6 +43,7 @@ class ECP_Screen_Agent_Settings {
                 <?php
                 $tabs = array(
                     'general'     => __('General', 'enhanced-content-plugin'),
+                    'profile'     => __('Site profile', 'enhanced-content-plugin'),
                     'writing'     => __('Writing rules', 'enhanced-content-plugin'),
                     'approval'    => __('Approval & autopilot', 'enhanced-content-plugin'),
                     'permissions' => __('Who can do what', 'enhanced-content-plugin'),
@@ -70,6 +71,9 @@ class ECP_Screen_Agent_Settings {
 
                 <?php
                 switch ($tab) {
+                    case 'profile':
+                        self::tab_profile();
+                        break;
                     case 'writing':
                         self::tab_writing($settings);
                         break;
@@ -110,6 +114,22 @@ class ECP_Screen_Agent_Settings {
         // A CSV upload is handled separately from the settings write.
         if (!empty($_FILES['ecp_csv']['tmp_name'])) {
             return self::handle_csv_upload();
+        }
+
+        // The site profile is its own record, not an agent setting — it
+        // routes to ECP_Site_Profile, which owns its own sanitization.
+        if ('profile' === (isset($_POST['ecp_tab']) ? sanitize_key(wp_unslash($_POST['ecp_tab'])) : '')) {
+            $profile_input = array();
+
+            foreach (array_keys(ECP_Site_Profile::fields()) as $key) {
+                if (isset($_POST['ecp_pf_' . $key])) {
+                    $profile_input[$key] = wp_unslash($_POST['ecp_pf_' . $key]);  // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- sanitized per-type in ECP_Site_Profile::update().
+                }
+            }
+
+            ECP_Site_Profile::update($profile_input);
+
+            return __('Site profile saved.', 'enhanced-content-plugin');
         }
 
         // Checkboxes only appear in POST when checked, so the set of keys we
@@ -495,6 +515,64 @@ class ECP_Screen_Agent_Settings {
                     </label>
                 </td>
             </tr>
+        </table>
+        <?php
+    }
+
+    /**
+     * The site profile: who this business is, in their own words.
+     *
+     * Driven entirely by the field registry so a field added there appears
+     * here with no screen work. No agent settings on this tab — it posts to
+     * ECP_Site_Profile through its own handle_post() branch.
+     */
+    private static function tab_profile() {
+        $profile = ECP_Site_Profile::all();
+        $completeness = ECP_Site_Profile::completeness();
+        ?>
+        <h2><?php esc_html_e('Site profile', 'enhanced-content-plugin'); ?></h2>
+        <p class="description" style="max-width:720px;">
+            <?php esc_html_e('The agent reads this before making any strategic judgement: which topics are worth covering, which are out of bounds, and who the writing is for. Plain, specific sentences work best — this is context for the AI, not marketing copy.', 'enhanced-content-plugin'); ?>
+        </p>
+
+        <p>
+            <span class="ecp-dot <?php echo $completeness >= 100 ? 'ecp-dot-on' : 'ecp-dot-warn'; ?>"></span>
+            <?php
+            printf(
+                /* translators: %d: percentage */
+                esc_html__('%d%% complete. The core fields (name, purpose, offerings, audience, conversions, topics) unlock the growth features.', 'enhanced-content-plugin'),
+                (int) $completeness
+            );
+            ?>
+        </p>
+
+        <table class="form-table" role="presentation">
+            <?php foreach (ECP_Site_Profile::fields() as $key => $field) : ?>
+                <tr>
+                    <th scope="row">
+                        <label for="ecp_pf_<?php echo esc_attr($key); ?>"><?php echo esc_html($field['label']); ?></label>
+                    </th>
+                    <td>
+                        <?php if ('textarea' === $field['type']) : ?>
+                            <textarea name="ecp_pf_<?php echo esc_attr($key); ?>" id="ecp_pf_<?php echo esc_attr($key); ?>"
+                                      rows="3" class="large-text"><?php echo esc_textarea($profile[$key]); ?></textarea>
+                        <?php elseif ('list' === $field['type']) : ?>
+                            <textarea name="ecp_pf_<?php echo esc_attr($key); ?>" id="ecp_pf_<?php echo esc_attr($key); ?>"
+                                      rows="4" class="large-text"><?php echo esc_textarea(implode("\n", (array) $profile[$key])); ?></textarea>
+                        <?php elseif ('number' === $field['type']) : ?>
+                            <input type="number" name="ecp_pf_<?php echo esc_attr($key); ?>" id="ecp_pf_<?php echo esc_attr($key); ?>"
+                                   value="<?php echo esc_attr($profile[$key]); ?>" min="0" step="1" class="small-text">
+                        <?php else : ?>
+                            <input type="text" name="ecp_pf_<?php echo esc_attr($key); ?>" id="ecp_pf_<?php echo esc_attr($key); ?>"
+                                   value="<?php echo esc_attr($profile[$key]); ?>" class="regular-text">
+                        <?php endif; ?>
+
+                        <?php if ($field['help']) : ?>
+                            <p class="description"><?php echo esc_html($field['help']); ?></p>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </table>
         <?php
     }

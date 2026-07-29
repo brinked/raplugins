@@ -37,6 +37,7 @@ $options = array(
     'ecp_metrics_synced_at',
     'ecp_sitekit_user',
     'ecp_dimension_summary',
+    'ecp_site_profile',
     // Editorial toolkit (option keys kept from v1 for upgrade compatibility)
     'map_settings',
     'map_recent_contributors',
