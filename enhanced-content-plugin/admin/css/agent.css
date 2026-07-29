@@ -1797,3 +1797,102 @@ a.ecp-band-badge:hover {
 	align-items: center;
 	gap: 8px;
 }
+
+/* Topical Map ----------------------------------------------------------- */
+
+.ecp-map-restraint .ecp-map-restraint-line {
+	margin: 0;
+	font-size: 14px;
+}
+
+.ecp-map-form {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.ecp-map-form-status {
+	font-size: 12px;
+}
+
+.ecp-map-seeds {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.ecp-map-seeds .ecp-chip {
+	text-decoration: none;
+}
+
+.ecp-map-cluster-head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.ecp-map-cluster-head h2 {
+	margin: 0;
+}
+
+.ecp-map-topic {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 12px 0;
+	border-top: 1px solid var(--ecp-line);
+}
+
+.ecp-map-topic.is-restrained {
+	opacity: 0.75;
+}
+
+.ecp-map-topic.is-dismissed {
+	opacity: 0.55;
+}
+
+.ecp-map-topic-main {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.ecp-map-topic-title {
+	margin: 0 0 4px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.ecp-map-topic-main p {
+	margin: 0 0 4px;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.ecp-map-topic-main .ecp-map-verdict {
+	font-size: 13px;
+}
+
+.ecp-map-verdict.is-skip strong {
+	color: #996800;
+}
+
+.ecp-map-evidence {
+	font-style: italic;
+}
+
+.ecp-map-topic-actions {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.ecp-map-topic-actions .ecp-row-status {
+	font-size: 12px;
+}

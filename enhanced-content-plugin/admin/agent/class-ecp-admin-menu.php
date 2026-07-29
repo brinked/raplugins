@@ -93,6 +93,15 @@ class ECP_Admin_Menu {
             array('ECP_Screen_Roadmap', 'render')
         );
 
+        $this->hooks['map'] = add_submenu_page(
+            'ecp-dashboard',
+            __('Topical Map', 'enhanced-content-plugin'),
+            __('Topical Map', 'enhanced-content-plugin'),
+            self::CAP,
+            'ecp-map',
+            array('ECP_Screen_Map', 'render')
+        );
+
         $this->hooks['rankings'] = add_submenu_page(
             'ecp-dashboard',
             __('Rankings', 'enhanced-content-plugin'),
@@ -226,6 +235,8 @@ class ECP_Admin_Menu {
                 'saving'         => __('Saving…', 'enhanced-content-plugin'),
                 'answerEmpty'    => __('Type an answer first.', 'enhanced-content-plugin'),
                 'factEmpty'      => __('Type the fact first.', 'enhanced-content-plugin'),
+                'seedEmpty'      => __('Type a seed topic first.', 'enhanced-content-plugin'),
+                'mapping'        => __('Mapping the topic… this can take a minute.', 'enhanced-content-plugin'),
             ),
         ));
     }
@@ -334,6 +345,7 @@ class ECP_Admin_Menu {
             'ecp-review'        => __('Review Changes', 'enhanced-content-plugin'),
             'ecp-opportunities' => __('Opportunities', 'enhanced-content-plugin'),
             'ecp-roadmap'       => __('Roadmap', 'enhanced-content-plugin'),
+            'ecp-map'           => __('Topical Map', 'enhanced-content-plugin'),
             'ecp-rankings'      => __('Rankings', 'enhanced-content-plugin'),
         );
 

@@ -887,6 +887,81 @@
 				});
 		});
 
+		// Topical Map: grow a map from a seed. The build is a real AI call,
+		// so the button locks until the answer comes back, then follows the
+		// redirect to the freshly built map.
+		$('#ecp-build-map').on('click', function () {
+			var $button = $(this);
+			var $status = $('.ecp-map-form-status');
+			var seed = $.trim($('#ecp-map-seed').val());
+
+			if (!seed) {
+				$status.text(t('seedEmpty'));
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$status.text(t('mapping'));
+
+			post('build_map', { seed: seed })
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.redirect) {
+						window.setTimeout(function () {
+							window.location.href = data.redirect;
+						}, 1200);
+					}
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		// Approve / dismiss / reconsider one topic.
+		$(document).on('click', '.ecp-topic-act', function () {
+			var $button = $(this);
+			var $topic = $button.closest('.ecp-map-topic');
+			var $status = $topic.find('.ecp-row-status');
+
+			$topic.find('button').prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('topic_action', { id: $button.data('id'), act: $button.data('act') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 800);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$topic.find('button').prop('disabled', false);
+				});
+		});
+
+		// Approve everything still open in a cluster.
+		$(document).on('click', '.ecp-cluster-approve', function () {
+			var $button = $(this);
+			var $status = $button.siblings('.ecp-row-status');
+
+			$button.prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('approve_cluster', { seed: $button.data('seed'), parent: $button.data('parent') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 800);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
 		// Knowledge Vault: add a fact from the form.
 		$('#ecp-add-fact').on('click', function () {
 			var $button = $(this);

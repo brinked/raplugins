@@ -54,6 +54,9 @@ class ECP_Ajax {
             'rebuild_roadmap'  => 'rebuild_roadmap',
             'save_fact'        => 'save_fact',
             'fact_action'      => 'fact_action',
+            'build_map'        => 'build_map',
+            'topic_action'     => 'topic_action',
+            'approve_cluster'  => 'approve_cluster',
         );
 
         foreach ($actions as $action => $method) {
@@ -159,6 +162,94 @@ class ECP_Ajax {
 
         wp_send_json_success(array(
             'message' => isset($messages[$act]) ? $messages[$act] : __('Done.', 'enhanced-content-plugin'),
+        ));
+    }
+
+    /* --------------------------------------------------------------------
+     * Topical Map
+     * ----------------------------------------------------------------- */
+
+    /**
+     * Grow a map from a seed. One AI call, metered monthly.
+     */
+    public function build_map() {
+        $this->guard();
+
+        $seed = isset($_POST['seed']) ? sanitize_text_field(wp_unslash($_POST['seed'])) : '';
+
+        $result = ECP_Topical_Map::build($seed, array('trigger_source' => 'manual'));
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        wp_send_json_success(array(
+            'message'  => sprintf(
+                /* translators: 1: topics mapped, 2: topics judged not worth writing */
+                __('Mapped %1$d topics — the restraint engine ruled out a new page for %2$d of them.', 'enhanced-content-plugin'),
+                (int) $result['total'],
+                (int) $result['restrained']
+            ),
+            'redirect' => add_query_arg(
+                array('page' => 'ecp-map', 'seed' => rawurlencode($result['seed'])),
+                admin_url('admin.php')
+            ),
+        ));
+    }
+
+    /**
+     * Approve, dismiss or reopen one topic.
+     */
+    public function topic_action() {
+        $this->guard();
+
+        $id = isset($_POST['id']) ? absint($_POST['id']) : 0;
+        $act = isset($_POST['act']) ? sanitize_key($_POST['act']) : '';
+
+        $result = ECP_Topical_Map::decide(array($id), $act);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        $messages = array(
+            'approve' => __('Approved. Briefs for approved topics arrive in the next phase.', 'enhanced-content-plugin'),
+            'dismiss' => __('Dismissed.', 'enhanced-content-plugin'),
+            'reopen'  => __('Back under consideration.', 'enhanced-content-plugin'),
+        );
+
+        wp_send_json_success(array(
+            'message' => isset($messages[$act]) ? $messages[$act] : __('Done.', 'enhanced-content-plugin'),
+        ));
+    }
+
+    /**
+     * Approve every open topic in one cluster.
+     */
+    public function approve_cluster() {
+        $this->guard();
+
+        $seed = isset($_POST['seed']) ? sanitize_text_field(wp_unslash($_POST['seed'])) : '';
+        $parent = isset($_POST['parent']) ? sanitize_text_field(wp_unslash($_POST['parent'])) : '';
+
+        $ids = ECP_Topical_Map::cluster_ids($seed, $parent);
+
+        if (!$ids) {
+            wp_send_json_error(array('message' => __('Nothing left to approve in that cluster.', 'enhanced-content-plugin')));
+        }
+
+        $result = ECP_Topical_Map::decide($ids, 'approve');
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        wp_send_json_success(array(
+            'message' => sprintf(
+                /* translators: %d: number of topics approved */
+                _n('%d topic approved.', '%d topics approved.', (int) $result, 'enhanced-content-plugin'),
+                (int) $result
+            ),
         ));
     }
 
