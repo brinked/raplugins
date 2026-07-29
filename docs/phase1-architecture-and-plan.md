@@ -286,3 +286,38 @@ Order of commits (each independently shippable, current agent untouched througho
   batches (500 posts ≈ 10 batches) → classification proceeds at the daily cap → intelligence
   screen populates progressively with an honest "N of M classified" header rather than appearing
   empty (the lesson this codebase keeps re-learning: show partial state, never blank).
+
+---
+
+## Addendum (2026-07-29): external review adopted — Site Memory & the Content Restraint Engine
+
+A second-opinion review (ChatGPT, against the gameplan) produced three recommendations. Status:
+
+**1. "Shrink Phase 1 to: understand the site, recommend the top actions, no article builder."**
+Satisfied by v2.9.0 as shipped — Phase 1 contained exactly this scope. Adopted from the review's
+mockup: the richer Today's Priority card (recommended-action list, effort/confidence/value chips,
+one-click **Build Improvement Plan**) and the per-item "why RankAudit picked this" evidence line
+on the Opportunities list. Chips are derived, never invented: effort from the issues' fix types,
+confidence from whether the diagnosis is measured (GSC) or inferred (on-page), value from the
+modelled click upside.
+
+**2. Site Memory** — now a named core concept (supersedes "learning engine, Phase 7").
+The institutional memory of what works *on this site*: what was changed, rejected, reverted,
+edited; what performed at 7/14/28/56/90 days; which title styles win CTR here; which topics the
+site earns trust on; what the owner has verified as fact. Most raw material is already recorded
+(trust ladder, measurement checks, human-edit flags, topic locks, owner facts). Newly added:
+**style tagging** on meta title/description proposals (benefit_driven / question / how_to / list /
+year_fresh / brand / plain), recorded from day one because outcomes cannot be backfilled onto
+changes that never noted their style. Sequencing change: memory-as-prompt-context ("on this site,
+FAQ additions are rejected half the time") moves from Phase 7 into **Phase 2**; style-outcome
+aggregation follows once measurement data accumulates. This is the moat: a year in, RankAudit
+knows the site in a way no fresh install of any competitor can.
+
+**3. Content Restraint Engine** — now a named core concept and positioning pillar.
+The engine that says "do not write this article" — because an existing page already satisfies the
+intent, demand doesn't justify a separate URL, it would cannibalize an existing page, or no
+information gain is available. Substance already in the plan (§8.6 dedup, §10.3 info-gain, §28
+standard) and half-built (clusters/cannibalisation); elevation means every topical-map node gets
+an explicit create / expand / merge / **refuse** verdict, with refusals displayed as prominently
+as recommendations. Lands with the topical map phase. Positioning line adopted: *"Other tools
+help you publish more; RankAudit helps you publish only what deserves to exist."*
