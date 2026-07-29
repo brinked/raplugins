@@ -1966,3 +1966,17 @@ a.ecp-band-badge:hover {
 	gap: 8px;
 	flex-wrap: wrap;
 }
+
+/* Draft state on the Content Plan --------------------------------------- */
+
+.ecp-draft-state {
+	margin: 10px 0 0 18px;
+	padding: 10px 14px;
+	background: #f6f7f7;
+	border-left: 3px solid #dcdcde;
+}
+
+.ecp-draft-state p {
+	margin: 0 0 6px;
+	font-size: 13px;
+}

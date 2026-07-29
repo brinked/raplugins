@@ -59,6 +59,7 @@ class ECP_Ajax {
             'approve_cluster'  => 'approve_cluster',
             'build_brief'      => 'build_brief',
             'brief_action'     => 'brief_action',
+            'draft_article'    => 'draft_article',
         );
 
         foreach ($actions as $action => $method) {
@@ -303,6 +304,34 @@ class ECP_Ajax {
 
         wp_send_json_success(array(
             'message' => isset($messages[$act]) ? $messages[$act] : __('Done.', 'enhanced-content-plugin'),
+        ));
+    }
+
+    /**
+     * Draft the article for an approved brief. One AI call; the result
+     * is an unpublished WordPress draft.
+     */
+    public function draft_article() {
+        $this->guard();
+
+        $id = isset($_POST['id']) ? absint($_POST['id']) : 0;
+
+        $result = ECP_Drafter::draft($id, array('trigger_source' => 'manual'));
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        $flags = count($result['quality']['flags']);
+
+        wp_send_json_success(array(
+            'message' => $flags
+                ? sprintf(
+                    /* translators: %d: number of quality flags */
+                    _n('Draft created with %d thing to check before publishing.', 'Draft created with %d things to check before publishing.', $flags, 'enhanced-content-plugin'),
+                    $flags
+                )
+                : __('Draft created — nothing flagged. It is waiting, unpublished, in your editor.', 'enhanced-content-plugin'),
         ));
     }
 

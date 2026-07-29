@@ -984,6 +984,29 @@
 				});
 		});
 
+		// Draft the article from an approved brief — the long AI call of
+		// the plugin. The result is an unpublished WordPress draft.
+		$(document).on('click', '.ecp-draft-article', function () {
+			var $button = $(this);
+			var $topic = $button.closest('.ecp-plan-topic');
+			var $status = $topic.find('.ecp-row-status').first();
+
+			$topic.find('button').prop('disabled', true);
+			$status.text(t('drafting'));
+
+			post('draft_article', { id: $button.data('id') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 1500);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$topic.find('button').prop('disabled', false);
+				});
+		});
+
 		$(document).on('click', '.ecp-brief-act', function () {
 			var $button = $(this);
 			var $topic = $button.closest('.ecp-plan-topic');

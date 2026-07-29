@@ -247,6 +247,7 @@ class ECP_Admin_Menu {
                 'seedEmpty'      => __('Type a seed topic first.', 'enhanced-content-plugin'),
                 'mapping'        => __('Mapping the topic… this can take a minute.', 'enhanced-content-plugin'),
                 'briefing'       => __('Writing the brief… this can take a minute.', 'enhanced-content-plugin'),
+                'drafting'       => __('Drafting the article… this can take a few minutes.', 'enhanced-content-plugin'),
             ),
         ));
     }

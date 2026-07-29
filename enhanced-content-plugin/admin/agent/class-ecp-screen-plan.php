@@ -264,6 +264,8 @@ class ECP_Screen_Plan {
                 <?php endif; ?>
             </details>
 
+            <?php self::render_draft_state($row, $can_review); ?>
+
             <?php if ($can_review) : ?>
                 <p class="ecp-brief-actions">
                     <?php if (ECP_Briefs::PROPOSED === $row['status']) : ?>
@@ -274,6 +276,11 @@ class ECP_Screen_Plan {
                             <?php esc_html_e('Reject', 'enhanced-content-plugin'); ?>
                         </button>
                     <?php else : ?>
+                        <?php if (ECP_Briefs::APPROVED === $row['status'] && !(int) $row['draft_post_id'] && ECP_Agent_Settings::is_ready()) : ?>
+                            <button type="button" class="button button-small button-primary ecp-draft-article" data-id="<?php echo esc_attr($row['id']); ?>">
+                                <?php esc_html_e('Draft the article', 'enhanced-content-plugin'); ?>
+                            </button>
+                        <?php endif; ?>
                         <button type="button" class="button button-small ecp-brief-act" data-act="reopen" data-id="<?php echo esc_attr($row['id']); ?>">
                             <?php esc_html_e('Reconsider', 'enhanced-content-plugin'); ?>
                         </button>
@@ -284,6 +291,83 @@ class ECP_Screen_Plan {
                         <?php endif; ?>
                     <?php endif; ?>
                 </p>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    /**
+     * The drafted article, its live status, and the quality report.
+     *
+     * Everything the pipeline flagged is shown before the edit link —
+     * the owner walks into the editor knowing exactly what to check.
+     */
+    private static function render_draft_state(array $row, $can_review) {
+        if (!(int) $row['draft_post_id']) {
+            return;
+        }
+
+        $post = get_post((int) $row['draft_post_id']);
+
+        if (!$post) {
+            ?>
+            <p class="ecp-muted"><?php esc_html_e('The draft for this brief was deleted. You can draft it again.', 'enhanced-content-plugin'); ?></p>
+            <?php
+            return;
+        }
+
+        $quality = ECP_DB::decode($row['draft_quality']);
+        $flags = isset($quality['flags']) ? (array) $quality['flags'] : array();
+        $claims = isset($quality['claims']) ? (array) $quality['claims'] : array();
+        $unverified = array_filter($claims, function ($claim) {
+            return isset($claim['support']) && 'needs_verification' === $claim['support'];
+        });
+        ?>
+        <div class="ecp-draft-state">
+            <p>
+                <?php if ('publish' === $post->post_status) : ?>
+                    <span class="ecp-chip ecp-chip-safe"><?php esc_html_e('Published', 'enhanced-content-plugin'); ?></span>
+                    <a href="<?php echo esc_url(get_permalink($post)); ?>"><?php esc_html_e('View the article', 'enhanced-content-plugin'); ?> &rarr;</a>
+                <?php else : ?>
+                    <span class="ecp-chip ecp-chip-moderate"><?php esc_html_e('Unpublished draft', 'enhanced-content-plugin'); ?></span>
+                    <?php if ($can_review) : ?>
+                        <a href="<?php echo esc_url(get_edit_post_link($post)); ?>"><?php esc_html_e('Review and publish in the editor', 'enhanced-content-plugin'); ?> &rarr;</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </p>
+
+            <?php if ($flags) : ?>
+                <p><strong><?php esc_html_e('Check before publishing:', 'enhanced-content-plugin'); ?></strong></p>
+                <ul class="ecp-brief-list">
+                    <?php foreach ($flags as $flag) : ?>
+                        <li>
+                            <span class="ecp-chip ecp-chip-<?php echo esc_attr('high' === $flag['severity'] ? 'sensitive' : ('medium' === $flag['severity'] ? 'moderate' : 'safe')); ?>">
+                                <?php echo esc_html($flag['severity']); ?>
+                            </span>
+                            <?php echo esc_html($flag['detail']); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php elseif ('publish' !== $post->post_status) : ?>
+                <p class="ecp-muted"><?php esc_html_e('The quality review found nothing to flag. Read it anyway — it publishes under your name.', 'enhanced-content-plugin'); ?></p>
+            <?php endif; ?>
+
+            <?php if ($unverified) : ?>
+                <details class="ecp-brief-details">
+                    <summary><?php esc_html_e('Claims needing your verification', 'enhanced-content-plugin'); ?></summary>
+                    <ul class="ecp-brief-list">
+                        <?php foreach ($unverified as $claim) : ?>
+                            <li>
+                                <strong><?php echo esc_html($claim['section']); ?>:</strong>
+                                <?php echo esc_html($claim['statement']); ?>
+                                <span class="ecp-muted">— <?php echo esc_html($claim['source_note']); ?></span>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <p class="ecp-muted">
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-vault')); ?>"><?php esc_html_e('Verify facts in the Knowledge Vault', 'enhanced-content-plugin'); ?> &rarr;</a>
+                    </p>
+                </details>
             <?php endif; ?>
         </div>
         <?php
