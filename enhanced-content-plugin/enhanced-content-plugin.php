@@ -118,6 +118,7 @@ class Enhanced_Content_Plugin {
         // real page with an unsaved change applied.
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-preview.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-trust-ladder.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-memory.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-measurement.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-refresh.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-scheduler.php';

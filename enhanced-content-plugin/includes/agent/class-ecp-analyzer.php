@@ -696,6 +696,17 @@ class ECP_Analyzer {
             $lines[] = $rule;
         }
 
+        // Site Memory: the track record of what this owner approves,
+        // rejects and rolls back, and which changes measurably worked here.
+        // This is what separates the five-hundredth analysis on this site
+        // from the first one.
+        $memory = ECP_Memory::prompt_context();
+
+        if ($memory) {
+            $lines[] = '';
+            $lines[] = $memory;
+        }
+
         if ($brand_terms) {
             $lines[] = '';
             $lines[] = 'Brand terms — reproduce these exactly, including capitalisation and spacing: ' . implode(', ', $brand_terms) . '.';

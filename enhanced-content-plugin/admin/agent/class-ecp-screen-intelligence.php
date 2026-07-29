@@ -57,6 +57,7 @@ class ECP_Screen_Intelligence {
                         <?php self::render_inventory($list, $args, $stats); ?>
                     </div>
                     <div class="ecp-col-side">
+                        <?php self::render_memory(); ?>
                         <?php self::render_mix(); ?>
                         <?php self::render_health(); ?>
                     </div>
@@ -157,6 +158,37 @@ class ECP_Screen_Intelligence {
                     <?php endforeach; ?>
                 </tbody>
             </table>
+        </div>
+        <?php
+    }
+
+    /**
+     * Site Memory: what the agent has learned about THIS site.
+     *
+     * Every line here is also fed into the analysis prompts, verbatim in
+     * substance — the model is never told anything the owner cannot see,
+     * and the owner can watch the moat accumulate.
+     */
+    private static function render_memory() {
+        $insights = ECP_Memory::insights();
+        ?>
+        <div class="ecp-panel ecp-memory-panel">
+            <h2><?php esc_html_e('What the agent has learned here', 'enhanced-content-plugin'); ?></h2>
+
+            <?php if (!$insights) : ?>
+                <p class="ecp-muted">
+                    <?php esc_html_e('Nothing yet — this fills in as you review changes and their results get measured. Every approval, rejection and measured outcome becomes knowledge about what works on this site specifically, and future proposals are calibrated by it.', 'enhanced-content-plugin'); ?>
+                </p>
+            <?php else : ?>
+                <ul class="ecp-memory-list">
+                    <?php foreach ($insights as $insight) : ?>
+                        <li><?php echo esc_html($insight); ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                <p class="description">
+                    <?php esc_html_e('These findings are given to the AI with every analysis, so proposals lean toward what has actually worked here rather than generic best practice.', 'enhanced-content-plugin'); ?>
+                </p>
+            <?php endif; ?>
         </div>
         <?php
     }
