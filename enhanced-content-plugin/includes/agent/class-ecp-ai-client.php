@@ -87,9 +87,29 @@ class ECP_AI_Client {
             'trigger_source' => 'cron',
             'max_tokens'     => 16000,
             'effort'         => ECP_Agent_Settings::get('effort', 'high'),
+            // Which meter this call spends against. 'analyze' is the
+            // default and behaves exactly as before; other meters (e.g.
+            // 'classify') are budgeted separately so bulk classification
+            // can never eat the day's analysis allowance.
+            'meter'          => 'analyze',
+            // Per-call model override — classification runs fine on a
+            // cheaper model and the caller knows that, not this method.
+            'model'          => '',
         ));
 
-        $budget = self::budget_check();
+        if ('analyze' === $args['meter']) {
+            $budget = self::budget_check();
+        } else {
+            // Non-analyze meters answer to their own cap plus the shared
+            // monthly dollar ceiling. The caller has already checked its
+            // meter with the real unit count; this is the backstop.
+            $budget = self::monthly_budget_check();
+
+            if (!is_wp_error($budget)) {
+                $budget = ECP_Limits::can($args['meter']);
+            }
+        }
+
         if (is_wp_error($budget)) {
             ECP_Log::warn(ECP_Log::BUDGET_EXHAUSTED, $budget->get_error_message(), array(
                 'post_id' => (int) $args['post_id'],
@@ -98,7 +118,7 @@ class ECP_AI_Client {
             return $budget;
         }
 
-        $provider = self::provider();
+        $provider = self::provider($args['model'] ? array('model' => $args['model']) : array());
         if (is_wp_error($provider)) {
             return $provider;
         }
@@ -117,9 +137,15 @@ class ECP_AI_Client {
         self::finish_run($run_id, $result, $usage);
 
         if (!is_wp_error($result)) {
-            // Cached counters the budget check reads on the hot path.
+            // Cached counters the budget check reads on the hot path. Only
+            // analyze-meter calls count as analyses; other meters record
+            // their own spend at the caller, which knows the real unit
+            // count (a classify call is N pages, not one analysis).
             self::increment_spend($usage['cost_micros']);
-            self::increment_daily_analyses();
+
+            if ('analyze' === $args['meter']) {
+                self::increment_daily_analyses();
+            }
         }
 
         return is_wp_error($result) ? $result : array('data' => $result, 'usage' => $usage, 'run_id' => $run_id);
@@ -132,17 +158,14 @@ class ECP_AI_Client {
     /**
      * @return true|WP_Error
      */
-    public static function budget_check() {
+    /**
+     * The shared monthly dollar ceiling, alone. Every meter answers to
+     * this regardless of its own count-based cap.
+     *
+     * @return true|WP_Error
+     */
+    public static function monthly_budget_check() {
         $monthly_cap = (float) ECP_Agent_Settings::get('monthly_budget_usd', 20);
-
-        // The per-day analysis cap is read through the limits gate, so a
-        // plan entitlement can raise it without this method knowing. The
-        // behaviour is identical to the old inline check.
-        $daily = ECP_Limits::can('analyze');
-
-        if (is_wp_error($daily)) {
-            return $daily;
-        }
 
         if ($monthly_cap > 0) {
             $spent = self::month_spend_usd();
@@ -157,6 +180,19 @@ class ECP_AI_Client {
         }
 
         return true;
+    }
+
+    public static function budget_check() {
+        // The per-day analysis cap is read through the limits gate, so a
+        // plan entitlement can raise it without this method knowing. The
+        // behaviour is identical to the old inline check.
+        $daily = ECP_Limits::can('analyze');
+
+        if (is_wp_error($daily)) {
+            return $daily;
+        }
+
+        return self::monthly_budget_check();
     }
 
     /**

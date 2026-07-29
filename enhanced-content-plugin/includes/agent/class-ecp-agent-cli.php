@@ -762,6 +762,90 @@ class ECP_Agent_CLI {
     public function digest() {
         WP_CLI::success(ECP_Digest::send_test() ? 'Digest sent.' : 'wp_mail() returned false — check the site\'s email configuration.');
     }
+
+    /**
+     * Build or refresh the full site inventory.
+     *
+     * Walks every eligible post through the same scoring pass the hourly
+     * scan uses, which also writes the inventory row for each.
+     *
+     * ## EXAMPLES
+     *
+     *     wp ecp inventory
+     */
+    public function inventory($args, $assoc_args) {
+        $offset = 0;
+        $total = 0;
+
+        do {
+            $result = ECP_Opportunity_Engine::scan_batch($offset, 50);
+            $offset += $result['processed'];
+            $total = (int) $result['total'];
+
+            WP_CLI::log(sprintf('  %d / %d scanned…', min($offset, $total), $total));
+        } while ($result['processed'] > 0 && $offset < $total);
+
+        $stats = ECP_Inventory::stats();
+
+        WP_CLI::success(sprintf(
+            'Inventory holds %d pages (%d published). %d classified, %d awaiting classification.',
+            $stats['total'],
+            $stats['published'],
+            $stats['classified'],
+            max(0, $stats['published'] - $stats['classified'])
+        ));
+    }
+
+    /**
+     * Classify pages by topic, intent and funnel stage.
+     *
+     * Runs batches until the backlog is empty or the daily classification
+     * limit is reached.
+     *
+     * ## OPTIONS
+     *
+     * [--batches=<n>]
+     * : Maximum batches this invocation runs. Default 50.
+     *
+     * ## EXAMPLES
+     *
+     *     wp ecp classify
+     *     wp ecp classify --batches=5
+     */
+    public function classify($args, $assoc_args) {
+        $max = isset($assoc_args['batches']) ? max(1, (int) $assoc_args['batches']) : 50;
+        $done = 0;
+
+        for ($i = 0; $i < $max; $i++) {
+            $result = ECP_Classifier::run_batch('cli');
+
+            if (is_wp_error($result)) {
+                WP_CLI::warning($result->get_error_message());
+                break;
+            }
+
+            if (0 === (int) $result['classified']) {
+                break;   // Backlog empty.
+            }
+
+            $done += (int) $result['classified'];
+            WP_CLI::log(sprintf('  %d classified, %d remaining…', $done, (int) $result['remaining']));
+
+            if (0 === (int) $result['remaining']) {
+                break;
+            }
+        }
+
+        $stats = ECP_Inventory::stats();
+
+        WP_CLI::success(sprintf(
+            '%d pages classified this run. Site: %d of %d published pages classified across %d topics.',
+            $done,
+            $stats['classified'],
+            $stats['published'],
+            $stats['topics']
+        ));
+    }
 }
 
 WP_CLI::add_command('ecp', 'ECP_Agent_CLI');

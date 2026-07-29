@@ -243,6 +243,18 @@ class ECP_Scheduler {
             ECP_Analyzer::analyze($post_id, array('trigger_source' => 'cron'));
         }
 
+        // One classification batch per tick, until the whole site is
+        // classified. Separate meter from analyses, so cataloguing a big
+        // site never eats the day's improvement budget; after the initial
+        // pass this almost always no-ops (only edited pages re-qualify).
+        if (!is_wp_error(ECP_Limits::can('classify'))) {
+            $unclassified = ECP_Inventory::unclassified(1);
+
+            if ($unclassified) {
+                ECP_Classifier::run_batch('cron');
+            }
+        }
+
         // One reader-question audit per tick, on the most valuable page
         // whose audit is missing or describes text that has since changed.
         // Costs one analysis from the same daily budget; article quality is

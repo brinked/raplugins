@@ -516,6 +516,41 @@ class ECP_Screen_Agent_Settings {
                 </td>
             </tr>
         </table>
+
+        <h2><?php esc_html_e('Site intelligence', 'enhanced-content-plugin'); ?></h2>
+        <table class="form-table" role="presentation">
+            <tr>
+                <th scope="row"><label for="ecp_classify_per_day"><?php esc_html_e('Pages classified per day', 'enhanced-content-plugin'); ?></label></th>
+                <td>
+                    <input type="number" name="ecp_classify_per_day" id="ecp_classify_per_day"
+                           value="<?php echo esc_attr($s['classify_per_day']); ?>" min="0" step="20" class="small-text">
+                    <p class="description">
+                        <?php esc_html_e('Topic and intent classification for the Site Intelligence screen. Separate from the analysis limit, and cheap: pages are classified 20 to a request from their outline, once, then only again when their content changes. 0 pauses it.', 'enhanced-content-plugin'); ?>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="ecp_classify_model"><?php esc_html_e('Classification model', 'enhanced-content-plugin'); ?></label></th>
+                <td>
+                    <select name="ecp_classify_model" id="ecp_classify_model">
+                        <option value="" <?php selected($s['classify_model'], ''); ?>><?php esc_html_e('Same as the main model', 'enhanced-content-plugin'); ?></option>
+                        <?php
+                        foreach (ECP_AI_Client::all_providers() as $provider) {
+                            foreach ($provider->models() as $id => $label) {
+                                printf(
+                                    '<option value="%s"%s>%s</option>',
+                                    esc_attr($id),
+                                    selected($s['classify_model'], $id, false),
+                                    esc_html($label)
+                                );
+                            }
+                        }
+                        ?>
+                    </select>
+                    <p class="description"><?php esc_html_e('Cataloguing pages is simpler work than rewriting them — a cheaper, faster model does it fine.', 'enhanced-content-plugin'); ?></p>
+                </td>
+            </tr>
+        </table>
         <?php
     }
 

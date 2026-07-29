@@ -130,6 +130,10 @@ class ECP_Agent_Settings {
                 'schema_fix',
             ),
 
+            // --- Site intelligence ---------------------------------------------------
+            'classify_per_day'      => 100, // Pages classified per day; own meter, not analyses.
+            'classify_model'        => '',  // Empty = the main model. Classification runs fine on a cheaper one.
+
             // --- Search Console ---------------------------------------------------
             'search_source'        => 'auto', // auto | sitekit | csv | none
             'metrics_retention_days' => 400,
@@ -275,6 +279,7 @@ class ECP_Agent_Settings {
             'refresh_interval_days' => array(30, 730),
             'refresh_per_day'      => array(1, 10),
             'refresh_hold_hours'   => array(0, 168),
+            'classify_per_day'     => array(0, 5000),
         );
 
         foreach ($ints as $key => $range) {
@@ -299,6 +304,10 @@ class ECP_Agent_Settings {
                 $value = sanitize_text_field((string) $input[$key]);
                 $out[$key] = in_array($value, $allowed, true) ? $value : $allowed[0];
             }
+        }
+
+        if (isset($input['classify_model'])) {
+            $out['classify_model'] = sanitize_text_field((string) $input['classify_model']);
         }
 
         if (isset($input['model'])) {
