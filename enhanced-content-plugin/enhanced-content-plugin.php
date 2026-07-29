@@ -133,6 +133,7 @@ class Enhanced_Content_Plugin {
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-review.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-opportunities.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-roadmap.php';
+            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-vault.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-rankings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-clusters.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-intelligence.php';

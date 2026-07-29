@@ -1760,3 +1760,40 @@ a.ecp-band-badge:hover {
 	margin-left: 8px;
 	font-size: 12px;
 }
+
+/* Knowledge Vault ------------------------------------------------------- */
+
+.ecp-vault-form label {
+	display: block;
+	margin: 10px 0 4px;
+	font-weight: 600;
+	font-size: 13px;
+}
+
+.ecp-vault-form textarea,
+.ecp-vault-form input,
+.ecp-vault-form select {
+	max-width: 640px;
+}
+
+.ecp-vault-form-status {
+	margin-left: 8px;
+	font-size: 12px;
+}
+
+.ecp-vault-table .ecp-cell-action {
+	white-space: nowrap;
+	text-align: right;
+}
+
+.ecp-vault-table .ecp-row-status {
+	display: block;
+	font-size: 12px;
+}
+
+.ecp-fact-edit-controls {
+	margin-top: 6px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}

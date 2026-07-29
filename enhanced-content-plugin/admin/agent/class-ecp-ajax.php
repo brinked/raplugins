@@ -52,6 +52,8 @@ class ECP_Ajax {
             'cluster_status'   => 'cluster_status',
             'roadmap_action'   => 'roadmap_action',
             'rebuild_roadmap'  => 'rebuild_roadmap',
+            'save_fact'        => 'save_fact',
+            'fact_action'      => 'fact_action',
         );
 
         foreach ($actions as $action => $method) {
@@ -158,6 +160,76 @@ class ECP_Ajax {
         wp_send_json_success(array(
             'message' => isset($messages[$act]) ? $messages[$act] : __('Done.', 'enhanced-content-plugin'),
         ));
+    }
+
+    /* --------------------------------------------------------------------
+     * Knowledge Vault
+     * ----------------------------------------------------------------- */
+
+    /**
+     * Add a fact to the vault.
+     */
+    public function save_fact() {
+        $this->guard();
+
+        $id = ECP_Vault::add(array(
+            'fact'     => isset($_POST['fact']) ? wp_unslash($_POST['fact']) : '',
+            'question' => isset($_POST['question']) ? wp_unslash($_POST['question']) : '',
+            'topic'    => isset($_POST['topic']) ? wp_unslash($_POST['topic']) : '',
+            'source'   => 'manual',
+        ));
+
+        if (is_wp_error($id)) {
+            wp_send_json_error(array('message' => $id->get_error_message()));
+        }
+
+        wp_send_json_success(array(
+            'message' => __('In the vault. The agent can use it from the next analysis on.', 'enhanced-content-plugin'),
+        ));
+    }
+
+    /**
+     * Confirm, edit, retire or restore a vault fact.
+     */
+    public function fact_action() {
+        $this->guard();
+
+        $id = isset($_POST['id']) ? absint($_POST['id']) : 0;
+        $act = isset($_POST['act']) ? sanitize_key($_POST['act']) : '';
+
+        switch ($act) {
+            case 'confirm':
+                $result = ECP_Vault::confirm($id);
+                $message = __('Confirmed as still true.', 'enhanced-content-plugin');
+                break;
+
+            case 'retire':
+                $result = ECP_Vault::retire($id);
+                $message = __('Retired — removed from every future analysis.', 'enhanced-content-plugin');
+                break;
+
+            case 'restore':
+                $result = ECP_Vault::restore($id);
+                $message = __('Restored.', 'enhanced-content-plugin');
+                break;
+
+            case 'edit':
+                $result = ECP_Vault::update_fact($id, array(
+                    'fact' => isset($_POST['fact']) ? wp_unslash($_POST['fact']) : '',
+                ));
+                $message = __('Updated and re-confirmed.', 'enhanced-content-plugin');
+                break;
+
+            default:
+                wp_send_json_error(array('message' => __('Unknown vault action.', 'enhanced-content-plugin')));
+                return;
+        }
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        wp_send_json_success(array('message' => $message));
     }
 
     /**

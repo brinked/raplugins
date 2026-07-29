@@ -887,6 +887,114 @@
 				});
 		});
 
+		// Knowledge Vault: add a fact from the form.
+		$('#ecp-add-fact').on('click', function () {
+			var $button = $(this);
+			var $status = $('.ecp-vault-form-status');
+			var fact = $.trim($('#ecp-fact-text').val());
+
+			if (!fact) {
+				$status.text(t('factEmpty'));
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('save_fact', {
+				fact: fact,
+				question: $.trim($('#ecp-fact-question').val()),
+				topic: $('#ecp-fact-topic').val()
+			})
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 800);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		// Confirm / retire / restore a fact.
+		$(document).on('click', '.ecp-fact-act', function () {
+			var $button = $(this);
+			var $row = $button.closest('tr');
+			var $status = $row.find('.ecp-row-status');
+
+			$row.find('button').prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('fact_action', { id: $button.data('id'), act: $button.data('act') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 800);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$row.find('button').prop('disabled', false);
+				});
+		});
+
+		// Edit a fact in place: swap the text for a textarea, save on
+		// Enter or the save button, cancel on Escape.
+		$(document).on('click', '.ecp-fact-edit', function () {
+			var $row = $(this).closest('tr');
+			var $cell = $row.find('.ecp-fact-cell');
+			var $text = $cell.find('.ecp-fact-text');
+
+			if ($cell.data('editing')) {
+				return;
+			}
+
+			$cell.data('editing', true);
+
+			var $area = $('<textarea class="large-text" rows="2"></textarea>').val($text.text());
+			var $save = $('<button type="button" class="button button-small"></button>').text(t('saveEdit'));
+			var $cancel = $('<button type="button" class="button-link"></button>').text(t('cancel'));
+			var $controls = $('<div class="ecp-fact-edit-controls"></div>').append($save, ' ', $cancel);
+
+			$text.hide().after($area, $controls);
+			$area.focus();
+
+			var close = function () {
+				$area.remove();
+				$controls.remove();
+				$text.show();
+				$cell.data('editing', false);
+			};
+
+			$cancel.on('click', close);
+			$area.on('keydown', function (event) {
+				if ('Escape' === event.key) {
+					close();
+				}
+			});
+
+			$save.on('click', function () {
+				var value = $.trim($area.val());
+
+				if (!value) {
+					return;
+				}
+
+				$save.prop('disabled', true);
+
+				post('fact_action', { id: $row.data('id'), act: 'edit', fact: value })
+					.done(function () {
+						window.location.reload();
+					})
+					.fail(function (message) {
+						$row.find('.ecp-row-status').text(message);
+						$save.prop('disabled', false);
+					});
+			});
+		});
+
 		$('#ecp-classify-now').on('click', function () {
 			var $button = $(this);
 			var $result = $('#ecp-classify-result');

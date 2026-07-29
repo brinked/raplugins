@@ -567,6 +567,11 @@ class ECP_Screen_Dashboard {
                     </li>
                 <?php endforeach; ?>
             </ul>
+            <p>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-vault')); ?>">
+                    <?php esc_html_e('Everything the agent knows lives in the Knowledge Vault', 'enhanced-content-plugin'); ?> &rarr;
+                </a>
+            </p>
         </div>
         <?php
     }

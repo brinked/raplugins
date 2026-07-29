@@ -122,6 +122,15 @@ class ECP_Admin_Menu {
             array('ECP_Screen_Intelligence', 'render')
         );
 
+        $this->hooks['vault'] = add_submenu_page(
+            'ecp-dashboard',
+            __('Knowledge Vault', 'enhanced-content-plugin'),
+            __('Knowledge Vault', 'enhanced-content-plugin'),
+            self::CAP,
+            'ecp-vault',
+            array('ECP_Screen_Vault', 'render')
+        );
+
         $this->hooks['history'] = add_submenu_page(
             'ecp-dashboard',
             __('History', 'enhanced-content-plugin'),
@@ -216,6 +225,7 @@ class ECP_Admin_Menu {
                 'findingLinks'   => __('Looking for pages that could link here…', 'enhanced-content-plugin'),
                 'saving'         => __('Saving…', 'enhanced-content-plugin'),
                 'answerEmpty'    => __('Type an answer first.', 'enhanced-content-plugin'),
+                'factEmpty'      => __('Type the fact first.', 'enhanced-content-plugin'),
             ),
         ));
     }
@@ -332,6 +342,7 @@ class ECP_Admin_Menu {
         }
 
         $tabs['ecp-intelligence'] = __('Site Intelligence', 'enhanced-content-plugin');
+        $tabs['ecp-vault'] = __('Knowledge Vault', 'enhanced-content-plugin');
         $tabs['ecp-history'] = __('History', 'enhanced-content-plugin');
 
         if (ECP_Capabilities::can_manage()) {
