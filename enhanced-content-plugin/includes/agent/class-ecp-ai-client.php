@@ -134,14 +134,14 @@ class ECP_AI_Client {
      */
     public static function budget_check() {
         $monthly_cap = (float) ECP_Agent_Settings::get('monthly_budget_usd', 20);
-        $daily_cap = (int) ECP_Agent_Settings::get('max_analyses_per_day', 10);
 
-        if ($daily_cap > 0 && self::daily_analyses() >= $daily_cap) {
-            return new WP_Error('ecp_daily_cap', sprintf(
-                /* translators: %d: configured daily analysis limit */
-                __('The daily limit of %d analyses has been reached. It resets at midnight.', 'enhanced-content-plugin'),
-                $daily_cap
-            ));
+        // The per-day analysis cap is read through the limits gate, so a
+        // plan entitlement can raise it without this method knowing. The
+        // behaviour is identical to the old inline check.
+        $daily = ECP_Limits::can('analyze');
+
+        if (is_wp_error($daily)) {
+            return $daily;
         }
 
         if ($monthly_cap > 0) {
@@ -212,7 +212,7 @@ class ECP_AI_Client {
     public static function budget_status() {
         $cap = (float) ECP_Agent_Settings::get('monthly_budget_usd', 20);
         $spent = self::month_spend_usd();
-        $daily_cap = (int) ECP_Agent_Settings::get('max_analyses_per_day', 10);
+        $daily_cap = ECP_Limits::limit('analyze');
         $today = self::daily_analyses();
 
         return array(

@@ -90,6 +90,7 @@ class Enhanced_Content_Plugin {
         // --- SEO agent ---
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-db.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-log.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-limits.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-agent-settings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-capabilities.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-map.php';

@@ -107,7 +107,7 @@ class ECP_Scheduler {
 
         $agent_on = ECP_Agent_Settings::is_on('agent_enabled');
         $analysis_on = ECP_Agent_Settings::is_on('analysis_enabled');
-        $daily_cap = (int) ECP_Agent_Settings::get('max_analyses_per_day', 10);
+        $daily_cap = ECP_Limits::limit('analyze');
 
         if (!$agent_on) {
             $reasons[] = __('The agent is switched off in Settings → General.', 'enhanced-content-plugin');
@@ -211,7 +211,7 @@ class ECP_Scheduler {
         // Spread the daily allowance across the day rather than burning it in
         // the first hour — that keeps the review queue arriving in digestible
         // batches and leaves headroom for on-demand analyses.
-        $daily_cap = (int) ECP_Agent_Settings::get('max_analyses_per_day', 10);
+        $daily_cap = ECP_Limits::limit('analyze');
         $per_tick = $daily_cap > 0 ? max(1, (int) ceil($daily_cap / 12)) : 3;
 
         // Clusters first. A cannibalisation fix changes which page should own
