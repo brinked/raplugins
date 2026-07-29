@@ -1896,3 +1896,73 @@ a.ecp-band-badge:hover {
 .ecp-map-topic-actions .ecp-row-status {
 	font-size: 12px;
 }
+
+/* Content Plan ---------------------------------------------------------- */
+
+.ecp-campaign-wave {
+	margin: 18px 0 6px;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #646970;
+}
+
+.ecp-plan-topic {
+	padding: 12px 0;
+	border-top: 1px solid var(--ecp-line);
+}
+
+.ecp-plan-topic-head {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.ecp-plan-topic-head .ecp-row-status {
+	font-size: 12px;
+}
+
+.ecp-brief {
+	margin: 8px 0 0 18px;
+}
+
+.ecp-brief p {
+	margin: 0 0 6px;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.ecp-brief-gate {
+	color: #996800;
+}
+
+.ecp-brief-details {
+	margin: 8px 0;
+	font-size: 13px;
+}
+
+.ecp-brief-details summary {
+	cursor: pointer;
+	color: #2271b1;
+}
+
+.ecp-brief-details > *:not(summary) {
+	margin-left: 14px;
+}
+
+.ecp-brief-list {
+	margin: 0 0 10px 32px;
+	font-size: 13px;
+}
+
+.ecp-brief-list li {
+	margin-bottom: 4px;
+}
+
+.ecp-brief-actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}

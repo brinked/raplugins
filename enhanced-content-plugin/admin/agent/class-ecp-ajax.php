@@ -57,6 +57,8 @@ class ECP_Ajax {
             'build_map'        => 'build_map',
             'topic_action'     => 'topic_action',
             'approve_cluster'  => 'approve_cluster',
+            'build_brief'      => 'build_brief',
+            'brief_action'     => 'brief_action',
         );
 
         foreach ($actions as $action => $method) {
@@ -250,6 +252,57 @@ class ECP_Ajax {
                 _n('%d topic approved.', '%d topics approved.', (int) $result, 'enhanced-content-plugin'),
                 (int) $result
             ),
+        ));
+    }
+
+    /* --------------------------------------------------------------------
+     * Content briefs
+     * ----------------------------------------------------------------- */
+
+    /**
+     * Write the strategic brief for one approved topic. One AI call.
+     */
+    public function build_brief() {
+        $this->guard();
+
+        $topic_id = isset($_POST['topic']) ? absint($_POST['topic']) : 0;
+
+        $result = ECP_Briefs::build($topic_id, array('trigger_source' => 'manual'));
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        wp_send_json_success(array(
+            'message' => (int) $result['info_gain_ok']
+                ? __('Brief ready for your review.', 'enhanced-content-plugin')
+                : __('Brief ready — but it could not name anything new this page would add. Read it carefully.', 'enhanced-content-plugin'),
+        ));
+    }
+
+    /**
+     * Approve, reject or reopen a brief.
+     */
+    public function brief_action() {
+        $this->guard();
+
+        $id = isset($_POST['id']) ? absint($_POST['id']) : 0;
+        $act = isset($_POST['act']) ? sanitize_key($_POST['act']) : '';
+
+        $result = ECP_Briefs::decide($id, $act);
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        $messages = array(
+            'approve' => __('Approved. Drafting arrives in the next phase and will honour exactly this brief.', 'enhanced-content-plugin'),
+            'reject'  => __('Rejected. You can rewrite it any time.', 'enhanced-content-plugin'),
+            'reopen'  => __('Back under review.', 'enhanced-content-plugin'),
+        );
+
+        wp_send_json_success(array(
+            'message' => isset($messages[$act]) ? $messages[$act] : __('Done.', 'enhanced-content-plugin'),
         ));
     }
 

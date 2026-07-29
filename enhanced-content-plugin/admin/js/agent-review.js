@@ -962,6 +962,49 @@
 				});
 		});
 
+		// Content Plan: write or rewrite a brief (a real AI call), and
+		// decide on one. Both reload — brief state changes the whole row.
+		$(document).on('click', '.ecp-build-brief', function () {
+			var $button = $(this);
+			var $status = $button.closest('.ecp-plan-topic').find('.ecp-row-status').first();
+
+			$button.prop('disabled', true);
+			$status.text(t('briefing'));
+
+			post('build_brief', { topic: $button.data('topic') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 1200);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		$(document).on('click', '.ecp-brief-act', function () {
+			var $button = $(this);
+			var $topic = $button.closest('.ecp-plan-topic');
+			var $status = $topic.find('.ecp-row-status').first();
+
+			$topic.find('button').prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('brief_action', { id: $button.data('id'), act: $button.data('act') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 1000);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$topic.find('button').prop('disabled', false);
+				});
+		});
+
 		// Knowledge Vault: add a fact from the form.
 		$('#ecp-add-fact').on('click', function () {
 			var $button = $(this);
