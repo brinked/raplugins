@@ -62,6 +62,12 @@ class ECP_Limits {
                 'period'  => 'month',
                 'label'   => __('Article drafts per month', 'enhanced-content-plugin'),
             ),
+            'serp' => array(
+                'setting' => 'serp_per_month',
+                'default' => 300,
+                'period'  => 'month',
+                'label'   => __('SERP data requests per month', 'enhanced-content-plugin'),
+            ),
         );
 
         /**

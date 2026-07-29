@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.14.0';
+    const SCHEMA_VERSION = '2.15.0';
 
     /* --------------------------------------------------------------------
      * Table names
@@ -86,6 +86,11 @@ class ECP_DB {
         return $wpdb->prefix . 'ecp_briefs';
     }
 
+    public static function serp_cache_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'ecp_serp_cache';
+    }
+
     /**
      * All table names, for uninstall.
      *
@@ -104,6 +109,7 @@ class ECP_DB {
             self::facts_table(),
             self::topics_table(),
             self::briefs_table(),
+            self::serp_cache_table(),
         );
     }
 
@@ -135,6 +141,7 @@ class ECP_DB {
         $facts = self::facts_table();
         $topics = self::topics_table();
         $briefs = self::briefs_table();
+        $serp_cache = self::serp_cache_table();
 
         // ---- Runs -------------------------------------------------------
         // job_type: scan | analyze | measure | manual
@@ -491,6 +498,22 @@ class ECP_DB {
             PRIMARY KEY  (id),
             UNIQUE KEY topic_id (topic_id),
             KEY seed_status (seed,status)
+        ) {$charset};");
+
+        // ---- SERP data cache ------------------------------------------------
+        // DataForSEO bills per request, so every response is kept and a
+        // repeat question is answered from here. `cache_key` is a hash of
+        // (endpoint + payload); rows expire by age at read time and are
+        // pruned by the maintenance job.
+        dbDelta("CREATE TABLE {$serp_cache} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            cache_key char(32) NOT NULL,
+            endpoint varchar(120) NOT NULL DEFAULT '',
+            payload longtext NULL,
+            created_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY cache_key (cache_key),
+            KEY created_at (created_at)
         ) {$charset};");
     }
 

@@ -434,6 +434,37 @@ class ECP_Screen_Agent_Settings {
                     </p>
                 </td>
             </tr>
+            <tr>
+                <th scope="row"><?php esc_html_e('SERP data (DataForSEO)', 'enhanced-content-plugin'); ?></th>
+                <td>
+                    <input type="text" name="ecp_dataforseo_login" class="regular-text"
+                           value="<?php echo esc_attr($s['dataforseo_login']); ?>"
+                           placeholder="<?php esc_attr_e('API login (email)', 'enhanced-content-plugin'); ?>"
+                           autocomplete="off">
+                    <input type="password" name="ecp_dataforseo_password" class="regular-text"
+                           value="<?php echo $s['dataforseo_password'] ? esc_attr(ECP_Agent_Settings::mask()) : ''; ?>"
+                           placeholder="<?php esc_attr_e('API password', 'enhanced-content-plugin'); ?>"
+                           autocomplete="off">
+                    <p class="description">
+                        <?php esc_html_e('Optional. Adds real search volumes to the Topical Map and grounds the information-gain check in what actually ranks. From your DataForSEO dashboard\'s API credentials — not your account login password. Stored encrypted with your site\'s salts. Without it, everything runs on Search Console data alone.', 'enhanced-content-plugin'); ?>
+                    </p>
+                    <p>
+                        <input type="text" name="ecp_serp_location" class="regular-text"
+                               value="<?php echo esc_attr($s['serp_location']); ?>"
+                               placeholder="<?php esc_attr_e('Location, e.g. United States', 'enhanced-content-plugin'); ?>">
+                        <input type="text" name="ecp_serp_language" class="regular-text"
+                               value="<?php echo esc_attr($s['serp_language']); ?>"
+                               placeholder="<?php esc_attr_e('Language, e.g. English', 'enhanced-content-plugin'); ?>">
+                    </p>
+                    <p>
+                        <button type="button" class="button" id="ecp-test-serp"><?php esc_html_e('Test DataForSEO', 'enhanced-content-plugin'); ?></button>
+                        <span id="ecp-test-serp-result" aria-live="polite"></span>
+                    </p>
+                    <p class="description">
+                        <?php esc_html_e('Tests the saved credentials — save first. The test itself is free; data requests are billed by DataForSEO and capped by the monthly meter below.', 'enhanced-content-plugin'); ?>
+                    </p>
+                </td>
+            </tr>
             <tr class="ecp-rankaudit-row">
                 <th scope="row"><?php esc_html_e('RankAudit connection', 'enhanced-content-plugin'); ?></th>
                 <td>

@@ -60,6 +60,7 @@ class ECP_Ajax {
             'build_brief'      => 'build_brief',
             'brief_action'     => 'brief_action',
             'draft_article'    => 'draft_article',
+            'test_serp'        => 'test_serp',
         );
 
         foreach ($actions as $action => $method) {
@@ -253,6 +254,35 @@ class ECP_Ajax {
                 _n('%d topic approved.', '%d topics approved.', (int) $result, 'enhanced-content-plugin'),
                 (int) $result
             ),
+        ));
+    }
+
+    /**
+     * Test the saved DataForSEO credentials against the free
+     * account-status endpoint.
+     */
+    public function test_serp() {
+        $this->guard(ECP_Capabilities::MANAGE);
+
+        $result = ECP_Serp::test();
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        wp_send_json_success(array(
+            'message' => null !== $result['balance']
+                ? sprintf(
+                    /* translators: 1: account login, 2: balance */
+                    __('Connected as %1$s — $%2$.2f of credit remaining.', 'enhanced-content-plugin'),
+                    $result['login'],
+                    (float) $result['balance']
+                )
+                : sprintf(
+                    /* translators: %s: account login */
+                    __('Connected as %s.', 'enhanced-content-plugin'),
+                    $result['login']
+                ),
         ));
     }
 

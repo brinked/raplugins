@@ -339,6 +339,8 @@ class ECP_Scheduler {
 
         ECP_Inventory::prune();
 
+        ECP_Serp::prune();
+
         // Refresh search metrics where we have a live connection.
         if ('sitekit' === ECP_Search_Data::active_source()) {
             $synced = ECP_Search_Data::sync_all();

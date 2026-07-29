@@ -962,6 +962,25 @@
 				});
 		});
 
+		// DataForSEO: test the saved credentials (free endpoint).
+		$('#ecp-test-serp').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-test-serp-result');
+
+			$button.prop('disabled', true);
+			$result.attr('class', '').text(t('testing'));
+
+			post('test_serp')
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+					$button.prop('disabled', false);
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
 		// Content Plan: write or rewrite a brief (a real AI call), and
 		// decide on one. Both reload — brief state changes the whole row.
 		$(document).on('click', '.ecp-build-brief', function () {

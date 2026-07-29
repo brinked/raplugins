@@ -50,6 +50,13 @@ class ECP_Agent_Settings {
             'request_timeout'      => 120,
             'max_retries'          => 2,
 
+            // --- SERP data (DataForSEO) --------------------------------------
+            'dataforseo_login'     => '',
+            'dataforseo_password'  => '',   // Stored encrypted, like api_key.
+            'serp_location'        => 'United States',
+            'serp_language'        => 'English',
+            'serp_per_month'       => 300,
+
             // --- Budget ------------------------------------------------------
             'monthly_budget_usd'   => 20,
             'max_analyses_per_day' => 10,
@@ -280,6 +287,7 @@ class ECP_Agent_Settings {
             'refresh_per_day'      => array(1, 10),
             'refresh_hold_hours'   => array(0, 168),
             'classify_per_day'     => array(0, 5000),
+            'serp_per_month'       => array(0, 100000),
         );
 
         foreach ($ints as $key => $range) {
@@ -332,6 +340,29 @@ class ECP_Agent_Settings {
             } elseif (!self::is_mask($submitted)) {
                 $out['api_key'] = self::encrypt($submitted);
             }
+        }
+
+        // DataForSEO credentials: same mask-and-encrypt contract as api_key.
+        if (isset($input['dataforseo_login'])) {
+            $out['dataforseo_login'] = sanitize_text_field((string) $input['dataforseo_login']);
+        }
+
+        if (isset($input['dataforseo_password'])) {
+            $submitted = trim((string) $input['dataforseo_password']);
+
+            if ('' === $submitted) {
+                $out['dataforseo_password'] = '';
+            } elseif (!self::is_mask($submitted)) {
+                $out['dataforseo_password'] = self::encrypt($submitted);
+            }
+        }
+
+        if (isset($input['serp_location'])) {
+            $out['serp_location'] = sanitize_text_field((string) $input['serp_location']);
+        }
+
+        if (isset($input['serp_language'])) {
+            $out['serp_language'] = sanitize_text_field((string) $input['serp_language']);
         }
 
         // Post types must be real, public and registered.
