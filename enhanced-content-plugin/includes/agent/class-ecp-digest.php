@@ -168,6 +168,7 @@ class ECP_Digest {
             'roadmap_done'   => ECP_Roadmap::completed_since($since),
             'roadmap_stats'  => ECP_Roadmap::stats(),
             'map_stats'      => ECP_Topical_Map::stats(),
+            'brief_stats'    => ECP_Briefs::stats(),
         );
     }
 
@@ -386,6 +387,36 @@ class ECP_Digest {
                     ?>
                     <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-map')); ?>" style="color:#2271b1;">
                         <?php esc_html_e('See the map', 'enhanced-content-plugin'); ?>
+                    </a>
+                </p>
+            <?php endif; ?>
+
+            <?php if (!empty($data['brief_stats']['briefed'])) : ?>
+                <p style="margin:0 0 24px;color:#50575e;font-size:14px;">
+                    <?php
+                    printf(
+                        /* translators: 1: briefs written, 2: briefs approved */
+                        esc_html__('Content plan: %1$d briefs written, %2$d approved and ready for drafting.', 'enhanced-content-plugin'),
+                        (int) $data['brief_stats']['briefed'],
+                        (int) $data['brief_stats']['approved']
+                    );
+
+                    if ((int) $data['brief_stats']['gated'] > 0) {
+                        echo ' ';
+                        printf(
+                            /* translators: %d: briefs failing the information-gain gate */
+                            esc_html(_n(
+                                '%d brief could not name anything new its page would add — worth a hard look before anyone writes it.',
+                                '%d briefs could not name anything new their pages would add — worth a hard look before anyone writes them.',
+                                (int) $data['brief_stats']['gated'],
+                                'enhanced-content-plugin'
+                            )),
+                            (int) $data['brief_stats']['gated']
+                        );
+                    }
+                    ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-plan')); ?>" style="color:#2271b1;">
+                        <?php esc_html_e('Open the plan', 'enhanced-content-plugin'); ?>
                     </a>
                 </p>
             <?php endif; ?>
