@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Accordion Debug</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        #debug-info {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .debug-line {
+            margin: 5px 0;
+            padding: 5px;
+            background: #f0f0f0;
+            border-left: 3px solid #333;
+        }
+        .error { border-left-color: #f44336; }
+        .success { border-left-color: #4CAF50; }
+        .info { border-left-color: #2196F3; }
+    </style>
+</head>
+<body>
+    <h1>Mobile Accordion Debugger</h1>
+    <div id="debug-info">
+        <div class="debug-line info">Initializing debug...</div>
+    </div>
+    
+    <button onclick="runDiagnostics()" style="padding: 15px 30px; font-size: 16px; margin-bottom: 20px;">
+        Run Diagnostics
+    </button>
+    
+    <button onclick="clearDebug()" style="padding: 15px 30px; font-size: 16px; margin-bottom: 20px;">
+        Clear Log
+    </button>
+
+    <script>
+        function log(message, type = 'info') {
+            const debugDiv = document.getElementById('debug-info');
+            const line = document.createElement('div');
+            line.className = 'debug-line ' + type;
+            line.textContent = new Date().toLocaleTimeString() + ': ' + message;
+            debugDiv.appendChild(line);
+            debugDiv.scrollTop = debugDiv.scrollHeight;
+        }
+        
+        function clearDebug() {
+            document.getElementById('debug-info').innerHTML = '<div class="debug-line info">Debug cleared</div>';
+        }
+        
+        function runDiagnostics() {
+            log('=== Starting Diagnostics ===', 'info');
+            
+            // Check if we're on the actual site
+            const currentUrl = window.location.href;
+            log('Current URL: ' + currentUrl, 'info');
+            
+            if (!currentUrl.includes('localhost') && !currentUrl.includes('127.0.0.1') && !currentUrl.includes('your-site')) {
+                log('⚠️ This is a standalone debug page. Please run these checks on your actual product page:', 'error');
+                log('1. Open your product page on mobile', 'info');
+                log('2. Open browser console (Safari: Settings > Advanced > Web Inspector)', 'info');
+                log('3. Run: document.body.classList.contains("wcepi-accordion-mode")', 'info');
+                log('4. Run: jQuery(".wcepi-accordion-header").length', 'info');
+                log('5. Run: jQuery(".woocommerce-Tabs-panel").length', 'info');
+                return;
+            }
+            
+            // Check jQuery
+            if (typeof jQuery === 'undefined') {
+                log('❌ jQuery not loaded!', 'error');
+            } else {
+                log('✓ jQuery loaded (v' + jQuery.fn.jquery + ')', 'success');
+            }
+            
+            // Check body class
+            const hasAccordionMode = document.body.classList.contains('wcepi-accordion-mode');
+            if (hasAccordionMode) {
+                log('✓ Body has wcepi-accordion-mode class', 'success');
+            } else {
+                log('❌ Body missing wcepi-accordion-mode class', 'error');
+                log('Display mode might not be set to accordion', 'info');
+            }
+            
+            // Check for accordion headers
+            if (typeof jQuery !== 'undefined') {
+                const $ = jQuery;
+                const headerCount = $('.wcepi-accordion-header').length;
+                log('Accordion headers found: ' + headerCount, headerCount > 0 ? 'success' : 'error');
+                
+                // Check panels
+                const panelCount = $('.woocommerce-Tabs-panel').length;
+                log('Tab panels found: ' + panelCount, panelCount > 0 ? 'success' : 'error');
+                
+                // Check active panels
+                const activePanels = $('.woocommerce-Tabs-panel.active').length;
+                log('Active panels: ' + activePanels, 'info');
+                
+                // Check panel visibility
+                $('.woocommerce-Tabs-panel').each(function(i) {
+                    const $panel = $(this);
+                    const id = $panel.attr('id');
+                    const isActive = $panel.hasClass('active');
+                    const display = $panel.css('display');
+                    const visibility = $panel.css('visibility');
+                    const opacity = $panel.css('opacity');
+                    
+                    log('Panel #' + id + ': active=' + isActive + ', display=' + display + ', visibility=' + visibility + ', opacity=' + opacity, 
+                        isActive ? 'success' : 'info');
+                });
+                
+                // Check for click handlers
+                const headersWithHandlers = $('.wcepi-accordion-header').filter(function() {
+                    const events = $._data(this, 'events');
+                    return events && (events.click || events.touchend);
+                }).length;
+                log('Headers with click handlers: ' + headersWithHandlers + '/' + headerCount, 
+                    headersWithHandlers === headerCount ? 'success' : 'error');
+                
+                // Test click simulation
+                log('Attempting to simulate click on first header...', 'info');
+                const $firstHeader = $('.wcepi-accordion-header').first();
+                if ($firstHeader.length) {
+                    $firstHeader.trigger('click');
+                    setTimeout(function() {
+                        const isActive = $firstHeader.hasClass('active');
+                        log('First header active after click: ' + isActive, isActive ? 'success' : 'error');
+                    }, 100);
+                }
+            }
+            
+            log('=== Diagnostics Complete ===', 'info');
+        }
+        
+        // Auto-run on load
+        window.addEventListener('load', function() {
+            setTimeout(runDiagnostics, 500);
+        });
+    </script>
+</body>
+</html>

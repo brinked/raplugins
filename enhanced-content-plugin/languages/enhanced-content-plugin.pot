@@ -1,0 +1,1343 @@
+# Copyright (C) 2026 Multi-Author Contributor Plugin
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Multi-Author Contributor Plugin 1.3.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-04 21:27+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Domain: multi-author-plugin\n"
+
+#: multi-author-plugin.php:173
+msgid " (Already added)"
+msgstr ""
+
+#: includes/class-bulk-edit.php:143
+msgid "&mdash; No Change &mdash;"
+msgstr ""
+
+#: includes/class-article-health.php:144
+msgid "%d citations"
+msgstr ""
+
+#: includes/class-article-health.php:607
+msgid "%d days ago"
+msgstr ""
+
+#: includes/class-article-health.php:160
+msgid "%d days since last update"
+msgstr ""
+
+#: includes/class-integrations.php:340
+msgid "%d post credits a contributor whose account was deleted. Deleted contributors are hidden on the front end, but you may want to reassign these credits. Post edits will clean the stored data."
+msgid_plural "%d posts credit contributors whose accounts were deleted. Deleted contributors are hidden on the front end, but you may want to reassign these credits. Post edits will clean the stored data."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-article-health.php:133
+msgid "%d words"
+msgstr ""
+
+#: templates/editorial-team.php:56
+msgid "%s article fact-checked"
+msgid_plural "%s articles fact-checked"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/editorial-team.php:52
+msgid "%s article reviewed"
+msgid_plural "%s articles reviewed"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/editorial-team.php:21
+msgid "%s articles reviewed"
+msgstr ""
+
+#: includes/class-integrations.php:156
+msgid "%s is active and may already output Article schema. Emitting two Article schemas on the same page can cause Search Console conflicts. You can disable this plugin's Article schema under Display Options."
+msgstr ""
+
+#: includes/class-integrations.php:367
+msgid "%s is active and may output Article schema alongside this plugin's. Consider disabling one of them (Settings > Multi-Author > Display Options > Disable Article Schema)."
+msgstr ""
+
+#: includes/class-article-health.php:647
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-article-health.php:557
+msgid "↑ Ascending"
+msgstr ""
+
+#: includes/class-article-health.php:557
+msgid "↓ Descending"
+msgstr ""
+
+#: includes/class-meta-boxes.php:212
+msgid "+ Add Co-Author"
+msgstr ""
+
+#: includes/class-meta-boxes.php:119
+msgid "+ Add Correction"
+msgstr ""
+
+#: includes/class-meta-boxes.php:497
+msgid "+ Add Custom AI Use"
+msgstr ""
+
+#: includes/class-meta-boxes.php:250
+msgid "+ Add Fact Checker"
+msgstr ""
+
+#: includes/class-meta-boxes.php:231
+msgid "+ Add Reviewer"
+msgstr ""
+
+#: includes/class-meta-boxes.php:340
+msgid "+ Add Source"
+msgstr ""
+
+#: includes/class-user-profile.php:103
+msgid "A brief bio (max 200 characters) that appears in the contributor hover popup. This should be concise and highlight your expertise."
+msgstr ""
+
+#: templates/contributor-badges.php:124
+msgid "About our Review Board"
+msgstr ""
+
+#: includes/class-article-health.php:571
+msgid "Actions"
+msgstr ""
+
+#: includes/class-faq.php:96
+msgid "Add a FAQ section to this article. FAQ schema will be automatically added for SEO."
+msgstr ""
+
+#: includes/class-settings.php:617
+msgid "Add a link to your editorial process page at the bottom of author hover popups. Enable here, then toggle per-post in the Article Contributors meta box."
+msgstr ""
+
+#: includes/class-settings.php:631
+msgid "Add a link to your fact-checking process page at the bottom of fact-checker hover popups. Enable here, then toggle per-post in the Article Contributors meta box."
+msgstr ""
+
+#: includes/class-settings.php:624
+msgid "Add a link to your review process page at the bottom of reviewer hover popups. Enable here, then toggle per-post in the Article Contributors meta box."
+msgstr ""
+
+#: includes/class-settings.php:610
+msgid "Add an \"Expert Verified\" badge with a hover popup to show content credibility. Enable here globally, then toggle per-post in the Article Contributors meta box."
+msgstr ""
+
+#: includes/class-meta-boxes.php:477
+msgid "Add any additional ways AI was used that are not listed above:"
+msgstr ""
+
+#: includes/class-bulk-edit.php:127
+msgid "Add Co-Author"
+msgstr ""
+
+#: includes/class-meta-boxes.php:188
+msgid "Add contributors to this article. Users will be displayed in the order shown below."
+msgstr ""
+
+#: includes/class-bulk-edit.php:129
+msgid "Add Fact Checker"
+msgstr ""
+
+#: includes/class-faq.php:140
+msgid "Add FAQ Item"
+msgstr ""
+
+#: includes/class-faq.php:127
+msgid "Add questions and answers. Each FAQ item will include schema markup."
+msgstr ""
+
+#: includes/class-bulk-edit.php:128
+msgid "Add Reviewer"
+msgstr ""
+
+#: includes/class-meta-boxes.php:271
+msgid "Add Selected"
+msgstr ""
+
+#: includes/class-meta-boxes.php:326
+msgid "Add source citations for this article. These will be displayed at the bottom of the article."
+msgstr ""
+
+#: includes/class-meta-boxes.php:374
+msgid "Additional details or description (optional - not linked)"
+msgstr ""
+
+#: includes/class-settings.php:551
+msgid "AI Disclaimer Page URL"
+msgstr ""
+
+#: includes/class-meta-boxes.php:64
+msgid "AI Disclosure Badge"
+msgstr ""
+
+#: includes/class-settings.php:544
+msgid "AI Disclosure Settings"
+msgstr ""
+
+#: includes/class-meta-boxes.php:452
+#: templates/ai-disclaimer-badge.php:49
+#: templates/contributor-badges.php:370
+msgid "AI Enhanced"
+msgstr ""
+
+#: includes/class-meta-boxes.php:453
+msgid "AI tools were used in the creation of this article"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:59
+#: templates/contributor-badges.php:378
+msgid "AI was used for:"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:54
+#: templates/contributor-badges.php:373
+msgid "AI-Assisted Content"
+msgstr ""
+
+#: includes/class-article-health.php:660
+msgid "All"
+msgstr ""
+
+#: includes/class-article-health.php:519
+msgid "All Articles"
+msgstr ""
+
+#: includes/class-integrations.php:303
+msgid "All contributor assignments checked point at existing user accounts."
+msgstr ""
+
+#: includes/class-faq.php:168
+#: includes/class-faq.php:210
+msgid "Answer"
+msgstr ""
+
+#: multi-author-plugin.php:177
+msgid "are credited in more than one role on this post. Self-review can undermine reader trust."
+msgstr ""
+
+#: includes/class-article-health.php:566
+msgid "Article"
+msgstr ""
+
+#: includes/class-meta-boxes.php:46
+msgid "Article Contributors"
+msgstr ""
+
+#: includes/class-article-health.php:65
+#: includes/class-article-health.php:66
+msgid "Article Health"
+msgstr ""
+
+#: includes/class-article-health.php:481
+msgid "Article Health Dashboard"
+msgstr ""
+
+#: includes/class-article-health.php:378
+msgid "Article Health Issues:"
+msgstr ""
+
+#: includes/class-meta-boxes.php:55
+msgid "Article Sources & Citations"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:55
+#: templates/contributor-badges.php:375
+msgid "Artificial intelligence tools were used in the creation of this article. Human editors reviewed and verified all content for accuracy and quality."
+msgstr ""
+
+#: includes/class-frontend-display.php:437
+#: includes/class-meta-boxes.php:418
+msgid "Audio/Voice Generation"
+msgstr ""
+
+#: includes/class-settings.php:394
+msgid "Author Archive Credits"
+msgstr ""
+
+#: includes/class-settings.php:346
+msgid "Automatic (added to content)"
+msgstr ""
+
+#: includes/class-settings.php:151
+msgid "Badge Label"
+msgstr ""
+
+#: includes/class-meta-boxes.php:436
+msgid "Badge Type"
+msgstr ""
+
+#: includes/class-settings.php:905
+#: templates/contributor-badges.php:295
+msgid "By"
+msgstr ""
+
+#: includes/class-user-profile.php:106
+msgid "Character count:"
+msgstr ""
+
+#: includes/class-settings.php:574
+msgid "Choose which content types get the contributor, sources, FAQ, and schema features."
+msgstr ""
+
+#: includes/class-article-health.php:117
+#: includes/class-article-health.php:545
+#: includes/class-article-health.php:568
+msgid "Citations"
+msgstr ""
+
+#: includes/class-bulk-edit.php:81
+msgid "Co-Author"
+msgstr ""
+
+#: includes/class-settings.php:103
+msgid "Co-Author Label"
+msgstr ""
+
+#: includes/class-meta-boxes.php:206
+msgid "Co-Authors"
+msgstr ""
+
+#: includes/class-frontend-display.php:440
+#: includes/class-meta-boxes.php:421
+msgid "Code Generation"
+msgstr ""
+
+#: includes/class-settings.php:567
+msgid "Configure AI disclosure badge settings. The AI badge can be enabled per-post in the AI Disclosure Badge meta box when editing posts."
+msgstr ""
+
+#: includes/class-integrations.php:302
+msgid "Content"
+msgstr ""
+
+#: includes/class-settings.php:480
+msgid "Contributor Avatar Size (px)"
+msgstr ""
+
+#: includes/class-settings.php:352
+msgid "Contributor Badges Placement"
+msgstr ""
+
+#: includes/class-shortcodes.php:98
+msgid "Contributor badges will appear here once contributors are assigned."
+msgstr ""
+
+#: includes/class-integrations.php:300
+msgid "Contributor data references valid users"
+msgstr ""
+
+#: includes/class-user-profile.php:382
+msgid "Contributor Info"
+msgstr ""
+
+#: includes/class-user-profile.php:62
+msgid "Contributor Information"
+msgstr ""
+
+#: includes/class-settings.php:489
+msgid "Contributor Name Font Size (px)"
+msgstr ""
+
+#: includes/class-integrations.php:228
+msgid "Contributor Profile"
+msgstr ""
+
+#: includes/class-bulk-edit.php:54
+#: includes/class-bulk-edit.php:60
+#: includes/class-bulk-edit.php:136
+msgid "Contributors"
+msgstr ""
+
+#: includes/class-settings.php:460
+msgid "Contributors Styling (Co-authors, Reviewers, Fact-checkers)"
+msgstr ""
+
+#: includes/class-settings.php:638
+msgid "Control how author information is displayed on your site."
+msgstr ""
+
+#: templates/corrections-log.php:22
+msgid "Corrections & Updates"
+msgstr ""
+
+#: includes/class-meta-boxes.php:108
+msgid "Corrections Log"
+msgstr ""
+
+#: includes/class-meta-boxes.php:476
+msgid "Custom AI Uses"
+msgstr ""
+
+#: includes/class-settings.php:652
+msgid "Customize the appearance of co-authors, reviewers, and fact-checkers."
+msgstr ""
+
+#: includes/class-settings.php:645
+msgid "Customize the appearance of the primary author byline row (with date)."
+msgstr ""
+
+#: includes/class-settings.php:603
+msgid "Customize the text labels for different contributor roles."
+msgstr ""
+
+#: includes/class-frontend-display.php:439
+#: includes/class-meta-boxes.php:420
+msgid "Data Analysis"
+msgstr ""
+
+#: includes/class-article-health.php:118
+msgid "Days Since Update"
+msgstr ""
+
+#: includes/class-meta-boxes.php:143
+msgid "Describe the correction, e.g. \"Corrected the survey sample size in section 2.\""
+msgstr ""
+
+#: includes/class-settings.php:407
+msgid "Disable Article Schema"
+msgstr ""
+
+#: includes/class-integrations.php:163
+msgid "Dismiss — keep both"
+msgstr ""
+
+#: includes/class-meta-boxes.php:431
+msgid "Display an AI disclosure badge on this article to inform readers about AI usage."
+msgstr ""
+
+#: includes/class-settings.php:435
+msgid "Display avatar/photo for the primary author in the byline row."
+msgstr ""
+
+#: includes/class-settings.php:474
+msgid "Display avatars/photos for co-authors, reviewers, and fact-checkers."
+msgstr ""
+
+#: includes/class-settings.php:314
+msgid "Display Options"
+msgstr ""
+
+#: includes/class-meta-boxes.php:441
+msgid "Do not display any AI disclosure badge"
+msgstr ""
+
+#: includes/class-meta-boxes.php:360
+msgid "Drag to reorder"
+msgstr ""
+
+#: includes/class-meta-boxes.php:486
+#: includes/class-meta-boxes.php:509
+msgid "e.g., Voice cloning, 3D modeling"
+msgstr ""
+
+#: includes/class-article-health.php:624
+msgid "Edit"
+msgstr ""
+
+#: includes/class-frontend-display.php:427
+#: includes/class-meta-boxes.php:408
+msgid "Editing & Proofreading"
+msgstr ""
+
+#: includes/class-frontend-display.php:482
+msgid "Editorial Process"
+msgstr ""
+
+#: includes/class-integrations.php:206
+#: includes/class-settings.php:197
+#: includes/class-user-profile.php:132
+msgid "Editorial Process Link"
+msgstr ""
+
+#: includes/class-settings.php:226
+msgid "Editorial Process Page URL"
+msgstr ""
+
+#: includes/class-user-profile.php:72
+msgid "Editorial Team"
+msgstr ""
+
+#: includes/class-settings.php:204
+msgid "Enable Editorial Process Link"
+msgstr ""
+
+#: includes/class-settings.php:138
+msgid "Enable Expert Verified Badge"
+msgstr ""
+
+#: includes/class-settings.php:282
+msgid "Enable Fact-Check Process Link"
+msgstr ""
+
+#: includes/class-faq.php:106
+msgid "Enable FAQ section for this article"
+msgstr ""
+
+#: includes/class-settings.php:77
+msgid "Enable for Post Types"
+msgstr ""
+
+#: includes/class-settings.php:243
+msgid "Enable Review Process Link"
+msgstr ""
+
+#: multi-author-plugin.php:168
+msgid "Enter a name or email to search..."
+msgstr ""
+
+#: multi-author-plugin.php:169
+msgid "Enter at least 2 characters to search..."
+msgstr ""
+
+#: includes/class-faq.php:172
+#: includes/class-faq.php:214
+msgid "Enter the answer..."
+msgstr ""
+
+#: includes/class-faq.php:165
+#: includes/class-faq.php:207
+msgid "Enter the question..."
+msgstr ""
+
+#: multi-author-plugin.php:172
+msgid "Error searching users."
+msgstr ""
+
+#: templates/contributor-badges.php:121
+msgid "Expert verified"
+msgstr ""
+
+#: includes/class-settings.php:131
+msgid "Expert Verified Badge"
+msgstr ""
+
+#: includes/class-integrations.php:212
+#: includes/class-user-profile.php:234
+msgid "Facebook Profile"
+msgstr ""
+
+#: includes/class-meta-boxes.php:73
+msgid "Fact Check & Corrections"
+msgstr ""
+
+#: includes/class-bulk-edit.php:83
+msgid "Fact Checker"
+msgstr ""
+
+#: includes/class-meta-boxes.php:245
+msgid "Fact Checkers"
+msgstr ""
+
+#: includes/class-frontend-display.php:444
+#: includes/class-meta-boxes.php:425
+msgid "Fact Checking Assistance"
+msgstr ""
+
+#: includes/class-settings.php:275
+msgid "Fact-Check Process Link"
+msgstr ""
+
+#: includes/class-settings.php:304
+msgid "Fact-Check Process Page URL"
+msgstr ""
+
+#: templates/contributor-badges.php:320
+msgid "Fact-checked %s"
+msgstr ""
+
+#: includes/class-frontend-display.php:368
+msgid "Fact-checked %s article"
+msgid_plural "Fact-checked %s articles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-frontend-display.php:460
+msgid "Fact-checked by"
+msgstr ""
+
+#: includes/class-settings.php:121
+msgid "Fact-Checked By Label"
+msgstr ""
+
+#: includes/class-faq.php:126
+msgid "FAQ Items"
+msgstr ""
+
+#: includes/class-settings.php:380
+msgid "FAQ Placement"
+msgstr ""
+
+#: includes/class-faq.php:67
+msgid "FAQ Section"
+msgstr ""
+
+#: includes/class-faq.php:114
+msgid "FAQ Section Title"
+msgstr ""
+
+#: includes/class-frontend-display.php:430
+#: includes/class-meta-boxes.php:411
+msgid "Formatting & Structure"
+msgstr ""
+
+#: includes/class-faq.php:90
+#: includes/class-faq.php:121
+#: includes/class-faq.php:314
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: includes/class-user-profile.php:246
+msgid "Full URL to your Facebook profile."
+msgstr ""
+
+#: includes/class-user-profile.php:227
+msgid "Full URL to your LinkedIn profile."
+msgstr ""
+
+#: includes/class-user-profile.php:284
+msgid "Full URL to your YouTube channel."
+msgstr ""
+
+#: includes/class-article-health.php:613
+msgid "Good"
+msgstr ""
+
+#: includes/class-frontend-display.php:429
+#: includes/class-meta-boxes.php:410
+msgid "Grammar Checking"
+msgstr ""
+
+#: includes/class-frontend-display.php:442
+#: includes/class-meta-boxes.php:423
+msgid "Headline/Title Generation"
+msgstr ""
+
+#: includes/class-article-health.php:570
+msgid "Health"
+msgstr ""
+
+#: includes/class-settings.php:328
+msgid "Hide the default WordPress/theme author byline to prevent duplicate author display. The plugin will display all authors including the primary author in a consistent format."
+msgstr ""
+
+#: includes/class-settings.php:321
+msgid "Hide Theme Author Byline"
+msgstr ""
+
+#: templates/contributor-badges.php:122
+msgid "How is this page expert verified?"
+msgstr ""
+
+#: includes/class-meta-boxes.php:459
+msgid "How was AI used?"
+msgstr ""
+
+#: includes/class-meta-boxes.php:365
+msgid "https://example.com/source"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:30
+#: templates/contributor-badges.php:353
+msgid "Human-Created Content"
+msgstr ""
+
+#: includes/class-frontend-display.php:433
+#: includes/class-meta-boxes.php:414
+msgid "Image Creation/Generation"
+msgstr ""
+
+#: includes/class-frontend-display.php:434
+#: includes/class-meta-boxes.php:415
+msgid "Image Editing/Enhancement"
+msgstr ""
+
+#: includes/class-user-profile.php:84
+msgid "Include this person in the [map_editorial_team] shortcode and Editorial Team block. Only administrators can change this."
+msgstr ""
+
+#: includes/class-integrations.php:213
+#: includes/class-user-profile.php:253
+msgid "Instagram Profile"
+msgstr ""
+
+#: multi-author-plugin.php:176
+msgid "is credited in more than one role on this post. Self-review can undermine reader trust."
+msgstr ""
+
+#: includes/class-article-health.php:654
+msgid "Items per page"
+msgstr ""
+
+#: includes/class-integrations.php:209
+msgid "Job Title"
+msgstr ""
+
+#: includes/class-user-profile.php:114
+msgid "Job Title / Role"
+msgstr ""
+
+#: includes/class-settings.php:498
+msgid "Job Title Font Size (px)"
+msgstr ""
+
+#: includes/class-settings.php:525
+msgid "Job Title Text Color"
+msgstr ""
+
+#: includes/class-meta-boxes.php:96
+msgid "Last fact-checked on"
+msgstr ""
+
+#: includes/class-article-health.php:550
+#: includes/class-article-health.php:569
+msgid "Last Updated"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:34
+#: templates/contributor-badges.php:359
+msgid "Learn more about our AI policy"
+msgstr ""
+
+#: templates/contributor-badges.php:172
+msgid "Learn more about our editorial process"
+msgstr ""
+
+#: templates/contributor-badges.php:188
+msgid "Learn more about our fact-checking process"
+msgstr ""
+
+#: templates/contributor-badges.php:180
+msgid "Learn more about our review process"
+msgstr ""
+
+#: includes/class-settings.php:178
+#: includes/class-settings.php:217
+#: includes/class-settings.php:256
+#: includes/class-settings.php:295
+msgid "Link Text"
+msgstr ""
+
+#: includes/class-meta-boxes.php:370
+msgid "Link text (optional - displays instead of raw URL)"
+msgstr ""
+
+#: includes/class-settings.php:558
+msgid "Link to your AI usage policy/disclaimer page. This will be shown in the AI badge popup."
+msgstr ""
+
+#: includes/class-settings.php:187
+msgid "Link URL"
+msgstr ""
+
+#: includes/class-integrations.php:211
+#: includes/class-user-profile.php:215
+msgid "LinkedIn Profile"
+msgstr ""
+
+#: includes/class-settings.php:899
+msgid "Live Preview"
+msgstr ""
+
+#: includes/class-meta-boxes.php:109
+msgid "Log corrections transparently. Entries are displayed in a \"Corrections & Updates\" section at the end of the article."
+msgstr ""
+
+#: includes/class-article-health.php:498
+#: includes/class-article-health.php:523
+msgid "Low Word Count"
+msgstr ""
+
+#: includes/class-article-health.php:323
+msgid "Low word count (%d)"
+msgstr ""
+
+#: includes/class-settings.php:347
+msgid "Manual (use shortcode or block)"
+msgstr ""
+
+#: includes/class-settings.php:360
+msgid "Manual: place with the [map_contributors] shortcode or the Contributors block."
+msgstr ""
+
+#: includes/class-settings.php:388
+msgid "Manual: place with the [map_faq] shortcode or the FAQ block."
+msgstr ""
+
+#: includes/class-settings.php:374
+msgid "Manual: place with the [map_sources] shortcode or the Sources block."
+msgstr ""
+
+#: includes/class-article-health.php:505
+msgid "Missing sources"
+msgstr ""
+
+#: includes/class-settings.php:50
+msgid "Multi-Author"
+msgstr ""
+
+#: includes/class-integrations.php:189
+#: includes/class-integrations.php:246
+msgid "Multi-Author Contributor Plugin"
+msgstr ""
+
+#: includes/class-integrations.php:152
+msgid "Multi-Author Contributor Plugin:"
+msgstr ""
+
+#: includes/class-settings.php:49
+msgid "Multi-Author Settings"
+msgstr ""
+
+#: includes/class-integrations.php:282
+msgid "Multi-Author: contributor data is valid"
+msgstr ""
+
+#: includes/class-integrations.php:286
+msgid "Multi-Author: no duplicate Article schema"
+msgstr ""
+
+#: includes/class-settings.php:516
+msgid "Name Text Color"
+msgstr ""
+
+#: includes/class-article-health.php:618
+msgid "Needs Work"
+msgstr ""
+
+#: templates/contributor-badges.php:350
+msgid "No AI"
+msgstr ""
+
+#: includes/class-meta-boxes.php:446
+#: templates/ai-disclaimer-badge.php:25
+msgid "No AI Used"
+msgstr ""
+
+#: includes/class-article-health.php:634
+msgid "No articles found."
+msgstr ""
+
+#: includes/class-meta-boxes.php:440
+msgid "No Badge"
+msgstr ""
+
+#: includes/class-user-profile.php:404
+msgid "No bio set"
+msgstr ""
+
+#: includes/class-article-health.php:328
+msgid "No citations"
+msgstr ""
+
+#: includes/class-article-health.php:504
+#: includes/class-article-health.php:527
+msgid "No Citations"
+msgstr ""
+
+#: includes/class-meta-boxes.php:208
+msgid "No co-authors added yet."
+msgstr ""
+
+#: multi-author-plugin.php:175
+msgid "No contributors added yet."
+msgstr ""
+
+#: includes/class-integrations.php:356
+msgid "No duplicate Article structured data detected."
+msgstr ""
+
+#: includes/class-meta-boxes.php:246
+msgid "No fact checkers added yet."
+msgstr ""
+
+#: includes/class-meta-boxes.php:227
+msgid "No reviewers added yet."
+msgstr ""
+
+#: includes/class-shortcodes.php:180
+msgid "No team members yet. Enable \"Show on Editorial Team page\" on user profiles, or pass IDs via the include attribute."
+msgstr ""
+
+#: multi-author-plugin.php:171
+msgid "No users found."
+msgstr ""
+
+#: includes/class-article-health.php:333
+msgid "Not updated in %d days"
+msgstr ""
+
+#: includes/class-article-health.php:511
+msgid "Not updated in 1+ year"
+msgstr ""
+
+#: includes/class-settings.php:401
+msgid "On author archive pages, show how many articles the person has reviewed and fact-checked."
+msgstr ""
+
+#: includes/class-integrations.php:353
+msgid "Only one plugin outputs Article schema"
+msgstr ""
+
+#: includes/class-integrations.php:373
+msgid "Open Multi-Author settings"
+msgstr ""
+
+#: includes/class-user-profile.php:144
+msgid "Optional: Link to a page describing your editorial process or review methodology."
+msgstr ""
+
+#: includes/class-user-profile.php:163
+msgid "Optional: Public email address to display in contributor popup (different from WordPress login email)."
+msgstr ""
+
+#: includes/class-user-profile.php:182
+msgid "Optional: Your personal website or portfolio URL."
+msgstr ""
+
+#: includes/class-frontend-display.php:443
+#: includes/class-meta-boxes.php:424
+msgid "Outline Creation"
+msgstr ""
+
+#: includes/class-article-health.php:664
+msgid "per page"
+msgstr ""
+
+#: includes/class-meta-boxes.php:693
+msgid "Permission denied."
+msgstr ""
+
+#: includes/class-integrations.php:208
+#: includes/class-user-profile.php:170
+msgid "Personal Website"
+msgstr ""
+
+#: includes/class-settings.php:169
+msgid "Popup Content"
+msgstr ""
+
+#: includes/class-settings.php:160
+msgid "Popup Title"
+msgstr ""
+
+#: includes/class-settings.php:70
+msgid "Post Types"
+msgstr ""
+
+#: includes/class-settings.php:441
+msgid "Primary Author Avatar Size (px)"
+msgstr ""
+
+#: includes/class-settings.php:450
+msgid "Primary Author Font Size (px)"
+msgstr ""
+
+#: includes/class-settings.php:421
+msgid "Primary Author Row Styling"
+msgstr ""
+
+#: includes/class-integrations.php:207
+#: includes/class-user-profile.php:151
+msgid "Public Contact Email"
+msgstr ""
+
+#: includes/class-faq.php:160
+#: includes/class-faq.php:202
+msgid "Question"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:75
+#: templates/contributor-badges.php:394
+msgid "Read our full AI disclosure policy"
+msgstr ""
+
+#: includes/class-article-health.php:484
+msgid "Recalculate All"
+msgstr ""
+
+#: includes/class-article-health.php:863
+msgid "Recalculated metrics for %d articles."
+msgstr ""
+
+#: includes/class-faq.php:154
+#: includes/class-faq.php:196
+#: includes/class-meta-boxes.php:146
+#: includes/class-meta-boxes.php:304
+#: includes/class-meta-boxes.php:378
+msgid "Remove"
+msgstr ""
+
+#: includes/class-frontend-display.php:425
+#: includes/class-meta-boxes.php:406
+msgid "Research & Information Gathering"
+msgstr ""
+
+#: includes/class-settings.php:236
+msgid "Review Process Link"
+msgstr ""
+
+#: includes/class-settings.php:265
+msgid "Review Process Page URL"
+msgstr ""
+
+#: includes/class-integrations.php:162
+msgid "Review Settings"
+msgstr ""
+
+#: includes/class-frontend-display.php:364
+msgid "Reviewed %s article"
+msgid_plural "Reviewed %s articles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/class-frontend-display.php:459
+msgid "Reviewed by"
+msgstr ""
+
+#: includes/class-settings.php:112
+msgid "Reviewed By Label"
+msgstr ""
+
+#: includes/class-bulk-edit.php:82
+msgid "Reviewer"
+msgstr ""
+
+#: includes/class-meta-boxes.php:226
+msgid "Reviewers"
+msgstr ""
+
+#: includes/class-settings.php:507
+msgid "Role Label Font Size (px)"
+msgstr ""
+
+#: includes/class-settings.php:534
+msgid "Role Label Text Color"
+msgstr ""
+
+#: includes/class-settings.php:87
+msgid "Role Labels"
+msgstr ""
+
+#: includes/class-settings.php:893
+msgid "Save Settings"
+msgstr ""
+
+#: includes/class-meta-boxes.php:268
+msgid "Search by name or email..."
+msgstr ""
+
+#: includes/class-meta-boxes.php:267
+msgid "Search Users"
+msgstr ""
+
+#: multi-author-plugin.php:170
+msgid "Searching..."
+msgstr ""
+
+#: includes/class-meta-boxes.php:460
+msgid "Select all the ways AI was used in creating this article:"
+msgstr ""
+
+#: includes/class-bulk-edit.php:150
+msgid "Selected contributors are added to all chosen posts (existing contributors are kept)."
+msgstr ""
+
+#: includes/class-integrations.php:355
+msgid "SEO"
+msgstr ""
+
+#: includes/class-frontend-display.php:441
+#: includes/class-meta-boxes.php:422
+msgid "SEO Optimization"
+msgstr ""
+
+#: multi-author-plugin.php:100
+msgid "Settings"
+msgstr ""
+
+#: includes/class-settings.php:879
+msgid "Settings Saved"
+msgstr ""
+
+#: includes/class-integrations.php:205
+#: includes/class-user-profile.php:91
+msgid "Short Bio"
+msgstr ""
+
+#: includes/class-meta-boxes.php:196
+msgid "Show \"Expert Verified\" badge on this post"
+msgstr ""
+
+#: includes/class-settings.php:211
+msgid "Show \"Learn more about our editorial process\" link in all author popups."
+msgstr ""
+
+#: includes/class-settings.php:289
+msgid "Show \"Learn more about our fact-checking process\" link in fact-checker popups."
+msgstr ""
+
+#: includes/class-settings.php:250
+msgid "Show \"Learn more about our review process\" link in reviewer popups."
+msgstr ""
+
+#: includes/class-settings.php:145
+msgid "Show an \"Expert Verified\" badge in the author byline area."
+msgstr ""
+
+#: includes/class-settings.php:467
+msgid "Show Contributor Avatars"
+msgstr ""
+
+#: includes/class-meta-boxes.php:218
+msgid "Show Editorial Process link in author popups"
+msgstr ""
+
+#: includes/class-meta-boxes.php:256
+msgid "Show Fact-Check Process link in fact-checker popups"
+msgstr ""
+
+#: includes/class-user-profile.php:81
+msgid "Show on Editorial Team page"
+msgstr ""
+
+#: includes/class-settings.php:428
+msgid "Show Primary Author Avatar"
+msgstr ""
+
+#: includes/class-meta-boxes.php:237
+msgid "Show Review Process link in reviewer popups"
+msgstr ""
+
+#: includes/class-meta-boxes.php:103
+msgid "Shown in the article byline, separate from the last-modified date. Leave empty to hide."
+msgstr ""
+
+#: includes/class-settings.php:334
+msgid "Skip Primary Author in Plugin Display"
+msgstr ""
+
+#: includes/class-user-profile.php:188
+msgid "Social Media Profiles"
+msgstr ""
+
+#: includes/class-user-profile.php:190
+msgid "Social media profiles will be included in structured data (Schema.org) for better SEO."
+msgstr ""
+
+#: includes/class-integrations.php:337
+msgid "Some posts credit deleted user accounts"
+msgstr ""
+
+#: includes/class-article-health.php:537
+msgid "Sort by:"
+msgstr ""
+
+#: templates/sources-list.php:20
+msgid "Sources"
+msgstr ""
+
+#: includes/class-settings.php:366
+msgid "Sources Placement"
+msgstr ""
+
+#: includes/class-frontend-display.php:428
+#: includes/class-meta-boxes.php:409
+msgid "Spell Checking"
+msgstr ""
+
+#: includes/class-article-health.php:531
+msgid "Stale (Oldest First)"
+msgstr ""
+
+#: includes/class-article-health.php:510
+msgid "Stale Articles"
+msgstr ""
+
+#: includes/class-frontend-display.php:431
+#: includes/class-meta-boxes.php:412
+msgid "Summarization"
+msgstr ""
+
+#: includes/class-settings.php:596
+msgid "The Article Health dashboard always tracks standard posts only."
+msgstr ""
+
+#: includes/class-shortcodes.php:127
+msgid "The corrections log will appear here once corrections are added."
+msgstr ""
+
+#: includes/class-shortcodes.php:115
+msgid "The FAQ section will appear here once enabled for this post."
+msgstr ""
+
+#: includes/class-shortcodes.php:119
+msgid "The FAQ section will appear here once questions are added."
+msgstr ""
+
+#: includes/class-meta-boxes.php:207
+msgid "The post author is automatically the primary author. Add co-authors here if applicable."
+msgstr ""
+
+#: includes/class-shortcodes.php:106
+msgid "The sources list will appear here once sources are added."
+msgstr ""
+
+#: includes/class-article-health.php:365
+msgid "This article has no citations. Consider adding sources to improve credibility."
+msgstr ""
+
+#: includes/class-article-health.php:358
+msgid "This article has only %d words. Consider adding more content for better SEO."
+msgstr ""
+
+#: includes/class-article-health.php:371
+msgid "This article hasn't been updated in %d days. Consider reviewing and refreshing the content."
+msgstr ""
+
+#: includes/class-meta-boxes.php:447
+msgid "This article was created entirely without AI assistance"
+msgstr ""
+
+#: templates/ai-disclaimer-badge.php:31
+#: templates/contributor-badges.php:355
+msgid "This article was created entirely without the use of artificial intelligence. All research, writing, editing, and creative elements were produced by human authors and editors."
+msgstr ""
+
+#: includes/class-user-profile.php:64
+msgid "This information is used when you are listed as a contributor on articles."
+msgstr ""
+
+#: includes/class-faq.php:151
+#: includes/class-faq.php:193
+msgid "Toggle"
+msgstr ""
+
+#: includes/class-article-health.php:493
+msgid "Total Articles"
+msgstr ""
+
+#: includes/class-frontend-display.php:438
+#: includes/class-meta-boxes.php:419
+msgid "Transcription"
+msgstr ""
+
+#: includes/class-frontend-display.php:432
+#: includes/class-meta-boxes.php:413
+msgid "Translation"
+msgstr ""
+
+#: includes/class-settings.php:414
+msgid "Turn off this plugin's Article JSON-LD output. Enable this if your SEO plugin (Yoast, Rank Math, AIOSEO) already outputs Article schema."
+msgstr ""
+
+#: includes/class-user-profile.php:196
+msgid "Twitter Username"
+msgstr ""
+
+#: includes/class-integrations.php:210
+msgid "Twitter/X Profile"
+msgstr ""
+
+#: includes/class-integrations.php:364
+msgid "Two plugins may output Article schema"
+msgstr ""
+
+#: includes/class-article-health.php:499
+msgid "Under 500 words"
+msgstr ""
+
+#: templates/contributor-badges.php:311
+msgid "Updated %s"
+msgstr ""
+
+#: includes/class-settings.php:900
+msgid "Updates as you change styling options. Save to apply on your site."
+msgstr ""
+
+#: includes/class-settings.php:341
+msgid "Use WordPress/theme default for the primary author (with date). The plugin will only display co-authors, reviewers, and fact-checkers."
+msgstr ""
+
+#: includes/class-frontend-display.php:435
+#: includes/class-meta-boxes.php:416
+msgid "Video Creation/Generation"
+msgstr ""
+
+#: includes/class-frontend-display.php:436
+#: includes/class-meta-boxes.php:417
+msgid "Video Editing"
+msgstr ""
+
+#: includes/class-article-health.php:627
+msgid "View"
+msgstr ""
+
+#: templates/contributor-badges.php:252
+#: templates/editorial-team.php:64
+msgid "View Full Bio"
+msgstr ""
+
+#: templates/sources-list.php:31
+msgid "View source"
+msgstr ""
+
+#: includes/class-meta-boxes.php:199
+msgid "When enabled, the Expert Verified badge will appear in the author byline for this post."
+msgstr ""
+
+#: includes/class-article-health.php:116
+#: includes/class-article-health.php:540
+msgid "Word Count"
+msgstr ""
+
+#: includes/class-article-health.php:567
+msgid "Words"
+msgstr ""
+
+#: includes/class-frontend-display.php:426
+#: includes/class-meta-boxes.php:407
+msgid "Writing Assistance"
+msgstr ""
+
+#: includes/class-frontend-display.php:458
+msgid "Written by"
+msgstr ""
+
+#: includes/class-settings.php:94
+msgid "Written By Label"
+msgstr ""
+
+#: includes/class-faq.php:173
+#: includes/class-faq.php:215
+msgid "You can use basic HTML tags for formatting."
+msgstr ""
+
+#: includes/class-user-profile.php:265
+msgid "Your Instagram username (with or without @) or full URL."
+msgstr ""
+
+#: includes/class-user-profile.php:125
+msgid "Your professional title or role (e.g., \"Senior Editor\", \"Fact Checker\")."
+msgstr ""
+
+#: includes/class-user-profile.php:208
+msgid "Your Twitter/X username (with or without @)."
+msgstr ""
+
+#: includes/class-integrations.php:214
+#: includes/class-user-profile.php:272
+msgid "YouTube Channel"
+msgstr ""
+

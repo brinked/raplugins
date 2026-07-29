@@ -1,0 +1,439 @@
+/**
+ * Admin Styles
+ * WooCommerce Enhanced Product Info
+ */
+
+/* Settings Page */
+.wcepi-settings-wrap {
+    max-width: 1200px;
+}
+
+/* Hoverable "?" help tips */
+.wcepi-help-tip {
+    display: inline-block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+    margin-left: 6px;
+    vertical-align: text-bottom;
+    cursor: help;
+    background: #787c82;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    line-height: 16px;
+    text-align: center;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.wcepi-help-tip::before {
+    content: "?";
+}
+
+.wcepi-help-tip::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 280px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    background: #1d2327;
+    color: #f0f0f1;
+    font-size: 12px;
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.5;
+    text-align: left;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease-in-out;
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.wcepi-help-tip:hover::after,
+.wcepi-help-tip:focus::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Keep the bubble on-screen when the tip sits in the narrow label column */
+.form-table th .wcepi-help-tip::after {
+    left: 0;
+    transform: none;
+}
+
+/* Live badge preview stage (Styling tab) */
+.wcepi-badge-preview-stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    max-width: 560px;
+    padding: 18px;
+    /* Admin screens use a smaller system font than storefront themes;
+       scale the preview up so it reads closer to the live size */
+    zoom: 1.2;
+    background: #ffffff;
+    background-image:
+        linear-gradient(45deg, #f3f4f5 25%, transparent 25%, transparent 75%, #f3f4f5 75%),
+        linear-gradient(45deg, #f3f4f5 25%, transparent 25%, transparent 75%, #f3f4f5 75%);
+    background-size: 16px 16px;
+    background-position: 0 0, 8px 8px;
+    border: 1px dashed #c3c4c7;
+    border-radius: 6px;
+}
+
+.wcepi-preview-row th {
+    color: #2271b1;
+}
+
+.wcepi-settings-wrap h1 {
+    margin-bottom: 20px;
+}
+
+.wcepi-settings-wrap .form-table {
+    margin-top: 20px;
+}
+
+.wcepi-settings-wrap .form-table th {
+    width: 250px;
+    padding: 20px 10px 20px 0;
+}
+
+.wcepi-settings-wrap .form-table td {
+    padding: 20px 10px;
+}
+
+.wcepi-settings-wrap .description {
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Meta Box Styles */
+.wcepi-meta-box-wrap {
+    padding: 10px 0;
+}
+
+.wcepi-field-group {
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+.wcepi-field-group:last-child {
+    border-bottom: none;
+}
+
+.wcepi-field-group h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #23282d;
+}
+
+.wcepi-field-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.wcepi-field-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.wcepi-field-group input[type="text"],
+.wcepi-field-group input[type="url"],
+.wcepi-field-group input[type="date"],
+.wcepi-field-group input[type="number"] {
+    width: 100%;
+    max-width: 500px;
+}
+
+.wcepi-field-group .description {
+    color: #666;
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Repeater Rows */
+.wcepi-repeater-row {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.wcepi-repeater-row input[type="text"],
+.wcepi-repeater-row input[type="url"] {
+    flex: 1;
+    min-width: 0;
+}
+
+.wcepi-repeater-row .button {
+    flex-shrink: 0;
+}
+
+.wcepi-remove-row {
+    background: #dc3232;
+    border-color: #dc3232;
+    color: white;
+}
+
+.wcepi-remove-row:hover {
+    background: #c62828;
+    border-color: #c62828;
+    color: white;
+}
+
+/* Add Buttons */
+.wcepi-add-dimension,
+.wcepi-add-specification,
+.wcepi-add-download {
+    margin-top: 10px;
+    background: #2271b1;
+    border-color: #2271b1;
+    color: white;
+}
+
+.wcepi-add-dimension:hover,
+.wcepi-add-specification:hover,
+.wcepi-add-download:hover {
+    background: #135e96;
+    border-color: #135e96;
+    color: white;
+}
+
+/* Upload Button */
+.wcepi-upload-file {
+    background: #00a32a;
+    border-color: #00a32a;
+    color: white;
+}
+
+.wcepi-upload-file:hover {
+    background: #008a20;
+    border-color: #008a20;
+    color: white;
+}
+
+/* Editor Wrapper */
+.wcepi-field-group .wp-editor-wrap {
+    margin-top: 10px;
+}
+
+/* Responsive Admin */
+@media (max-width: 782px) {
+    .wcepi-repeater-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .wcepi-repeater-row input[type="text"],
+    .wcepi-repeater-row input[type="url"] {
+        width: 100%;
+    }
+    
+    .wcepi-repeater-row .button {
+        width: 100%;
+    }
+    
+    .wcepi-settings-wrap .form-table th {
+        width: auto;
+        padding: 10px;
+    }
+    
+    .wcepi-settings-wrap .form-table td {
+        padding: 10px;
+    }
+}
+
+/* Notice Styles */
+.wcepi-notice {
+    padding: 12px;
+    margin: 15px 0;
+    border-left: 4px solid;
+    background: #fff;
+}
+
+.wcepi-notice.notice-success {
+    border-left-color: #00a32a;
+}
+
+.wcepi-notice.notice-error {
+    border-left-color: #dc3232;
+}
+
+.wcepi-notice.notice-warning {
+    border-left-color: #dba617;
+}
+
+.wcepi-notice.notice-info {
+    border-left-color: #2271b1;
+}
+
+/* Loading State */
+.wcepi-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.wcepi-loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #2271b1;
+    border-radius: 50%;
+    animation: wcepi-spin 1s linear infinite;
+}
+
+@keyframes wcepi-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Help Text */
+.wcepi-help-text {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+    text-align: center;
+    background: #2271b1;
+    color: white;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: help;
+    margin-left: 5px;
+}
+
+.wcepi-help-text:hover {
+    background: #135e96;
+}
+
+/* Tooltips */
+.wcepi-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.wcepi-tooltip .wcepi-tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 12px;
+}
+
+.wcepi-tooltip:hover .wcepi-tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Section Headers */
+.wcepi-section-header {
+    background: #f0f0f1;
+    padding: 15px 20px;
+    margin: 20px 0 15px;
+    border-left: 4px solid #2271b1;
+}
+
+.wcepi-section-header h2 {
+    margin: 0;
+    font-size: 18px;
+    color: #1d2327;
+}
+
+/* Toggle Switch */
+.wcepi-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.wcepi-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wcepi-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+}
+
+.wcepi-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.wcepi-toggle-switch input:checked + .wcepi-toggle-slider {
+    background-color: #2271b1;
+}
+
+.wcepi-toggle-switch input:checked + .wcepi-toggle-slider:before {
+    transform: translateX(26px);
+}
+
+/* Color Picker Styles */
+.wcepi-color-picker {
+    max-width: 100px;
+}
+
+.wcepi-color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wcepi-color-preview {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    display: inline-block;
+    vertical-align: middle;
+}

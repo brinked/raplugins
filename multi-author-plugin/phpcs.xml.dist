@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset name="Multi-Author Contributor Plugin">
+    <description>Coding standards for the Multi-Author Contributor Plugin</description>
+
+    <file>.</file>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/docs/*</exclude-pattern>
+    <exclude-pattern>*/languages/*</exclude-pattern>
+
+    <arg value="sp"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+
+    <config name="minimum_wp_version" value="5.0"/>
+    <config name="testVersion" value="7.2-"/>
+
+    <rule ref="WordPress-Extra">
+        <!-- The existing codebase uses 4-space indentation, not tabs -->
+        <exclude name="Generic.WhiteSpace.DisallowSpaceIndent"/>
+        <!-- File/class naming predates the standard; renaming would break upgrades -->
+        <exclude name="WordPress.Files.FileName"/>
+        <!-- Short array syntax and modern conventions allowed -->
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+    </rule>
+
+    <rule ref="PHPCompatibilityWP"/>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="multi-author-plugin"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

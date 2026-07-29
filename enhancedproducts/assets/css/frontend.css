@@ -1,0 +1,1574 @@
+/**
+ * Frontend Styles
+ * WooCommerce Enhanced Product Info
+ */
+
+/* Force visibility on all devices - Override theme/Elementor hiding */
+.wcepi-free-shipping-badge,
+.wcepi-ships-in,
+.stock.wcepi-in-stock,
+.stock.wcepi-out-of-stock,
+.woocommerce-tabs {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+
+/* Ensure content inside panels is visible when panel is shown */
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-dimensions-content,
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-specifications-content,
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-downloads-content,
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-warranty-content,
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-faq-content,
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-shipping-returns-content,
+.woocommerce-tabs .woocommerce-Tabs-panel .wcepi-returns-content {
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    max-height: none !important;
+}
+
+/* Free Shipping Badge */
+.wcepi-free-shipping-badge {
+    display: inline-block !important;
+    background: #4CAF50;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 3px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-left: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+
+/* =====================================================
+   ARCHIVE/LISTING PAGE STYLES
+   ===================================================== */
+
+/* Archive page Free Shipping badge - compact version */
+.wcepi-archive-badge {
+    display: inline-block !important;
+    padding: 2px 6px !important;
+    font-size: 9px !important;
+    font-weight: 600 !important;
+    margin-left: 0 !important;
+    margin-top: 4px !important;
+    vertical-align: baseline !important;
+    letter-spacing: 0.3px !important;
+}
+
+/* Archive warranty badge - consistent with ships-in */
+.wcepi-archive-warranty {
+    display: flex !important;
+    align-items: center !important;
+    margin-top: 6px !important;
+    margin-bottom: 2px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    line-height: 1 !important;
+}
+
+.wcepi-archive-warranty .wcepi-warranty-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    margin-right: 6px !important;
+    flex-shrink: 0 !important;
+    line-height: 0 !important;
+}
+
+.wcepi-archive-warranty .wcepi-warranty-icon svg {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    display: block !important;
+}
+
+.wcepi-archive-warranty .wcepi-warranty-text {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    color: #1a1a1a !important;
+    line-height: 1.2 !important;
+}
+
+/* Archive ships in badge - consistent with warranty */
+.wcepi-archive-ships-in {
+    display: flex !important;
+    align-items: center !important;
+    margin-top: 4px !important;
+    font-size: 11px !important;
+    color: #16a34a !important;
+    line-height: 1 !important;
+}
+
+.wcepi-archive-ships-in .wcepi-ships-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    margin-right: 6px !important;
+    flex-shrink: 0 !important;
+    line-height: 0 !important;
+}
+
+.wcepi-archive-ships-in .wcepi-ships-icon svg {
+    width: 14px !important;
+    height: 14px !important;
+    min-width: 14px !important;
+    min-height: 14px !important;
+    max-width: 14px !important;
+    max-height: 14px !important;
+    display: block !important;
+}
+
+.wcepi-archive-ships-in .wcepi-ships-text {
+    color: #16a34a !important;
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    line-height: 1.2 !important;
+}
+
+/* Product listing price area - make badges stack nicely */
+.woocommerce ul.products li.product .price {
+    display: block !important;
+}
+
+.woocommerce ul.products li.product .wcepi-warranty-badge-price,
+.woocommerce ul.products li.product .wcepi-archive-ships-in {
+    display: flex !important;
+    width: 100% !important;
+}
+
+/* =====================================================
+   END ARCHIVE/LISTING PAGE STYLES
+   ===================================================== */
+
+/* Warranty Badge Below Price - Pill/Button style */
+.wcepi-warranty-badge-price {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-top: 10px !important;
+    margin-bottom: 8px !important;
+    padding: 8px 14px !important;
+    background: #f8f9fa !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    color: #1a1a1a !important;
+    line-height: 1.4 !important;
+}
+
+.wcepi-warranty-icon {
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    line-height: 0 !important;
+    margin-right: 8px !important;
+}
+
+.wcepi-warranty-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    display: block !important;
+}
+
+.wcepi-warranty-text {
+    color: #1a1a1a !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    line-height: 1.4 !important;
+}
+
+/* =====================================================
+   INLINE BADGE BASE STYLES (Free Shipping, Custom Badges)
+   ===================================================== */
+
+/* Base styles for all inline badges */
+.wcepi-inline-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+    gap: 6px !important;
+    min-height: 40px !important;
+    box-sizing: border-box !important;
+}
+
+/* Reset p tag margin for stock badges */
+p.wcepi-inline-badge {
+    margin: 0 !important;
+}
+
+/* Badge icon container */
+.wcepi-inline-badge .wcepi-badge-icon,
+.wcepi-inline-badge .wcepi-stock-icon,
+.wcepi-inline-badge .wcepi-warranty-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    line-height: 0 !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+.wcepi-inline-badge .wcepi-badge-icon svg,
+.wcepi-inline-badge .wcepi-stock-icon svg,
+.wcepi-inline-badge .wcepi-warranty-icon svg {
+    display: block !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Badge text */
+.wcepi-inline-badge .wcepi-badge-text {
+    white-space: nowrap !important;
+}
+
+/* Free shipping badge specific styles */
+.wcepi-free-shipping-badge.wcepi-inline-badge {
+    background-color: #4CAF50 !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+}
+
+/* Custom badge - uses inline styles for colors */
+.wcepi-custom-badge.wcepi-inline-badge {
+    /* Base styling - colors set via inline styles */
+}
+
+/* =====================================================
+   BADGE LAYOUT WRAPPERS
+   ===================================================== */
+
+/* Stacked badges wrapper - displays badges vertically */
+.wcepi-badges-wrapper.wcepi-stacked-wrapper {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+
+/* Badges inside stacked wrapper - maintain pill styling */
+.wcepi-stacked-wrapper .wcepi-warranty-badge-price,
+.wcepi-stacked-wrapper .wcepi-in-stock,
+.wcepi-stacked-wrapper .wcepi-out-of-stock {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 8px 14px !important;
+    background: #f8f9fa !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+}
+
+/* Inline badges (free shipping, custom) in stacked wrapper */
+.wcepi-stacked-wrapper .wcepi-inline-badge {
+    margin: 0 !important;
+}
+
+/* Inline badges wrapper - displays badges horizontally */
+.wcepi-badges-wrapper.wcepi-inline-wrapper {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    margin-top: 15px !important;
+    margin-bottom: 15px !important;
+}
+
+/* Badges inside inline wrapper - maintain pill styling */
+.wcepi-inline-wrapper .wcepi-warranty-badge-price,
+.wcepi-inline-wrapper .wcepi-in-stock,
+.wcepi-inline-wrapper .wcepi-out-of-stock {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 8px 14px !important;
+    background: #f8f9fa !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+    font-size: 15px !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+}
+
+/* Inline badges (free shipping, custom) in inline wrapper */
+.wcepi-inline-wrapper .wcepi-inline-badge {
+    margin: 0 !important;
+}
+
+/* When inline layout is enabled via body class (legacy support) */
+body.wcepi-inline-badges-mode .wcepi-warranty-badge-price,
+body.wcepi-inline-badges-mode .wcepi-in-stock,
+body.wcepi-inline-badges-mode .wcepi-out-of-stock {
+    display: inline-flex !important;
+    margin-top: 8px !important;
+    margin-bottom: 0 !important;
+    margin-right: 12px !important;
+    background: #f8f9fa !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+/* Separator styling between inline badges */
+body.wcepi-inline-badges-mode .wcepi-warranty-badge-price::after {
+    content: "" !important;
+    display: none !important;
+}
+
+/* Adjust spacing for inline mode */
+body.wcepi-inline-badges-mode .wcepi-warranty-badge-price .wcepi-warranty-icon,
+body.wcepi-inline-badges-mode .wcepi-in-stock .wcepi-stock-icon,
+body.wcepi-inline-badges-mode .wcepi-out-of-stock .wcepi-stock-icon {
+    margin-right: 6px !important;
+}
+
+/* Make sure elements flow inline */
+body.wcepi-inline-badges-mode .woocommerce div.product p.price,
+body.wcepi-inline-badges-mode .woocommerce div.product span.price {
+    display: block !important;
+}
+
+/* Mobile responsive for inline badges */
+@media (max-width: 480px) {
+    .wcepi-badges-wrapper.wcepi-inline-wrapper {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 6px !important;
+    }
+
+    body.wcepi-inline-badges-mode .wcepi-warranty-badge-price,
+    body.wcepi-inline-badges-mode .wcepi-in-stock,
+    body.wcepi-inline-badges-mode .wcepi-out-of-stock,
+    .wcepi-inline-wrapper .wcepi-warranty-badge-price,
+    .wcepi-inline-wrapper .wcepi-in-stock,
+    .wcepi-inline-wrapper .wcepi-out-of-stock {
+        display: flex !important;
+        width: auto !important;
+        margin-right: 8px !important;
+        margin-bottom: 0 !important;
+        padding: 6px 10px !important;
+        font-size: 13px !important;
+    }
+
+    body.wcepi-inline-badges-mode .wcepi-warranty-badge-price .wcepi-warranty-text,
+    body.wcepi-inline-badges-mode .wcepi-in-stock .wcepi-stock-text,
+    body.wcepi-inline-badges-mode .wcepi-out-of-stock .wcepi-stock-text,
+    .wcepi-inline-wrapper .wcepi-warranty-badge-price .wcepi-warranty-text,
+    .wcepi-inline-wrapper .wcepi-in-stock .wcepi-stock-text,
+    .wcepi-inline-wrapper .wcepi-out-of-stock .wcepi-stock-text {
+        font-size: 13px !important;
+    }
+
+    /* Mobile responsive for inline badges (free shipping, custom) */
+    .wcepi-inline-badge {
+        padding: 6px 10px !important;
+        font-size: 13px !important;
+        gap: 4px !important;
+    }
+
+    .wcepi-inline-badge .wcepi-badge-icon svg {
+        width: 14px !important;
+        height: 14px !important;
+    }
+}
+
+/* =====================================================
+   END INLINE BADGE LAYOUT
+   ===================================================== */
+
+/* Position badge next to price */
+.woocommerce div.product p.price .wcepi-free-shipping-badge,
+.woocommerce div.product span.price .wcepi-free-shipping-badge {
+    margin-left: 15px;
+}
+
+/* Alternative position after add to cart */
+.wcepi-free-shipping-badge-alt {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+/* Stock Status - Pill/Button style matching warranty badge */
+.wcepi-in-stock,
+.wcepi-out-of-stock {
+    display: inline-flex !important;
+    align-items: center !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    margin-top: 10px !important;
+    margin-bottom: 12px !important;
+    line-height: 1.4 !important;
+    padding: 8px 14px !important;
+    background: #f8f9fa !important;
+    border-radius: 20px !important;
+    border: 1px solid #e5e7eb !important;
+}
+
+.wcepi-in-stock {
+    color: #1a1a1a !important;
+}
+
+.wcepi-out-of-stock {
+    color: #dc2626 !important;
+}
+
+/* Stock icon - same structure as warranty icon */
+.wcepi-stock-icon {
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    line-height: 0 !important;
+    margin-right: 8px !important;
+    vertical-align: middle !important;
+}
+
+.wcepi-stock-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+    min-width: 18px !important;
+    min-height: 18px !important;
+    max-width: 18px !important;
+    max-height: 18px !important;
+    display: block !important;
+    vertical-align: middle !important;
+}
+
+.wcepi-stock-text {
+    color: #1a1a1a !important;
+    font-weight: 400 !important;
+    font-size: 15px !important;
+    line-height: 18px !important;
+    display: inline !important;
+    vertical-align: middle !important;
+}
+
+/* Content sections - Reduced padding */
+.wcepi-dimensions-content,
+.wcepi-specifications-content,
+.wcepi-downloads-content,
+.wcepi-shipping-returns-content,
+.wcepi-warranty-content,
+.wcepi-faq-content,
+.wcepi-reviews-content {
+    padding: 10px 0;
+    height: auto !important;
+    min-height: auto !important;
+}
+
+.wcepi-dimensions-table,
+.wcepi-specifications-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.wcepi-dimensions-table th,
+.wcepi-specifications-table th,
+.wcepi-custom-section-table th {
+    text-align: left;
+    background: #f5f5f5;
+    font-weight: 600;
+    width: 40%;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    border-bottom: 1px solid #eeeeee !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.wcepi-dimensions-table td,
+.wcepi-specifications-table td,
+.wcepi-custom-section-table td {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    border-bottom: 1px solid #eeeeee !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+}
+
+.wcepi-dimensions-table tr:last-child td,
+.wcepi-specifications-table tr:last-child td,
+.wcepi-custom-section-table tr:last-child td {
+    border-bottom: none !important;
+}
+
+.wcepi-dimensions-table tr:hover,
+.wcepi-specifications-table tr:hover {
+    background: #fafafa;
+}
+
+.wcepi-custom-dimensions {
+    margin-top: 20px;
+}
+
+/* Downloads List */
+.wcepi-downloads-list {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.wcepi-downloads-list li {
+    margin-bottom: 15px;
+}
+
+.wcepi-download-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 20px;
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.wcepi-download-link:hover {
+    background: #e0e0e0;
+    border-color: #999;
+    color: #000;
+    text-decoration: none;
+}
+
+.wcepi-download-icon {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.wcepi-download-title {
+    font-weight: 500;
+}
+
+/* Shipping & Returns */
+.wcepi-shipping-returns-content {
+    line-height: 1.8;
+}
+
+.wcepi-shipping-returns-content h3 {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.wcepi-shipping-returns-content ul,
+.wcepi-shipping-returns-content ol {
+    margin: 15px 0;
+    padding-left: 25px;
+}
+
+.wcepi-shipping-returns-content li {
+    margin-bottom: 8px;
+}
+
+/* FAQ Styles - Clean minimal design matching screenshot */
+.wcepi-faq-list {
+    margin: 30px 0;
+}
+
+.wcepi-faq-item {
+    margin-bottom: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    border-radius: 0;
+    transition: none;
+}
+
+.wcepi-faq-item:first-child {
+    border-top: 1px solid #ddd;
+}
+
+.wcepi-faq-item:hover {
+    background: transparent;
+    box-shadow: none;
+}
+
+.wcepi-faq-question {
+    font-size: 17px;
+    font-weight: 400;
+    color: #333;
+    margin: 0;
+    padding: 20px 50px 20px 0;
+    line-height: 1.5;
+    position: relative;
+    cursor: pointer;
+}
+
+.wcepi-faq-question::after {
+    content: "−";
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 28px;
+    font-weight: 300;
+    color: #333;
+    line-height: 1;
+}
+
+.wcepi-faq-item.collapsed .wcepi-faq-question::after {
+    content: "+";
+}
+
+.wcepi-faq-answer {
+    color: #666;
+    line-height: 1.7;
+    margin: 0;
+    padding: 0 0 20px 0;
+    display: block !important;
+    max-height: 1000px;
+    overflow: visible;
+    transition: max-height 0.3s ease;
+}
+
+.wcepi-faq-item.collapsed .wcepi-faq-answer {
+    display: none !important;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+}
+
+.wcepi-faq-answer p {
+    margin: 0 0 12px 0;
+}
+
+.wcepi-faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+/* Reviews Section - Display below tabs */
+.reviews-section {
+    margin-top: 60px;
+    padding-top: 40px;
+    border-top: 2px solid #e0e0e0;
+    clear: both;
+}
+
+.reviews-section h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Warranty */
+.wcepi-warranty-period {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.wcepi-warranty-link {
+    margin-top: 20px;
+}
+
+.wcepi-warranty-link .button {
+    background: #2196F3;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.3s ease;
+}
+
+.wcepi-warranty-link .button:hover {
+    background: #1976D2;
+    color: white;
+}
+
+/* Stacked Content Mode - reset any inherited borders */
+.wcepi-stacked-content {
+    border: none !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* Reset description content when NOT in stacked mode (e.g., in tabs) */
+.woocommerce-Tabs-panel .wcepi-description-content,
+.woocommerce-tabs .wcepi-description-content,
+#tab-description .wcepi-description-content {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* Ensure description content has no border when directly in product container */
+div.product > .wcepi-description-content,
+.product-info .wcepi-description-content,
+.entry-summary .wcepi-description-content,
+.summary .wcepi-description-content {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* Stacked Content Mode - only apply to actual content sections (NOT description) */
+.wcepi-stacked-content > .wcepi-dimensions-content,
+.wcepi-stacked-content > .wcepi-specifications-content,
+.wcepi-stacked-content > .wcepi-downloads-content,
+.wcepi-stacked-content > .wcepi-shipping-returns-content,
+.wcepi-stacked-content > .wcepi-returns-content,
+.wcepi-stacked-content > .wcepi-warranty-content,
+.wcepi-stacked-content > .wcepi-faq-content,
+.wcepi-stacked-content > .wcepi-custom-section-content {
+    margin-bottom: 40px;
+    padding: 25px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+/* Description content - no border box, just spacing */
+.wcepi-description-content {
+    margin-bottom: 40px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+/* Prevent borders on product gallery and summary areas */
+.woocommerce-product-gallery,
+.product-gallery,
+.product-thumbnails,
+.summary.entry-summary,
+.product-info,
+.product-main,
+div.product > .row,
+div.product > .images {
+    border: none !important;
+}
+
+.wcepi-stacked-content h2 {
+    margin-top: 0;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #333;
+    font-size: 24px;
+}
+
+/* Tabs Mode - Horizontal Tabs - Override any theme styles */
+body:not(.wcepi-accordion-mode) .woocommerce-tabs {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 40px 0 !important;
+    border: none !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs {
+    display: flex !important;
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 0 0 0 !important;
+    border-bottom: 3px solid #e0e0e0 !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    flex-wrap: wrap !important;
+    background: transparent !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs::before,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs::after {
+    display: none !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs li {
+    margin: 0 2px -3px 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs li::before,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs li::after {
+    display: none !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs li a {
+    display: block !important;
+    padding: 15px 25px !important;
+    background: transparent !important;
+    border: none !important;
+    border-bottom: 3px solid transparent !important;
+    text-decoration: none !important;
+    color: #666 !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    transition: all 0.3s ease !important;
+    border-radius: 0 !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs li a:hover {
+    background: transparent !important;
+    color: #333 !important;
+    border-bottom-color: #999 !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs ul.tabs li.active a {
+    background: transparent !important;
+    color: #0073aa !important;
+    border-bottom: 3px solid #0073aa !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .woocommerce-Tabs-panel {
+    display: none !important;
+    padding: 15px 0 !important;
+    border: none !important;
+    background: transparent !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    height: auto !important;
+    visibility: visible !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .woocommerce-Tabs-panel.active {
+    display: block !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    overflow: visible !important;
+    height: auto !important;
+    visibility: visible !important;
+    position: relative !important;
+    left: auto !important;
+}
+
+/* HIDE all H2 headings in tabs mode - tabs already show the section names */
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .woocommerce-Tabs-panel h2 {
+    display: none !important;
+}
+
+/* Hide theme/plugin accordion titles (wpt-acc-title class) in tabs mode */
+body:not(.wcepi-accordion-mode) .woocommerce-tabs h2.wpt-acc-title,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wpt-acc-title {
+    display: none !important;
+}
+
+/* Remove any blue box styling from content divs in tabs mode */
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-dimensions-content,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-specifications-content,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-downloads-content,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-shipping-returns-content,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-warranty-content,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-faq-content,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-reviews-content {
+    background: transparent !important;
+    border: none !important;
+    padding: 10px 0 !important;
+}
+
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-dimensions-content h2,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-specifications-content h2,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-downloads-content h2,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-shipping-returns-content h2,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-warranty-content h2,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-faq-content h2,
+body:not(.wcepi-accordion-mode) .woocommerce-tabs .wcepi-reviews-content h2 {
+    display: none !important;
+}
+
+/* Hide accordion headers in tabs mode */
+body:not(.wcepi-accordion-mode) .wcepi-accordion-header {
+    display: none !important;
+}
+
+/* Accordion Mode */
+.wcepi-accordion-mode .woocommerce-tabs {
+    border: none;
+}
+
+/* Prevent accordion styles from affecting other page elements */
+.wcepi-accordion-mode .product-info,
+.wcepi-accordion-mode .product-container,
+.wcepi-accordion-mode .product-gallery,
+.wcepi-accordion-mode .product-main,
+.wcepi-accordion-mode .product-page-row,
+.wcepi-accordion-mode .product-section,
+.wcepi-accordion-mode .row.product-page,
+.wcepi-accordion-mode div.product > .row,
+.wcepi-accordion-mode .woocommerce-product-gallery,
+.wcepi-accordion-mode .product_title,
+.wcepi-accordion-mode .summary.entry-summary,
+.wcepi-accordion-mode .entry-summary,
+.wcepi-accordion-mode .product-page-col,
+.wcepi-accordion-mode .large-6.col,
+.wcepi-accordion-mode .product-thumbnails,
+.wcepi-accordion-mode .product-gallery-slider,
+.wcepi-accordion-mode .has-product-gallery-slider {
+    border: none !important;
+}
+
+/* Flatsome theme specific - prevent border leakage */
+.wcepi-accordion-mode .product-page .col,
+.wcepi-accordion-mode .product-page .product-info,
+.wcepi-accordion-mode .product-page .product-gallery,
+.wcepi-accordion-mode .single-product .product-main {
+    border: none !important;
+    outline: none !important;
+}
+
+.wcepi-accordion-mode .woocommerce-tabs ul.tabs {
+    display: none !important;
+}
+
+.wcepi-accordion-mode .woocommerce-Tabs-panel {
+    display: none !important;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    margin-bottom: 0;
+}
+
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active {
+    display: block !important;
+    padding: 20px !important;
+}
+
+/* Force content divs inside active panels to be visible */
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active .wcepi-dimensions-content,
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active .wcepi-specifications-content,
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active .wcepi-downloads-content,
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active .wcepi-shipping-returns-content,
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active .wcepi-warranty-content,
+.wcepi-accordion-mode .woocommerce-Tabs-panel.active .wcepi-faq-content {
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Hide ALL h2 headings inside accordion panels to avoid repetition with accordion headers */
+.wcepi-accordion-mode .woocommerce-Tabs-panel h2 {
+    display: none !important;
+}
+
+/* Hide theme accordion titles in accordion mode - we use our own */
+.wcepi-accordion-mode .woocommerce-tabs h2.wpt-acc-title,
+.wcepi-accordion-mode .woocommerce-tabs .wpt-acc-title {
+    display: none !important;
+}
+
+.wcepi-accordion-mode .wcepi-accordion-header {
+    background: #f5f5f5;
+    padding: 15px 50px 15px 20px;
+    cursor: pointer;
+    border: 1px solid #e0e0e0;
+    margin-top: -1px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.wcepi-accordion-mode .wcepi-accordion-header:first-of-type {
+    margin-top: 0;
+}
+
+.wcepi-accordion-mode .wcepi-accordion-header:hover {
+    background: #e0e0e0;
+}
+
+.wcepi-accordion-mode .wcepi-accordion-header.active {
+    background: #333;
+    color: white;
+    border-bottom: none;
+}
+
+.wcepi-accordion-mode .wcepi-accordion-header.active + .woocommerce-Tabs-panel {
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Arrow indicator */
+.wcepi-accordion-mode .wcepi-accordion-header::after {
+    content: "▼";
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.wcepi-accordion-mode .wcepi-accordion-header.active::after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* Ensure free shipping badge is visible on mobile */
+    .wcepi-free-shipping-badge {
+        display: inline-block !important;
+        font-size: 12px;
+        padding: 4px 10px;
+        margin-left: 8px;
+        white-space: nowrap;
+    }
+    
+    /* Ensure ships in text is visible on mobile */
+    .wcepi-ships-in {
+        display: inline !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        font-size: 13px;
+    }
+    
+    /* Ensure stock status is visible */
+    .stock.wcepi-in-stock,
+    .stock.wcepi-out-of-stock {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Ensure tabs wrapper is visible on mobile */
+    .woocommerce-tabs {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Don't force panels visible - let tabs JS control them */
+    body:not(.wcepi-accordion-mode) .woocommerce-tabs .woocommerce-Tabs-panel.active {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Ensure content inside active panels is visible on mobile */
+    .woocommerce-tabs .woocommerce-Tabs-panel.active .wcepi-dimensions-content,
+    .woocommerce-tabs .woocommerce-Tabs-panel.active .wcepi-specifications-content,
+    .woocommerce-tabs .woocommerce-Tabs-panel.active .wcepi-downloads-content,
+    .woocommerce-tabs .woocommerce-Tabs-panel.active .wcepi-warranty-content,
+    .woocommerce-tabs .woocommerce-Tabs-panel.active .wcepi-faq-content {
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .wcepi-dimensions-table th,
+    .wcepi-specifications-table th {
+        width: 35%;
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    .wcepi-dimensions-table td,
+    .wcepi-specifications-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+    
+    .wcepi-download-link {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    
+    .wcepi-download-icon {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+    
+    .wcepi-stacked-content > .wcepi-dimensions-content,
+    .wcepi-stacked-content > .wcepi-specifications-content,
+    .wcepi-stacked-content > .wcepi-downloads-content,
+    .wcepi-stacked-content > .wcepi-shipping-returns-content,
+    .wcepi-stacked-content > .wcepi-returns-content,
+    .wcepi-stacked-content > .wcepi-warranty-content,
+    .wcepi-stacked-content > .wcepi-faq-content,
+    .wcepi-stacked-content > .wcepi-custom-section-content {
+        padding: 15px;
+    }
+    
+    .wcepi-stacked-content h2 {
+        font-size: 20px;
+    }
+    
+    .wcepi-faq-question {
+        font-size: 16px;
+    }
+    
+    .wcepi-faq-item {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Force visibility on small mobile devices */
+    .wcepi-free-shipping-badge {
+        display: inline-block !important;
+        font-size: 11px;
+        padding: 3px 8px;
+        margin-left: 5px;
+    }
+    
+    .wcepi-ships-in {
+        display: block !important;
+        margin-left: 0 !important;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+    
+    /* Ensure all sections are visible */
+    .woocommerce-tabs,
+    .woocommerce-Tabs-panel,
+    .wcepi-dimensions-content,
+    .wcepi-specifications-content,
+    .wcepi-downloads-content,
+    .wcepi-warranty-content,
+    .wcepi-faq-content,
+    .wcepi-shipping-returns-content {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    .wcepi-dimensions-table,
+    .wcepi-specifications-table {
+        font-size: 13px;
+    }
+    
+    .wcepi-dimensions-table th,
+    .wcepi-specifications-table th,
+    .wcepi-dimensions-table td,
+    .wcepi-specifications-table td {
+        padding: 8px;
+    }
+    
+    .wcepi-faq-question {
+        font-size: 15px;
+    }
+    
+    .wcepi-faq-item {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .wcepi-free-shipping-badge {
+        background: none;
+        color: #000;
+        border: 1px solid #000;
+    }
+    
+    .wcepi-download-link {
+        border: 1px solid #000;
+        background: none;
+    }
+    
+    .wcepi-warranty-link .button {
+        background: none;
+        color: #000;
+        border: 1px solid #000;
+    }
+}
+/* ========================================
+   MOBILE FORCE DISPLAY - ASTRA/ELEMENTOR OVERRIDE
+   These rules have maximum specificity to override theme hiding
+   ======================================== */
+
+/* WebKit-specific fixes for Safari/Brave on iOS */
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific styles */
+    .wcepi-free-shipping-badge,
+    .wcepi-ships-in,
+    .stock.wcepi-in-stock,
+    .stock.wcepi-out-of-stock {
+        -webkit-transform: translateZ(0) !important;
+        transform: translateZ(0) !important;
+        will-change: auto !important;
+    }
+    
+    .woocommerce-tabs,
+    .woocommerce-Tabs-panel,
+    .wcepi-dimensions-content,
+    .wcepi-specifications-content,
+    .wcepi-downloads-content,
+    .wcepi-warranty-content,
+    .wcepi-faq-content,
+    .wcepi-shipping-returns-content {
+        -webkit-transform: translateZ(0) !important;
+        transform: translateZ(0) !important;
+        backface-visibility: visible !important;
+        -webkit-backface-visibility: visible !important;
+    }
+}
+
+/* Force display on ALL mobile devices - Override Astra/Elementor */
+@media only screen and (max-width: 768px) {
+    /* Free Shipping Badge - Force visible */
+    body.woocommerce div.product p.price .wcepi-free-shipping-badge,
+    body.woocommerce div.product span.price .wcepi-free-shipping-badge,
+    body .woocommerce div.product p.price .wcepi-free-shipping-badge,
+    body .woocommerce div.product span.price .wcepi-free-shipping-badge,
+    .wcepi-free-shipping-badge {
+        display: inline-block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        clip: auto !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    
+    /* Ships in X days - Force visible */
+    body.woocommerce .wcepi-ships-in,
+    body .wcepi-ships-in,
+    .stock .wcepi-ships-in,
+    .wcepi-ships-in {
+        display: inline !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        clip: auto !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    
+    /* Stock Status - Force visible */
+    body.woocommerce .stock.wcepi-in-stock,
+    body.woocommerce .stock.wcepi-out-of-stock,
+    body .stock.wcepi-in-stock,
+    body .stock.wcepi-out-of-stock,
+    .stock.wcepi-in-stock,
+    .stock.wcepi-out-of-stock {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        clip: auto !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    
+    /* WooCommerce Tabs - Force visible */
+    body.woocommerce div.product .woocommerce-tabs,
+    body .woocommerce div.product .woocommerce-tabs,
+    .woocommerce div.product .woocommerce-tabs,
+    .woocommerce-tabs {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        clip: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* CRITICAL: Hide ALL panels by default in accordion mode on mobile */
+    body.wcepi-accordion-mode .woocommerce-tabs .woocommerce-Tabs-panel,
+    body.wcepi-accordion-mode .woocommerce-Tabs-panel,
+    .wcepi-accordion-mode .woocommerce-tabs .woocommerce-Tabs-panel,
+    .wcepi-accordion-mode .woocommerce-Tabs-panel {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        height: 0 !important;
+        max-height: 0 !important;
+        overflow: hidden !important;
+        position: absolute !important;
+        left: -9999px !important;
+    }
+    
+    /* CRITICAL: Only show ACTIVE panels in accordion mode on mobile */
+    body.wcepi-accordion-mode .woocommerce-tabs .woocommerce-Tabs-panel.active,
+    body.wcepi-accordion-mode .woocommerce-Tabs-panel.active,
+    .wcepi-accordion-mode .woocommerce-tabs .woocommerce-Tabs-panel.active,
+    .wcepi-accordion-mode .woocommerce-Tabs-panel.active {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        clip: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* For tabs mode (non-accordion), show active panel - CRITICAL OVERRIDE */
+    body:not(.wcepi-accordion-mode) .woocommerce-tabs .woocommerce-Tabs-panel.active,
+    body:not(.wcepi-accordion-mode) .woocommerce-Tabs-panel.active {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        max-height: none !important;
+        height: auto !important;
+        overflow: visible !important;
+        position: relative !important;
+        left: auto !important;
+    }
+    
+    /* For tabs mode (non-accordion), hide inactive panels */
+    body:not(.wcepi-accordion-mode) .woocommerce-tabs .woocommerce-Tabs-panel:not(.active),
+    body:not(.wcepi-accordion-mode) .woocommerce-Tabs-panel:not(.active) {
+        display: none !important;
+    }
+    
+    /* All Content Sections - Force visible */
+    body .wcepi-dimensions-content,
+    body .wcepi-specifications-content,
+    body .wcepi-downloads-content,
+    body .wcepi-warranty-content,
+    body .wcepi-faq-content,
+    body .wcepi-shipping-returns-content,
+    .wcepi-dimensions-content,
+    .wcepi-specifications-content,
+    .wcepi-downloads-content,
+    .wcepi-warranty-content,
+    .wcepi-faq-content,
+    .wcepi-shipping-returns-content {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        clip: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    
+    /* Tables - Force visible */
+    body .wcepi-dimensions-table,
+    body .wcepi-specifications-table,
+    .wcepi-dimensions-table,
+    .wcepi-specifications-table {
+        display: table !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        width: 100% !important;
+    }
+    
+    /* Downloads List - Force visible */
+    body .wcepi-downloads-list,
+    .wcepi-downloads-list {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* FAQ Items - Force visible */
+    body .wcepi-faq-list,
+    body .wcepi-faq-item,
+    .wcepi-faq-list,
+    .wcepi-faq-item {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    /* Safari-specific additional overrides for mobile */
+/* Payment Methods Badge - Compact single-line display */
+.wcepi-payment-methods-badge {
+    margin-top: 15px !important;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    display: block !important;
+    clear: both !important;
+    float: none !important;
+    text-align: center;
+    width: 100% !important;
+    position: relative !important;
+}
+
+.wcepi-payment-methods-icons {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 12px;
+    max-width: 100%;
+    width: 100%;
+}
+
+.wcepi-payment-icon {
+    height: auto !important;
+    width: 52px !important;
+    max-width: 52px !important;
+    max-height: 52px !important;
+    display: inline-block !important;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.wcepi-payment-icon:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments for payment methods */
+@media only screen and (max-width: 768px) {
+    .wcepi-payment-methods-badge {
+        padding: 8px 6px !important;
+        margin-top: 15px !important;
+        display: block !important;
+        width: 100% !important;
+        clear: both !important;
+        float: none !important;
+    }
+
+    .wcepi-payment-methods-icons {
+        gap: 6px !important;
+        flex-wrap: nowrap !important;
+        justify-content: center !important;
+    }
+
+    .wcepi-payment-icon {
+        width: 38px !important;
+        max-width: 38px !important;
+        max-height: 38px !important;
+        height: 38px !important;
+        min-width: 38px !important;
+        min-height: 38px !important;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .wcepi-payment-methods-badge {
+        padding: 8px 4px !important;
+        margin-top: 15px !important;
+        display: block !important;
+        width: 100% !important;
+        clear: both !important;
+        float: none !important;
+    }
+
+    .wcepi-payment-methods-icons {
+        gap: 4px !important;
+        flex-wrap: nowrap !important;
+        justify-content: center !important;
+    }
+
+    .wcepi-payment-icon {
+        width: 32px !important;
+        max-width: 32px !important;
+        max-height: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+    }
+}
+
+    @supports (-webkit-overflow-scrolling: touch) {
+        body .woocommerce-tabs,
+        body .woocommerce-Tabs-panel.active,
+        body .wcepi-dimensions-content,
+        body .wcepi-specifications-content,
+        body .wcepi-warranty-content {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            -webkit-transform: translate3d(0,0,0) !important;
+            transform: translate3d(0,0,0) !important;
+        }
+        
+        body .wcepi-free-shipping-badge,
+        body .wcepi-ships-in {
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+    }
+}
+
+/* Extra small devices - phones */
+@media only screen and (max-width: 480px) {
+    /* Apply same overrides for very small screens */
+    body.woocommerce div.product p.price .wcepi-free-shipping-badge,
+    body.woocommerce div.product span.price .wcepi-free-shipping-badge,
+    .wcepi-free-shipping-badge {
+        display: inline-block !important;
+        font-size: 11px !important;
+        padding: 3px 8px !important;
+    }
+    
+    body.woocommerce .wcepi-ships-in,
+    .wcepi-ships-in {
+        display: block !important;
+        margin-top: 5px !important;
+        margin-left: 0 !important;
+    }
+}

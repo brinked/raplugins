@@ -1,0 +1,5 @@
+dev
+.distignore
+.git
+.gitignore
+node_modules

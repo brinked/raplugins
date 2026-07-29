@@ -1,0 +1,425 @@
+RankAudit Optimization Platform
+Content Optimizer + Product Optimizer + WordPress Integration
+
+Master Product &amp; Development Plan
+
+Purpose: Build a cloud-based RankAudit platform connected to Google Search Console and WordPress that
+finds real organic-search opportunities, improves informational content and ecommerce product listings,
+publishes controlled changes through a WordPress plugin, and measures the results.
+
+1. Platform Vision
+RankAudit should operate as the intelligence layer, while the WordPress plugin acts as a secure bridge
+between RankAudit and the subscribers website. The system should avoid blind AI rewrites. It should use
+verified data, actual Search Console performance, structured recommendations, controlled publishing,
+revisions, and post-change measurement.
+ Content Optimizer — improves articles, guides, blog posts and informational pages.
+ Product Optimizer — improves WooCommerce product listings, specifications, descriptions and
+purchase information.
+ Trust Blocks — displays verified warranty, shipping, returns, stock, manufacturer and payment
+information.
+ Performance Tracking — measures rankings, impressions, clicks, CTR and the outcome of each
+optimization.
+
+2. Core Architecture
+RankAudit Cloud Application
+ User accounts, organizations, subscriptions and sites.
+ Google OAuth and Google Search Console synchronization.
+ WordPress site connections and secure authentication.
+ Search opportunity detection and prioritization.
+ Content/product analysis and AI generation.
+ Background jobs and scheduled rechecks.
+ Recommendation approval workflows.
+ Change history, revisions, rollback records and audit logs.
+ Performance reporting and notifications.
+WordPress Plugin
+ Pairs a WordPress site with the correct RankAudit account.
+ Retrieves posts, pages, WooCommerce products, metadata and supported custom fields.
+ Preserves Gutenberg blocks, shortcodes, embeds and important theme/plugin data.
+ Creates drafts and revisions before changes.
+ Applies approved changes and supports rollback.
+ Displays RankAudit recommendations inside WordPress.
+ Provides permission levels from analyze-only through optional autopilot.
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+Background Workers
+ Search Console imports and daily metric aggregation.
+ Website/content synchronization.
+ AI analysis and generation.
+ Query clustering and opportunity scoring.
+ Competitor and internal-link analysis.
+ Performance rechecks after publication.
+
+3. Subscriber Onboarding
+1. Create a RankAudit account and add a website.
+2. Click Connect Google Search Console and complete Google OAuth.
+3. Select the Search Console property associated with the site.
+4. Install and activate the RankAudit WordPress plugin.
+5. Pair the plugin using a one-time connection code.
+6. Choose permissions: analyze only, create recommendations, create drafts, publish approved changes,
+or full autopilot.
+7. Run site verification and initial WordPress/Search Console synchronization.
+8. Show the first opportunity dashboard after the initial data is processed.
+
+4. Google Search Console Integration
+Use Google OAuth 2.0 and begin with read-only Search Console access. Store refresh tokens encrypted on
+the RankAudit server rather than inside WordPress. Allow users to revoke the connection at any time.
+ Retrieve available Search Console properties after OAuth.
+ Import query, page, country, device and search-appearance dimensions where useful.
+ Store clicks, impressions, CTR and average position.
+ Maintain rolling periods such as 7, 28, 90 days and longer historical windows where available.
+ Store daily data so RankAudit can detect gains, declines, seasonality, cannibalization and post-
+optimization changes.
+
+5. WordPress Security &amp; Connection
+ Prefer a plugin-issued, site-specific connection secret rather than requesting the user&#39;s WordPress
+password.
+ Sign sensitive requests with a site identifier, timestamp, nonce, request-body hash and HMAC signature.
+ Verify capabilities and permissions before every mutation.
+ Use HTTPS, secret rotation, rate limiting and audit logging.
+ Create a WordPress revision before modifying published content.
+ Provide immediate disconnect and rollback controls.
+ WordPress Application Passwords can be supported as an alternative connection method.
+
+PART I — CONTENT OPTIMIZER
+
+6. Content Optimizer Goal
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+Find pages that already have a realistic chance to improve, diagnose why they may be underperforming,
+recommend specific changes, create controlled WordPress drafts, and measure whether those changes
+correlate with improved search performance.
+
+7. Content Opportunity Engine
+ Striking-distance pages, especially approximately positions 8–20.
+ High-impression / low-CTR pages.
+ Declining pages and content decay.
+ Query expansion opportunities where a page ranks for relevant topics it barely addresses.
+ Cannibalization between multiple URLs.
+ Weak internal-link support.
+ CTR-only opportunities that may need metadata rather than a rewrite.
+ Consolidation opportunities for overlapping or thin articles.
+Suggested scoring concept: Opportunity Score = Demand × Ranking Potential × Page Relevance ×
+Business Value × Confidence.
+
+8. Article Analysis Pipeline
+9. Retrieve the current article, metadata, blocks, headings, links, images, author information and SEO
+settings.
+10. Determine the article&#39;s primary topic, search intent, audience, conversion goal, angle and existing
+strengths.
+11. Map Search Console queries to the page and cluster them by topic and intent.
+12. Evaluate intent satisfaction, topical coverage, originality, usefulness, evidence, experience, trust,
+freshness and organization.
+13. Evaluate technical presentation including title, description, H1, headings, canonical, indexability,
+schema, links and image attributes.
+14. Analyze internal-link opportunities.
+15. Optionally compare the page against competing search results for missing useful topics or presentation
+patterns.
+16. Generate an evidence-based optimization plan before generating replacement text.
+
+9. Content Change Types
+ Metadata: SEO titles, meta descriptions and social metadata.
+ Structure: introductions, heading order, paragraph organization, tables of contents and conclusions.
+ Additions: missing sections, FAQs, comparisons, examples, definitions, steps, troubleshooting and
+pros/cons.
+ Trust: author information, sources, methodology, update information, firsthand media and disclosures.
+ Internal linking: inbound/outbound contextual links and improved anchor text.
+ Consolidation: merge overlapping pages and update internal links.
+ Reduction: remove filler, repetition, outdated information and irrelevant sections.
+
+10. AI Editing Rules for Content
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+ Preserve core meaning, author voice, brand terminology, disclosures, shortcodes, forms, embeds and
+tracking code.
+ Do not invent tests, customer quotes, statistics, credentials, prices, policies, dates or unsupported
+factual claims.
+ Prefer section-level patches over full-article replacement.
+ Use structured AI output containing analysis, recommendations, additions, modifications, removals,
+metadata changes, internal-link changes, verification flags and final patches.
+ Require human verification when new factual information cannot be established from trusted data.
+
+11. Content Editing Modes
+ Recommendations Only — no WordPress changes.
+ Draft Assistant — creates a revised WordPress draft.
+ Section-Level Approval — approve, edit or reject each change.
+ Automatic Low-Risk Improvements — optional automation for narrowly defined safe changes.
+ Full Autopilot — later-stage feature with explicit consent, revision creation, quality checks, change limits
+and rollback.
+
+12. Content Performance Tracking
+ Record baseline queries, positions, impressions, clicks and CTR before publication.
+ Measure at approximately 7, 14, 28, 56 and 90 days.
+ Statuses: awaiting data, too early to judge, improving, stable, declining, reverted, needs work and
+successful.
+ Describe outcomes as correlated improvements/declines rather than claiming every ranking movement
+was caused by RankAudit.
+
+PART II — PRODUCT OPTIMIZER
+
+13. Product Optimizer Goal
+Turn incomplete or weak ecommerce listings into more useful and trustworthy buying pages using verified
+store, product and manufacturer information. Product optimization should combine SEO, product
+completeness, trust, conversion usefulness and structured data rather than merely rewriting descriptions.
+
+14. WooCommerce Product Import
+ Product name, URL, short and long descriptions.
+ Price, sale price and stock status.
+ SKU, GTIN, MPN, UPC/EAN where available.
+ Brand, manufacturer, categories, tags and attributes.
+ Variations, dimensions, weight and shipping class.
+ Images, image alt text, reviews and ratings.
+ SEO metadata, structured data, related products and upsells.
+ Supported custom fields.
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+15. Store Trust Profile
+Merchants should enter important store-level facts once. RankAudit then uses those approved facts
+consistently instead of allowing AI to infer policies.
+Company Information
+ Business name and contact information.
+ Customer-service hours.
+ Authorized dealer/manufacturer status.
+ Payment methods and other approved trust facts.
+Shipping
+ Processing time.
+ Shipping methods.
+ Free-shipping threshold.
+ Estimated delivery time.
+ Freight rules.
+ Geographic restrictions.
+ Local pickup and expedited options.
+Returns
+ Return window.
+ Restocking fee.
+ Return-shipping responsibility.
+ Condition requirements.
+ Final-sale/custom-order exclusions.
+ Damaged-item process.
+ Refund timing.
+Warranty
+ Warranty duration and provider.
+ What is covered.
+ Important exclusions.
+ Residential vs. commercial coverage.
+ Claim instructions.
+ Full warranty URL/document.
+
+16. Product-Specific Verified Fields
+ Manufacturer name and official manufacturer URL.
+ Official manufacturer product URL.
+ Manufacturer warranty URL.
+ Brand, model, MPN and product identifiers.
+ Warranty duration/type and approved warranty summary.
+ Ships-from location and processing time.
+ Return eligibility and product-specific restrictions.
+ Installation/assembly requirements.
+ Country of manufacture.
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+ Materials, certifications and compatibility.
+ What is included and excluded.
+ Care instructions.
+ Installation guides, specification sheets, CAD files and technical documentation.
+
+17. Product Page Blocks
+ Product Summary — what it is, who it is for and the primary benefits.
+ Key Features — verified differentiators and important specifications.
+ Detailed Description — useful, original merchant-specific copy.
+ Specifications Table — structured factual attributes.
+ What Is Included / What Is Not Included.
+ Warranty Summary — plain-language approved summary plus link to full warranty.
+ Shipping Summary — processing, delivery and freight expectations.
+ Returns Summary — approved return rules and limitations.
+ Manufacturer Information — manufacturer, model, official links and support.
+ Downloads &amp; Documentation — manuals, warranty, care and technical files.
+ Frequently Asked Questions — generated from verified customer/search data where possible.
+
+18. RankAudit Trust Blocks
+Trust Blocks should provide reusable visual components that can be placed near the price/Add to Cart area,
+inside accordions, tabs, sidebars or full-width sections.
+ Warranty.
+ Availability / made-to-order status.
+ Processing and delivery expectations.
+ Returns.
+ Manufacturer.
+ Country of manufacture.
+ Payment options.
+ Support/contact information.
+
+19. Product Analysis Score
+ Description Quality — clarity, uniqueness, intent match and usefulness.
+ Product Completeness — identifiers, dimensions, materials, compatibility, images and specifications.
+ Trust &amp; Transparency — warranty, shipping, returns, manufacturer and contact information.
+ Search Opportunity — actual Search Console queries, model searches, comparisons and specification
+searches.
+ Conversion Usefulness — whether important buying questions are answered near the decision point.
+ Data Confidence — whether each claim is verified, imported, manufacturer-sourced, document-sourced,
+conflicting or awaiting verification.
+
+20. Product AI Safety Rules
+The product system must never invent or silently infer:
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+ Warranty coverage or exclusions.
+ Return eligibility.
+ Shipping/production dates.
+ Inventory.
+ Dimensions or weight.
+ Materials or certifications.
+ Compatibility.
+ Country of origin.
+ Manufacturer claims.
+ Customer reviews.
+ Prices or discounts.
+Every important claim should carry an internal source status such as Verified by Store Owner, Imported from
+WooCommerce, Imported from Manufacturer, Extracted from Approved Document, Needs Verification, or
+Conflicting Information.
+
+21. Manufacturer Information Workflow
+17. Identify the brand and manufacturer part number.
+18. Associate the product with an approved official manufacturer domain/product page.
+19. Compare manufacturer specifications with the merchant listing.
+20. Flag discrepancies instead of silently overwriting them.
+21. Save the approved manufacturer URL and approved facts.
+22. Generate original merchant-specific copy rather than copying the manufacturer&#39;s description.
+
+22. Product Optimization Workflow
+23. Import the WooCommerce product.
+24. Apply store-wide approved policies.
+25. Retrieve approved product/manufacturer facts.
+26. Detect missing, weak or conflicting information.
+27. Combine the product record with Search Console opportunities.
+28. Generate a product-page score and prioritized recommendations.
+29. Request missing facts from the merchant when required.
+30. Generate proposed description, specification and trust improvements.
+31. Show before/after differences and source confidence.
+32. Create a WooCommerce/WordPress draft or revision.
+33. Validate the page and structured data.
+34. Publish only after the selected approval workflow.
+35. Measure search performance and, where available, conversion impact.
+
+23. Product Opportunity Dashboard
+ Products missing warranty information.
+ Products missing manufacturer URLs.
+ Listings missing specifications or identifiers.
+ Conflicting dimensions/specifications.
+ Duplicate or manufacturer-copy descriptions.
+ High-impression products with weak descriptions.
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+ Products ranking on page two or three.
+ Products missing shipping/return summaries.
+ Stock or production-time messaging conflicts.
+ Variations with incomplete identifiers.
+
+PART III — SHARED PLATFORM
+
+24. Suggested Core Database Areas
+ Users, organizations, organization roles and sites.
+ Google connections and Search Console properties.
+ Daily Search Console metrics.
+ WordPress connections and permissions.
+ Content items and content revisions.
+ Products, product variations and verified product facts.
+ Store policies and trust profiles.
+ Query clusters and page/query mappings.
+ Opportunities, analyses and recommendations.
+ Optimization jobs and proposed changes.
+ Published changes and rollback records.
+ Performance snapshots and audit logs.
+
+25. Shared Dashboard
+ Organic clicks, impressions, CTR and average position.
+ Ranking pages/products.
+ High-value opportunities.
+ Declining content/products.
+ Pending approvals.
+ Published optimizations.
+ Successful/declining optimizations.
+ Trust-data completeness.
+ WordPress and Search Console connection health.
+
+26. Shared Quality-Control Pipeline
+36. Validate structured AI output.
+37. Validate HTML/Gutenberg structure.
+38. Preserve shortcodes, forms and embedded media.
+39. Check broken and internal links.
+40. Flag unsupported factual claims.
+41. Check for duplicate content.
+42. Validate brand rules and placeholders.
+43. Check SEO metadata/schema conflicts.
+44. Verify WordPress permissions.
+45. Create a revision before mutation.
+46. Record a complete audit trail.
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+27. Recommended MVP
+ User/site accounts and subscriptions.
+ Google Search Console OAuth and daily data sync.
+ WordPress plugin pairing and secure connection.
+ Gutenberg, Classic Editor and standard WooCommerce product support.
+ Article and product synchronization.
+ Content opportunity dashboard.
+ Product completeness/trust dashboard.
+ Section-level article improvements.
+ Product-description and specification improvements.
+ Warranty, shipping, returns and manufacturer trust fields/blocks.
+ Manual approval and WordPress draft creation.
+ Revision/rollback support.
+ Post-publication Search Console performance tracking.
+
+28. Development Phases for Codex
+Phase 1 — Foundation: Repository, authentication, organizations, sites, database, API conventions,
+queues, logging and tests.
+Phase 2 — Search Console: Google OAuth, property selection, encrypted tokens, Search Analytics
+synchronization and daily metrics.
+Phase 3 — WordPress Plugin: Plugin scaffold, pairing, signing, permissions, site information, heartbeat
+and disconnect.
+Phase 4 — Content &amp; Product Sync: Posts/pages, Gutenberg, Classic Editor, WooCommerce
+products/variations, metadata and content hashes.
+Phase 5 — Opportunity Engine: Query clustering, striking-distance pages, CTR opportunities, declines,
+content decay and scoring.
+Phase 6 — Content Analysis: Intent, topical coverage, trust, internal links and structured
+recommendations.
+Phase 7 — Product Analysis: Completeness, trust profile, verified fields, description quality, manufacturer
+data and conflicts.
+Phase 8 — AI Improvements: Structured prompts, section patches, product descriptions, specifications,
+trust summaries and validation.
+Phase 9 — Draft Publishing: Previews, revisions, draft creation, metadata updates, rollback and failure
+recovery.
+Phase 10 — Measurement: Baselines, scheduled rechecks, performance labels and optimization reporting.
+Phase 11 — Scale &amp; Autopilot: Controlled automation, staging workflows, agencies, page builders,
+advanced competitor analysis and learning.
+
+29. Product Positioning
+
+RankAudit — Master Content &amp; Product Optimization Plan
+
+RankAudit finds pages and products that already have an opportunity to perform better, explains what is
+missing, builds evidence-based improvements, safely applies approved changes inside WordPress, and
+measures whether the changes worked.
+Core loop: Search Console data → Opportunity detection → Evidence-based analysis → Verified
+improvements → WordPress draft/publishing → Performance measurement.
+
+30. Recommended First Release
+47. Subscriber connects Search Console.
+48. Subscriber connects WordPress/WooCommerce.
+49. RankAudit imports content, products and performance data.
+50. RankAudit identifies the highest-value article and product opportunities.
+51. The subscriber opens an opportunity and sees why it was selected.
+52. RankAudit creates structured, source-aware recommendations.
+53. The subscriber approves section-level changes.
+54. RankAudit creates a WordPress draft/revision.
+55. The subscriber publishes the approved version.
+56. RankAudit monitors subsequent Search Console performance.
+The first release should prove the complete feedback loop before adding broad automatic publishing. Once
+RankAudit reliably finds good opportunities, creates useful and factual improvements, preserves WordPress
+content, and measures results, automation can be expanded safely.

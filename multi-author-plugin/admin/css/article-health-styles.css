@@ -1,0 +1,321 @@
+/**
+ * Article Health Dashboard Styles
+ */
+
+/* Dashboard Layout */
+.map-article-health-dashboard {
+    max-width: 1400px;
+}
+
+.map-article-health-dashboard h1 {
+    margin-bottom: 20px;
+}
+
+/* Summary Cards */
+.map-health-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.map-health-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.map-health-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.map-health-card-number {
+    display: block;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.map-health-card-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d2327;
+    margin-bottom: 4px;
+}
+
+.map-health-card-desc {
+    display: block;
+    font-size: 12px;
+    color: #666;
+}
+
+.map-health-card-total .map-health-card-number {
+    color: #0073aa;
+}
+
+.map-health-card-warning .map-health-card-number {
+    color: #dba617;
+}
+
+.map-health-card-critical .map-health-card-number {
+    color: #d63638;
+}
+
+/* Filters */
+.map-health-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.map-health-filters .button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Sort Options */
+.map-health-sort {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background: #f6f7f7;
+    border-radius: 4px;
+    font-size: 13px;
+}
+
+.map-health-sort > span {
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.map-health-sort a {
+    text-decoration: none;
+    color: #0073aa;
+    padding: 4px 10px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.map-health-sort a:hover {
+    background: #ddd;
+    color: #1d2327;
+}
+
+.map-health-sort a.active {
+    background: #0073aa;
+    color: #fff;
+}
+
+/* Table Styles */
+.map-article-health-dashboard .wp-list-table {
+    margin-top: 0;
+}
+
+.map-article-health-dashboard .column-title {
+    width: 35%;
+}
+
+.map-article-health-dashboard .column-words,
+.map-article-health-dashboard .column-citations {
+    width: 10%;
+    text-align: center;
+}
+
+.map-article-health-dashboard .column-updated {
+    width: 15%;
+}
+
+.map-article-health-dashboard .column-status {
+    width: 12%;
+    text-align: center;
+}
+
+.map-article-health-dashboard .column-actions {
+    width: 15%;
+}
+
+.map-article-health-dashboard .column-actions .button {
+    margin-right: 5px;
+}
+
+/* Health Warning Colors */
+.map-health-warning {
+    color: #dba617 !important;
+    font-weight: 600;
+}
+
+.map-health-critical {
+    color: #d63638 !important;
+    font-weight: 600;
+}
+
+.map-health-good {
+    color: #00a32a;
+}
+
+/* Needs Attention Row */
+.map-needs-attention {
+    background-color: #fff8e5 !important;
+}
+
+.map-needs-attention:hover {
+    background-color: #fef5dc !important;
+}
+
+/* Health Badge */
+.map-health-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.map-health-badge .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+.map-health-badge.map-health-good {
+    background: #e7f5ea;
+    color: #00a32a;
+}
+
+.map-health-badge.map-health-needs-work {
+    background: #fcf0e3;
+    color: #b26200;
+}
+
+/* Posts List Columns */
+.column-map_word_count,
+.column-map_citations,
+.column-map_freshness {
+    width: 60px !important;
+    text-align: center !important;
+}
+
+.column-map_word_count .dashicons,
+.column-map_citations .dashicons,
+.column-map_freshness .dashicons {
+    color: #666;
+}
+
+/* Pagination Styles */
+.map-article-health-dashboard .tablenav {
+    margin: 20px 0;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.map-article-health-dashboard .tablenav-pages {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+}
+
+.map-article-health-dashboard .displaying-num {
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+}
+
+.map-article-health-dashboard #map-per-page {
+    padding: 4px 8px;
+    font-size: 13px;
+    border-radius: 3px;
+    border: 1px solid #8c8f94;
+    background: #fff;
+    cursor: pointer;
+}
+
+.map-article-health-dashboard .page-numbers {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 0 2px;
+    text-decoration: none;
+    background: #f6f7f7;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    color: #2271b1;
+    font-size: 13px;
+}
+
+.map-article-health-dashboard .page-numbers:hover {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.map-article-health-dashboard .page-numbers.current {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+    font-weight: 600;
+}
+
+.map-article-health-dashboard .page-numbers.dots {
+    background: transparent;
+    border: none;
+    color: #666;
+}
+
+.map-article-health-dashboard .page-numbers.dots:hover {
+    background: transparent;
+    color: #666;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .map-health-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .map-health-card-number {
+        font-size: 36px;
+    }
+
+    .map-health-filters {
+        flex-direction: column;
+    }
+
+    .map-health-sort {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .map-article-health-dashboard .column-title {
+        width: 100%;
+    }
+
+    .map-article-health-dashboard .column-words,
+    .map-article-health-dashboard .column-citations,
+    .map-article-health-dashboard .column-updated,
+    .map-article-health-dashboard .column-status,
+    .map-article-health-dashboard .column-actions {
+        display: none;
+    }
+}

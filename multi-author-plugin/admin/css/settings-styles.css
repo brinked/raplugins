@@ -1,0 +1,145 @@
+/**
+ * Multi-Author Plugin - Settings Page Styles
+ */
+
+.wrap h1 {
+    margin-bottom: 20px;
+}
+
+/* Settings Form */
+.form-table th {
+    padding: 20px 10px 20px 0;
+    width: 250px;
+}
+
+.form-table td {
+    padding: 15px 10px;
+}
+
+.form-table input[type="text"].regular-text {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-table input[type="number"].small-text {
+    width: 80px;
+}
+
+/* Color Picker */
+.map-color-picker {
+    max-width: 100px;
+}
+
+.wp-picker-container {
+    display: inline-block;
+}
+
+/* Settings Sections */
+h2.title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form-table + h2.title {
+    margin-top: 40px;
+}
+
+/* Section Descriptions */
+.form-table + p {
+    margin-top: -10px;
+    margin-bottom: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+/* Submit Button */
+.submit {
+    padding-top: 10px;
+}
+
+.submit .button-primary {
+    padding: 8px 20px;
+    height: auto;
+    font-size: 14px;
+}
+
+/* Preview Section */
+.map-settings-preview {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.map-settings-preview h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+.map-settings-preview p {
+    margin: 0;
+    color: #666;
+}
+
+/* Success Message */
+.notice.settings-error {
+    margin: 20px 0;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+    .form-table th,
+    .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .form-table th {
+        padding-bottom: 5px;
+    }
+    
+    .form-table input[type="text"].regular-text {
+        max-width: 100%;
+    }
+}
+
+/* Field Help Text */
+.description {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 13px;
+    font-style: italic;
+}
+
+/* Settings Groups */
+.form-table tr {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.form-table tr:last-child {
+    border-bottom: none;
+}
+
+/* Input Focus States */
+.form-table input[type="text"]:focus,
+.form-table input[type="number"]:focus {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+/* Color Picker Button */
+.wp-picker-container .wp-color-result {
+    height: 30px;
+    border-radius: 3px;
+}
+
+.wp-picker-container .wp-color-result:after {
+    line-height: 28px;
+    font-size: 12px;
+}

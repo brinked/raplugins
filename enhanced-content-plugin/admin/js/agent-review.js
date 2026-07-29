@@ -1,0 +1,907 @@
+/**
+ * Agent admin behaviour.
+ *
+ * The review queue is built for speed: J/K to move, A to apply, R to reject,
+ * E to edit. Cards resolve in place and fade out rather than reloading the
+ * page, so a reviewer keeps their position and their momentum.
+ */
+(function ($) {
+	'use strict';
+
+	var i18n = (window.ecpAgent && window.ecpAgent.i18n) || {};
+
+	function t(key, fallback) {
+		return i18n[key] || fallback || key;
+	}
+
+	function sprintf(template, values) {
+		var i = 0;
+		return String(template).replace(/%(\d+\$)?[ds]/g, function (match, position) {
+			var index = position ? parseInt(position, 10) - 1 : i++;
+			return typeof values[index] === 'undefined' ? match : values[index];
+		});
+	}
+
+	/**
+	 * All AJAX goes through here so the nonce and error handling live in one
+	 * place.
+	 */
+	function post(action, data) {
+		return $.ajax({
+			url: window.ecpAgent.ajaxurl,
+			method: 'POST',
+			data: $.extend({ action: 'ecp_' + action, nonce: window.ecpAgent.nonce }, data || {}),
+			dataType: 'json'
+		}).then(function (response) {
+			if (!response || !response.success) {
+				var message = (response && response.data && response.data.message) || t('failed');
+				return $.Deferred().reject(message).promise();
+			}
+			return response.data || {};
+		}, function (xhr) {
+			var message = t('networkError');
+			if (xhr && xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) {
+				message = xhr.responseJSON.data.message;
+			}
+			return $.Deferred().reject(message).promise();
+		});
+	}
+
+	function announce(message) {
+		if (window.wp && window.wp.a11y && window.wp.a11y.speak) {
+			window.wp.a11y.speak(message, 'polite');
+		}
+	}
+
+	function setStatus($card, message, isError) {
+		$card.find('.ecp-card-status, .ecp-row-status')
+			.first()
+			.attr('class', 'ecp-card-status' + (isError ? ' is-error' : ' is-ok'))
+			.text(message);
+
+		announce(message);
+	}
+
+	function busy($card, on) {
+		$card.toggleClass('is-busy', !!on);
+		$card.find('button').prop('disabled', !!on);
+	}
+
+	/**
+	 * Fade a resolved card out and move focus on, so keyboard reviewers are
+	 * never dropped back to the top of the document.
+	 */
+	function retire($card, label) {
+		$card.addClass('is-resolved');
+		$card.find('.ecp-card-actions').html('<span class="ecp-resolved-label">' + label + '</span>');
+
+		var $next = $card.nextAll('.ecp-card').not('.is-resolved').first();
+
+		window.setTimeout(function () {
+			$card.slideUp(200, function () {
+				$card.remove();
+
+				if (!$('.ecp-card').not('.is-resolved').length) {
+					$('#ecp-cards').append('<div class="ecp-empty"><h2>' + t('nothingLeft') + '</h2></div>');
+					announce(t('nothingLeft'));
+				}
+			});
+		}, 900);
+
+		if ($next.length) {
+			focusCard($next);
+		}
+	}
+
+	function updatePendingBadge(count) {
+		if (typeof count === 'undefined') {
+			return;
+		}
+
+		$('.ecp-tab-count, #adminmenu .plugin-count').text(count);
+
+		if (0 === count) {
+			$('.ecp-tab-count, #adminmenu .update-plugins').remove();
+			$('#wp-admin-bar-ecp-pending').remove();
+		}
+	}
+
+	/* ------------------------------------------------------------------
+	 * Single-card actions
+	 * --------------------------------------------------------------- */
+
+	function approve($card) {
+		busy($card, true);
+		setStatus($card, t('approving'));
+
+		post('approve', { id: $card.data('id') })
+			.done(function (data) {
+				setStatus($card, data.message || t('approved'));
+				updatePendingBadge(data.pending);
+				retire($card, data.message || t('approved'));
+			})
+			.fail(function (message) {
+				busy($card, false);
+				setStatus($card, message, true);
+			});
+	}
+
+	function reject($card) {
+		busy($card, true);
+		setStatus($card, t('rejecting'));
+
+		post('reject', { id: $card.data('id') })
+			.done(function (data) {
+				updatePendingBadge(data.pending);
+				retire($card, t('rejected'));
+			})
+			.fail(function (message) {
+				busy($card, false);
+				setStatus($card, message, true);
+			});
+	}
+
+	// Whether wp.editor (classic TinyMCE + quicktags) is available. It is
+	// enqueued on our screens, but a plugin conflict can still keep it out —
+	// in which case the plain textarea keeps working as before.
+	function editorAvailable() {
+		return window.wp && wp.editor && typeof wp.editor.initialize === 'function';
+	}
+
+	function toggleEdit($card, show) {
+		var $panel = $card.find('.ecp-edit-panel');
+
+		if (!$panel.length) {
+			return;
+		}
+
+		$panel.prop('hidden', !show);
+		$card.toggleClass('is-editing', show);
+
+		var $field = $panel.find('.ecp-edit-field');
+		var id = $field.attr('id');
+		var visual = $field.hasClass('ecp-edit-html') && editorAvailable();
+
+		if (show) {
+			if (visual && !$field.data('ecp-editor')) {
+				// Strip Gutenberg block comments before handing the HTML to
+				// TinyMCE — it mangles them, and the applier re-wraps plain
+				// HTML into proper blocks on save anyway.
+				$field.val(String($field.val()).replace(/<!--\s*\/?wp:[\s\S]*?-->\s?/g, ''));
+
+				wp.editor.initialize(id, {
+					mediaButtons: false,
+					quicktags: true,   // The Text tab, for anyone who wants the raw HTML.
+					tinymce: {
+						wpautop: false,
+						toolbar1: 'formatselect,bold,italic,bullist,numlist,link,unlink,blockquote,undo,redo',
+						toolbar2: '',
+						height: 280
+					}
+				});
+
+				$field.data('ecp-editor', true);
+			}
+
+			if (!visual) {
+				$field.trigger('focus');
+			}
+		} else if ($field.data('ecp-editor')) {
+			// Tear down on close so reopening initializes cleanly.
+			wp.editor.remove(id);
+			$field.data('ecp-editor', false);
+		}
+	}
+
+	function saveEdit($card) {
+		var $field = $card.find('.ecp-edit-field');
+		var value;
+
+		if ($field.data('ecp-editor') && editorAvailable()) {
+			value = wp.editor.getContent($field.attr('id'));
+		} else {
+			value = $field.val();
+		}
+
+		busy($card, true);
+		setStatus($card, t('approving'));
+
+		post('edit_apply', { id: $card.data('id'), value: value })
+			.done(function (data) {
+				updatePendingBadge(data.pending);
+				retire($card, data.message || t('approved'));
+			})
+			.fail(function (message) {
+				busy($card, false);
+				setStatus($card, message, true);
+			});
+	}
+
+	function revert($el) {
+		if (!window.confirm(t('confirmRevert'))) {
+			return;
+		}
+
+		var $row = $el.closest('.ecp-card, tr');
+		var id = $el.data('id') || $row.data('id');
+
+		$el.prop('disabled', true).text(t('approving'));
+
+		post('revert', { id: id })
+			.done(function () {
+				$row.addClass('ecp-row-reverted');
+				$row.find('.ecp-card-status, .ecp-row-status').first().text(t('reverted'));
+				$el.remove();
+				announce(t('reverted'));
+			})
+			.fail(function (message) {
+				$el.prop('disabled', false).text(t('cancel'));
+				$row.find('.ecp-card-status, .ecp-row-status').first().addClass('is-error').text(message);
+			});
+	}
+
+	/* ------------------------------------------------------------------
+	 * Bulk
+	 * --------------------------------------------------------------- */
+
+	function selectedIds() {
+		return $('.ecp-card-select:checked').map(function () {
+			return $(this).val();
+		}).get();
+	}
+
+	function refreshBulkState() {
+		var count = selectedIds().length;
+
+		$('#ecp-bulk-approve, #ecp-bulk-reject').prop('disabled', 0 === count);
+		$('.ecp-selected-count').text(count ? count + ' selected' : '');
+	}
+
+	function runBulk(operation, ids) {
+		if (!ids.length) {
+			return;
+		}
+
+		if ('approve' === operation && !window.confirm(sprintf(t('confirmBulk'), [ids.length]))) {
+			return;
+		}
+
+		var $bar = $('.ecp-bulk-bar');
+		$bar.find('button').prop('disabled', true);
+		$bar.find('.ecp-selected-count').text(t('approving'));
+
+		post('bulk', { operation: operation, ids: ids })
+			.done(function (data) {
+				updatePendingBadge(data.pending);
+
+				(data.succeeded || []).forEach(function (id) {
+					retire($('#ecp-proposal-' + id), 'approve' === operation ? t('approved') : t('rejected'));
+				});
+
+				(data.failed || []).forEach(function (failure) {
+					var $card = $('#ecp-proposal-' + failure.id);
+					busy($card, false);
+					setStatus($card, failure.message, true);
+				});
+
+				$bar.find('.ecp-selected-count').text(data.message || '');
+				$('#ecp-select-all').prop('checked', false);
+				refreshBulkState();
+			})
+			.fail(function (message) {
+				$bar.find('.ecp-selected-count').addClass('is-error').text(message);
+				$bar.find('button').prop('disabled', false);
+			});
+	}
+
+	/* ------------------------------------------------------------------
+	 * Keyboard
+	 * --------------------------------------------------------------- */
+
+	var focusIndex = -1;
+
+	function cards() {
+		return $('.ecp-card').not('.is-resolved');
+	}
+
+	function focusCard($card) {
+		if (!$card || !$card.length) {
+			return;
+		}
+
+		cards().removeClass('is-focused');
+		$card.addClass('is-focused').trigger('focus');
+
+		focusIndex = cards().index($card);
+
+		var top = $card.offset().top - 80;
+		if (top < $(window).scrollTop() || top > $(window).scrollTop() + $(window).height() - 200) {
+			$('html, body').animate({ scrollTop: top }, 150);
+		}
+	}
+
+	function moveFocus(delta) {
+		var $all = cards();
+
+		if (!$all.length) {
+			return;
+		}
+
+		focusIndex = Math.max(0, Math.min($all.length - 1, focusIndex + delta));
+		focusCard($all.eq(focusIndex));
+	}
+
+	function isTyping(event) {
+		var tag = (event.target.tagName || '').toLowerCase();
+
+		return 'input' === tag || 'textarea' === tag || 'select' === tag || event.target.isContentEditable;
+	}
+
+	$(document).on('keydown', function (event) {
+		if (isTyping(event) || event.metaKey || event.ctrlKey || event.altKey) {
+			return;
+		}
+
+		if (!cards().length) {
+			return;
+		}
+
+		var key = event.key.toLowerCase();
+		var $current = focusIndex >= 0 ? cards().eq(focusIndex) : null;
+
+		switch (key) {
+			case 'j':
+				event.preventDefault();
+				moveFocus(focusIndex < 0 ? 0 : 1);
+				break;
+
+			case 'k':
+				event.preventDefault();
+				moveFocus(-1);
+				break;
+
+			case 'a':
+				if ($current && $current.length) {
+					event.preventDefault();
+					approve($current);
+				}
+				break;
+
+			case 'r':
+				if ($current && $current.length) {
+					event.preventDefault();
+					reject($current);
+				}
+				break;
+
+			case 'e':
+				if ($current && $current.length) {
+					event.preventDefault();
+					toggleEdit($current, true);
+				}
+				break;
+
+			case 'escape':
+				if ($current && $current.length) {
+					toggleEdit($current, false);
+				}
+				break;
+		}
+	});
+
+	/* ------------------------------------------------------------------
+	 * Scan
+	 * --------------------------------------------------------------- */
+
+	function runScan(offset, $button, $progress) {
+		post('scan', { offset: offset })
+			.done(function (data) {
+				if (data.done) {
+					$progress.text(sprintf(t('scanDone'), [data.offset]));
+					$button.prop('disabled', false).text($button.data('label'));
+
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 900);
+
+					return;
+				}
+
+				$progress.text(sprintf(t('scanning'), [data.offset, data.total]));
+				runScan(data.offset, $button, $progress);
+			})
+			.fail(function (message) {
+				$progress.addClass('is-error').text(message);
+				$button.prop('disabled', false).text($button.data('label'));
+			});
+	}
+
+	/* ------------------------------------------------------------------
+	 * Wiring
+	 * --------------------------------------------------------------- */
+
+	$(function () {
+		var $cards = $('#ecp-cards');
+
+		$cards.on('click', '.ecp-approve', function () {
+			approve($(this).closest('.ecp-card'));
+		});
+
+		$cards.on('click', '.ecp-reject', function () {
+			reject($(this).closest('.ecp-card'));
+		});
+
+		$cards.on('click', '.ecp-edit', function () {
+			toggleEdit($(this).closest('.ecp-card'), true);
+		});
+
+		$cards.on('click', '.ecp-cancel-edit', function () {
+			toggleEdit($(this).closest('.ecp-card'), false);
+		});
+
+		$cards.on('click', '.ecp-save-edit', function () {
+			saveEdit($(this).closest('.ecp-card'));
+		});
+
+		// Rendered preview, fetched on demand. Running the_content for every
+		// card up front would be slow and would fire other plugins' content
+		// filters dozens of times per page load.
+		$cards.on('click', '.ecp-render-toggle', function () {
+			var $button = $(this);
+			var $card = $button.closest('.ecp-card');
+			var $target = $card.find('.ecp-rendered');
+			var isOpen = 'true' === $button.attr('aria-expanded');
+
+			if (isOpen) {
+				$target.prop('hidden', true);
+				$button.attr('aria-expanded', 'false').text(t('showRendered'));
+				return;
+			}
+
+			$button.attr('aria-expanded', 'true').text(t('hideRendered'));
+			$target.prop('hidden', false);
+
+			if ($target.data('loaded')) {
+				return;
+			}
+
+			$target.html('<p class="ecp-muted">' + t('loading') + '</p>');
+
+			post('render_preview', { id: $card.data('id') })
+				.done(function (data) {
+					$target.data('loaded', true).html(data.html);
+				})
+				.fail(function (message) {
+					$target.html('<p class="is-error"></p>').find('p').text(message);
+				});
+		});
+
+		$(document).on('click', '.ecp-revert', function () {
+			revert($(this));
+		});
+
+		$cards.on('click', function (event) {
+			// Clicking anywhere on a card makes it the keyboard target.
+			var $card = $(event.target).closest('.ecp-card');
+			if ($card.length && !$(event.target).is('button, input, a, textarea')) {
+				focusCard($card);
+			}
+		});
+
+		$cards.on('change', '.ecp-card-select', refreshBulkState);
+
+		$('#ecp-select-all').on('change', function () {
+			$('.ecp-card-select').prop('checked', $(this).prop('checked'));
+			refreshBulkState();
+		});
+
+		$('#ecp-bulk-approve').on('click', function () {
+			runBulk('approve', selectedIds());
+		});
+
+		$('#ecp-bulk-reject').on('click', function () {
+			runBulk('reject', selectedIds());
+		});
+
+		$('#ecp-approve-safe').on('click', function () {
+			var ids = $('.ecp-card[data-risk="safe"]').map(function () {
+				return $(this).data('id');
+			}).get();
+
+			runBulk('approve', ids);
+		});
+
+		// Scan buttons appear on three screens.
+		$(document).on('click', '#ecp-run-scan', function () {
+			var $button = $(this);
+			var $progress = $('.ecp-scan-progress').first();
+
+			$button.data('label', $button.text());
+			$button.prop('disabled', true).text(t('scanning'));
+			$progress.removeClass('is-error').text('');
+
+			runScan(0, $button, $progress);
+		});
+
+		// Analyze one page from the opportunities table.
+		$(document).on('click', '.ecp-analyze', function () {
+			var $button = $(this);
+			var $status = $button.closest('td').find('.ecp-row-status');
+
+			$button.prop('disabled', true);
+			$status.removeClass('is-error').text(t('analyzing'));
+
+			post('analyze', { post_id: $button.data('post') })
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.count > 0 && data.redirect) {
+						window.setTimeout(function () {
+							window.location.href = data.redirect;
+						}, 1200);
+					} else {
+						$button.prop('disabled', false);
+					}
+				})
+				.fail(function (message) {
+					$status.addClass('is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		// Content gap analysis — costs an API call, so it is explicit.
+		$(document).on('click', '.ecp-analyze-gaps', function () {
+			var $button = $(this);
+			var $status = $button.closest('td').find('.ecp-row-status');
+
+			$button.prop('disabled', true);
+			$status.removeClass('is-error').text(t('findingGaps'));
+
+			post('analyze_gaps', { post_id: $button.data('post') })
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 2000);
+					} else {
+						$button.prop('disabled', false);
+					}
+				})
+				.fail(function (message) {
+					$status.addClass('is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		// Answering a question the agent refused to invent an answer for.
+		$(document).on('click', '.ecp-save-answer', function () {
+			var $button = $(this);
+			var $field = $button.siblings('.ecp-answer-field');
+			var $status = $button.siblings('.ecp-answer-status');
+			var answer = String($field.val() || '').replace(/^\s+|\s+$/g, '');
+
+			if (!answer) {
+				$status.attr('class', 'ecp-answer-status is-error').text(t('answerEmpty'));
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$status.attr('class', 'ecp-answer-status').text(t('saving'));
+
+			post('answer_question', {
+				post_id: $field.data('post'),
+				question: $field.data('question'),
+				answer: answer
+			})
+				.done(function (data) {
+					$status.attr('class', 'ecp-answer-status is-ok').text(data.message);
+					$field.prop('disabled', true);
+					$button.remove();
+				})
+				.fail(function (message) {
+					$status.attr('class', 'ecp-answer-status is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		// Find existing pages that should link to an orphan. Free — no AI.
+		$(document).on('click', '.ecp-build-links', function () {
+			var $button = $(this);
+			var $status = $button.closest('td').find('.ecp-row-status');
+
+			$button.prop('disabled', true);
+			$status.removeClass('is-error').text(t('findingLinks'));
+
+			post('build_links', { post_id: $button.data('post') })
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.redirect) {
+						window.setTimeout(function () {
+							window.location.href = data.redirect;
+						}, 1500);
+					}
+				})
+				.fail(function (message) {
+					$status.addClass('is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		$(document).on('click', '.ecp-dismiss', function () {
+			var $link = $(this);
+			var $row = $link.closest('tr');
+
+			post('dismiss', { post_id: $link.data('post') })
+				.done(function () {
+					$row.fadeOut(200);
+				})
+				.fail(function (message) {
+					$row.find('.ecp-row-status').addClass('is-error').text(message);
+				});
+		});
+
+		// Settings-screen helpers.
+		$('#ecp-test-provider').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-test-result');
+			var $key = $('#ecp_api_key');
+			var payload = {};
+
+			// Test the credentials currently in the form. Without this the
+			// button checks the last-saved key, which is empty on the first
+			// visit and reports "no API key" the moment you paste one in.
+			if ($key.length) {
+				// Native trim, not $.trim — the jQuery helper is deprecated
+				// and gone in jQuery 4, and a fatal here would look exactly
+				// like the bug this code exists to fix.
+				var typed = String($key.val() || '').replace(/^\s+|\s+$/g, '');
+
+				if (typed && !/^[•*]+$/.test(typed)) {
+					payload.api_key = typed;
+				}
+			}
+
+			if ($('#ecp_provider').length) {
+				payload.provider = $('#ecp_provider').val();
+			}
+
+			if ($('#ecp_model').length) {
+				payload.model = $('#ecp_model').val();
+			}
+
+			$button.prop('disabled', true);
+			$result.attr('class', '').text(t('testing'));
+
+			post('test_provider', payload)
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+				})
+				.always(function () {
+					$button.prop('disabled', false);
+				});
+		});
+
+		$('#ecp-sync-search').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-sync-result');
+
+			$button.data('label', $button.text()).prop('disabled', true).text(t('syncing'));
+			$result.attr('class', '').text('');
+
+			post('sync_search')
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1500);
+					}
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+					$button.prop('disabled', false).text($button.data('label'));
+				});
+		});
+
+		$('#ecp-repair-search').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-sync-result');
+
+			$button.data('label', $button.text()).prop('disabled', true).text(t('syncing'));
+			$result.attr('class', '').text('');
+
+			post('repair_search')
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1500);
+					}
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+					$button.prop('disabled', false).text($button.data('label'));
+				});
+		});
+
+		// "Fix this" buttons beside a failing check run the action themselves
+		// rather than clicking the control further up the page. Delegating to
+		// another button meant the fix silently did nothing whenever that
+		// button happened not to be rendered.
+		$(document).on('click', '.ecp-fix', function () {
+			var $button = $(this);
+			var $result = $button.siblings('.ecp-fix-result').first();
+
+			$button.data('label', $button.text()).prop('disabled', true).text(t('syncing'));
+			$result.attr('class', 'ecp-fix-result').text('');
+
+			post($button.data('action'))
+				.done(function (data) {
+					$result.attr('class', 'ecp-fix-result is-ok').text(data.message);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1500);
+					}
+				})
+				.fail(function (message) {
+					$result.attr('class', 'ecp-fix-result is-error').text(message);
+					$button.prop('disabled', false).text($button.data('label'));
+				});
+		});
+
+		$('#ecp-save-sitekit-user').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-sitekit-user-result');
+			var userId = $('#ecp-sitekit-user').val();
+
+			if (!userId || userId === '0') {
+				$result.attr('class', 'is-error').text(t('pickAccount'));
+				return;
+			}
+
+			$button.prop('disabled', true);
+			$result.attr('class', '').text(t('testing'));
+
+			post('set_sitekit_user', { user_id: userId })
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1500);
+					}
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
+		$('#ecp-send-digest').on('click', function () {
+			var $button = $(this);
+			var $result = $('#ecp-digest-result');
+
+			$button.prop('disabled', true);
+			$result.attr('class', '').text(t('testing'));
+
+			post('send_digest')
+				.done(function (data) {
+					$result.attr('class', 'is-ok').text(data.message);
+				})
+				.fail(function (message) {
+					$result.attr('class', 'is-error').text(message);
+				})
+				.always(function () {
+					$button.prop('disabled', false);
+				});
+		});
+
+		$(document).on('click', '.ecp-enable-autopilot', function () {
+			var $button = $(this);
+
+			$button.prop('disabled', true);
+
+			post('enable_autopilot', { type: $button.data('type') })
+				.done(function (data) {
+					$button.closest('li').html('<span class="ecp-resolved-label">' + data.message + '</span>');
+				})
+				.fail(function (message) {
+					$button.prop('disabled', false);
+					$button.closest('li').append('<span class="is-error"> ' + message + '</span>');
+				});
+		});
+
+		/* --- Clusters ------------------------------------------------ */
+
+		$(document).on('click', '#ecp-detect-clusters', function () {
+			var $button = $(this);
+			var $progress = $('.ecp-cluster-progress').first();
+
+			$button.data('label', $button.text()).prop('disabled', true).text(t('detecting'));
+			$progress.removeClass('is-error').text('');
+
+			post('detect_clusters')
+				.done(function (data) {
+					$progress.text(data.message);
+
+					if (data.reload) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1200);
+					} else {
+						$button.prop('disabled', false).text($button.data('label'));
+					}
+				})
+				.fail(function (message) {
+					$progress.addClass('is-error').text(message);
+					$button.prop('disabled', false).text($button.data('label'));
+				});
+		});
+
+		$(document).on('click', '.ecp-analyze-cluster', function () {
+			var $button = $(this);
+			var $card = $button.closest('.ecp-cluster-card');
+
+			$card.addClass('is-busy');
+			$card.find('button').prop('disabled', true);
+			setStatus($card, t('analyzing'));
+
+			post('analyze_cluster', { cluster_id: $button.data('cluster') })
+				.done(function (data) {
+					setStatus($card, data.message);
+
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 1200);
+				})
+				.fail(function (message) {
+					$card.removeClass('is-busy');
+					$card.find('button').prop('disabled', false);
+					setStatus($card, message, true);
+				});
+		});
+
+		$(document).on('click', '.ecp-dismiss-cluster, .ecp-resolve-cluster', function () {
+			var $button = $(this);
+			var $card = $button.closest('.ecp-cluster-card');
+			var status = $button.hasClass('ecp-dismiss-cluster') ? 'dismissed' : 'resolved';
+
+			$card.find('button').prop('disabled', true);
+
+			post('cluster_status', { cluster_id: $button.data('cluster'), status: status })
+				.done(function (data) {
+					setStatus($card, data.message);
+					$card.addClass('is-resolved');
+
+					window.setTimeout(function () {
+						$card.slideUp(200, function () {
+							$card.remove();
+						});
+					}, 900);
+				})
+				.fail(function (message) {
+					$card.find('button').prop('disabled', false);
+					setStatus($card, message, true);
+				});
+		});
+
+		// Warn before losing an in-progress edit.
+		$(window).on('beforeunload', function () {
+			if ($('.ecp-card.is-editing').length) {
+				return t('unsavedEdit');
+			}
+		});
+	});
+})(jQuery);

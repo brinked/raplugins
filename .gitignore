@@ -1,0 +1,7 @@
+# Build artifacts — zips are produced from the plugin folders, not tracked.
+*.zip
+
+# OS noise
+Thumbs.db
+desktop.ini
+.DS_Store
