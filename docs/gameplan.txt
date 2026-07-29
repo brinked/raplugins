@@ -1,0 +1,1883 @@
+RankAudit Enhanced Content Plugin
+Autonomous SEO Growth System — Product and Implementation Plan
+
+1. PROJECT VISION
+
+Transform the existing Enhanced Content plugin from an article optimization tool into an autonomous SEO growth system built directly inside WordPress.
+
+The plugin should not merely tell users how to optimize one article. It should:
+
+1. Understand the entire website.
+2. Identify the most valuable growth opportunities.
+3. Build a prioritized SEO strategy.
+4. Create topical maps and content clusters.
+5. Produce research-grounded article drafts.
+6. Improve existing content safely.
+7. Create and maintain internal links.
+8. Monitor actual Search Console performance.
+9. Learn from the results of previous changes.
+10. Continuously tell the user what should happen next.
+
+The primary product promise should be:
+
+“RankAudit tells you exactly what to do to grow your website, completes most of the work for you, and shows whether the work produced results.”
+
+This product should be positioned as an AI SEO strategist and operating system for WordPress, rather than another content-score editor.
+
+
+2. CRITICAL PRODUCT PRINCIPLES
+
+2.1 Strategy Before Content
+
+The system must never jump directly from a seed keyword to generating articles.
+
+It should first determine:
+
+- Whether the topic is relevant to the business
+- Whether the site already covers it
+- Whether an existing page should be improved instead
+- Whether the website has realistic ranking potential
+- Which page type is appropriate
+- How the topic fits into the broader topical map
+- Which supporting pages are required
+- Which existing pages should link to it
+- What original experience or evidence is needed
+
+The system should generate content only after producing a coherent strategy.
+
+2.2 Evidence Before Claims
+
+The AI must not invent:
+
+- Statistics
+- Product specifications
+- Warranty terms
+- Prices
+- Years of experience
+- Customer results
+- Locations served
+- Certifications
+- Quotes
+- Research findings
+- Author credentials
+- Firsthand experience
+- URLs
+- Company policies
+
+Unknown claims must be marked as requiring user input.
+
+2.3 Human Approval at High-Risk Points
+
+Automation should be extensive, but not reckless.
+
+The system may automatically:
+
+- Analyze the site
+- Generate recommendations
+- Produce drafts
+- Suggest title changes
+- Suggest internal links
+- Create briefs
+- Flag declining pages
+- Build editorial calendars
+- Run recurring scans
+
+The system should require approval before:
+
+- Publishing a new article
+- Substantially rewriting a page
+- Removing content
+- Changing a URL
+- Adding factual claims
+- Consolidating or redirecting pages
+- Modifying important product or service pages
+- Updating legal, medical, financial, or regulated content
+
+An optional advanced automation level may permit automatic low-risk changes, but every change must remain reversible.
+
+2.4 Outcome-Based Recommendations
+
+Do not prioritize work solely using a generic SEO score.
+
+Every recommendation should include:
+
+- Why it matters
+- Supporting evidence
+- Expected impact range
+- Confidence level
+- Required effort
+- Risk level
+- Dependencies
+- Recommended action
+- Whether it can be automated
+- How success will be measured
+
+2.5 No AI-Generated Images
+
+The plugin must not generate images.
+
+Instead, the plugin should create an Original Media Plan for each article.
+
+It may recommend:
+
+- Original product photos
+- Jobsite photos
+- Before-and-after photos
+- Staff or author photographs
+- Screenshots
+- Charts generated from verified first-party data
+- Process photography
+- Diagrams created from verified technical information
+- Customer-provided images with permission
+- Short demonstration videos
+- Expert commentary videos
+- Tables
+- Checklists
+- Downloadable worksheets
+- Real examples
+- Original survey or test results
+
+The system should explain exactly what image or media asset is needed, where it should appear, and why it would improve the article.
+
+
+3. PRODUCT POSITIONING
+
+3.1 Category
+
+Autonomous SEO Growth System for WordPress.
+
+3.2 Core Differentiator
+
+Most SEO platforms provide separate tools for:
+
+- Keyword research
+- Content scoring
+- Content generation
+- Auditing
+- Internal linking
+- Search Console reporting
+
+RankAudit should connect these into one continuous operational loop:
+
+Analyze → Plan → Approve → Execute → Measure → Learn → Replan
+
+3.3 Primary User Outcomes
+
+Users should always know:
+
+- What is hurting their growth
+- What they should work on next
+- What RankAudit can complete automatically
+- What information RankAudit needs from them
+- Whether prior changes improved performance
+- What the next realistic milestone should be
+
+
+4. MAIN USER EXPERIENCE
+
+The main navigation should eventually contain:
+
+1. Growth Dashboard
+2. Strategy
+3. Topical Maps
+4. Content Plan
+5. Existing Content
+6. Opportunities
+7. Proposals
+8. Performance
+9. Site Knowledge
+10. Settings
+
+The existing proposal, approval, revision, rollback, provider, and guardrail systems should be reused rather than replaced.
+
+
+5. MODULE ONE: SITE INTELLIGENCE ENGINE
+
+5.1 Purpose
+
+Build a structured understanding of the website before making recommendations.
+
+5.2 Initial Site Onboarding
+
+When the plugin is first activated, ask the user for:
+
+- Business name
+- Website purpose
+- Primary products or services
+- Target customers
+- Geographic markets
+- Primary conversions
+- Seed topics
+- Topics that should not be covered
+- Competitors
+- Brand voice
+- Regulatory or compliance restrictions
+- Publishing capacity
+- Preferred approval level
+
+Search Console should be connected through:
+
+- Google Site Kit when available
+- Direct OAuth integration in a later version
+- CSV import as a fallback
+
+5.3 Site Crawl and Inventory
+
+Analyze all indexable WordPress content:
+
+- Posts
+- Pages
+- Products
+- Product categories
+- Blog categories
+- Custom post types
+- Authors
+- Tags
+- Media attachments where relevant
+
+For each URL, store:
+
+- URL
+- Post ID
+- Post type
+- Status
+- Canonical URL
+- Title
+- Meta description
+- Headings
+- Word count
+- Publish date
+- Modified date
+- Author
+- Taxonomy
+- Internal incoming links
+- Internal outgoing links
+- External links
+- Schema types
+- Images and alt text
+- Embedded video
+- Calls to action
+- Content fingerprint
+- Topic classification
+- Search intent classification
+- Commercial relevance
+- Funnel stage
+
+5.4 Search Console Enrichment
+
+For each URL and query, store:
+
+- Clicks
+- Impressions
+- CTR
+- Average position
+- Device
+- Country
+- Date range
+- Previous-period comparison
+- Year-over-year comparison when available
+
+Avoid treating average position as an exact rank. Present it as Search Console’s average-position measurement.
+
+5.5 Site Knowledge Graph
+
+Create structured relationships between:
+
+- Topics
+- Subtopics
+- Queries
+- Pages
+- Products
+- Services
+- Categories
+- Authors
+- Locations
+- Questions
+- Entities
+- Evidence sources
+
+The knowledge graph does not need a graph database in the first version. It can be modeled using normalized relational tables.
+
+5.6 Site Intelligence Output
+
+After the initial analysis, display:
+
+- Topics currently covered
+- Topics weakly covered
+- Topics not covered
+- Pages competing with one another
+- Pages with no meaningful internal links
+- High-impression, low-CTR pages
+- Pages losing visibility
+- Pages close to page-one visibility
+- Outdated content
+- Thin or unsupported content
+- Missing trust elements
+- Missing expert or firsthand evidence
+- Conversion opportunities
+- Highest-value next actions
+
+
+6. MODULE TWO: GROWTH DASHBOARD
+
+6.1 Purpose
+
+Replace a traditional SEO score dashboard with a prioritized operating dashboard.
+
+6.2 Dashboard Header
+
+Example:
+
+“Good morning, Will. RankAudit found seven meaningful opportunities. The highest-priority action is improving your Outdoor Kitchen Cost page, which received 3,840 impressions but only 18 clicks over the last 90 days.”
+
+6.3 Primary Dashboard Cards
+
+Display:
+
+- Estimated Organic Growth Potential
+- Topical Coverage
+- Content Requiring Attention
+- Current Ranking Opportunities
+- CTR Opportunities
+- Internal-Link Opportunities
+- Content Plan Progress
+- Changes Awaiting Measurement
+- Recommended Action Today
+
+Avoid presenting speculative traffic estimates as guarantees.
+
+Label estimates clearly:
+
+- Directional estimate
+- Confidence: low, medium, or high
+- Assumptions used
+- Data source
+- Date calculated
+
+6.4 Today’s Priority
+
+The dashboard should select one primary recommended action.
+
+Each action must include:
+
+- Opportunity
+- Reason
+- Supporting data
+- Estimated impact
+- Effort
+- Confidence
+- Automation availability
+- Review button
+- Dismiss or postpone button
+
+6.5 Recent Results
+
+Show results from previously accepted changes:
+
+- Impressions before and after
+- Clicks before and after
+- CTR before and after
+- Position movement
+- Conversion data when available
+- Measurement period
+- Confidence that the change contributed
+
+Do not claim causation solely because performance changed after an edit.
+
+Use wording such as:
+
+“Performance improved after this change. RankAudit cannot confirm that the change was the sole cause.”
+
+
+7. MODULE THREE: SEO GROWTH ROADMAP
+
+7.1 Purpose
+
+Convert all findings into an ordered, multi-stage plan.
+
+7.2 Roadmap Stages
+
+Stage 1: Foundation
+
+Tasks may include:
+
+- Search Console connection
+- Business profile completion
+- Missing trust pages
+- Author information
+- Broken internal links
+- Indexability problems
+- Cannibalization conflicts
+- Missing important business information
+
+Stage 2: Existing Content Wins
+
+Tasks may include:
+
+- High-impression, low-CTR pages
+- Positions 4–20
+- Declining pages
+- Content gaps within existing pages
+- Weak introductions
+- Missing answer sections
+- Missing comparison tables
+- Poor internal linking
+- Outdated claims
+
+Stage 3: Topical Authority Expansion
+
+Tasks may include:
+
+- Pillar pages
+- Supporting articles
+- Comparison pages
+- Question-based articles
+- Commercial investigation content
+- Original research opportunities
+- Expert content
+- Local or industry-specific pages
+
+Stage 4: Authority and Differentiation
+
+Tasks may include:
+
+- First-party research
+- Expert commentary
+- Case studies
+- Original media
+- Author pages
+- Editorial policies
+- Review methodology
+- Unique tools or calculators
+- Downloadable resources
+
+Stage 5: Continuous Optimization
+
+Tasks may include:
+
+- Refresh cycles
+- CTR testing
+- Internal-link maintenance
+- Cannibalization monitoring
+- Decay detection
+- Topic expansion
+- Search behavior changes
+- Content consolidation
+
+7.3 Task Prioritization Model
+
+Each task should receive scores for:
+
+- Potential impact
+- Confidence
+- Effort
+- Risk
+- Strategic importance
+- Commercial value
+- Time sensitivity
+- Existing authority
+- Search demand
+- Content dependency
+
+Suggested priority formula:
+
+Priority =
+(Impact × Confidence × Strategic Value × Commercial Value)
+divided by
+(Effort × Risk)
+
+The exact calculation should be configurable and should not be presented as scientific certainty.
+
+7.4 Roadmap Controls
+
+Users should be able to:
+
+- Approve a task
+- Reject a task
+- Postpone a task
+- Assign a task
+- Set a due date
+- Add notes
+- Generate the required proposal
+- Mark externally completed
+- Request a new analysis
+- Lock a page from automation
+
+
+8. MODULE FOUR: TOPICAL MAP BUILDER
+
+8.1 Entry Workflow
+
+The user enters a seed topic such as:
+
+“Outdoor kitchens”
+
+The plugin asks for or infers:
+
+- Target country
+- Target language
+- Audience
+- Business relationship to the topic
+- Product or service relevance
+- Geographic scope
+- Main conversion
+- Publishing capacity
+- Existing authority
+- Desired timeline
+
+8.2 Research Inputs
+
+The map should use:
+
+- Existing site content
+- Search Console queries
+- Google autocomplete data where legally and technically available
+- Search results through an approved SERP data provider
+- People Also Ask data where available
+- Related searches
+- Competitor heading and topic patterns
+- User-submitted source material
+- Product and service data
+- Existing site entities
+- RankAudit’s internal topic library
+
+Do not scrape Google directly from the customer’s WordPress server.
+
+Use a licensed third-party SERP API or the RankAudit backend.
+
+8.3 Topic Classification
+
+Each proposed topic should include:
+
+- Parent topic
+- Child topic
+- Search intent
+- Funnel stage
+- Recommended page type
+- Main query
+- Supporting queries
+- Related entities
+- Existing page match
+- New page required
+- Estimated difficulty
+- Business relevance
+- Commercial value
+- Authority prerequisite
+- Recommended priority
+- Internal-link relationships
+- Evidence requirements
+- Original media requirements
+
+8.4 Recommended Page Types
+
+The system should distinguish between:
+
+- Pillar guide
+- Supporting informational article
+- Product page
+- Product category page
+- Service page
+- Comparison page
+- Alternatives page
+- Cost guide
+- How-to guide
+- Troubleshooting article
+- FAQ resource
+- Glossary page
+- Local service page
+- Case study
+- Original research
+- Tool or calculator
+- Policy or trust page
+
+The system must not suggest an informational article when the query clearly deserves a product, service, category, or comparison page.
+
+8.5 Topic States
+
+Every map node should be marked as:
+
+- Strong coverage
+- Partial coverage
+- Weak coverage
+- Missing
+- Planned
+- Drafting
+- Awaiting information
+- Awaiting approval
+- Published
+- Measuring
+- Needs refresh
+- Consolidation candidate
+
+8.6 Duplicate and Cannibalization Prevention
+
+Before creating a new page, compare the proposed topic with:
+
+- Existing titles
+- Existing headings
+- Search Console query overlap
+- Semantic similarity
+- Search intent
+- Existing ranking URLs
+- Canonical relationships
+
+Possible decisions:
+
+- Create a new article
+- Expand an existing page
+- Merge two pages
+- Reposition one page
+- Create a supporting subsection
+- Do nothing
+
+
+9. MODULE FIVE: CONTENT CLUSTER BUILDER
+
+9.1 Purpose
+
+Turn an approved topical map branch into an executable content campaign.
+
+9.2 Build Cluster Workflow
+
+The user selects a cluster and clicks:
+
+“Build Content Campaign”
+
+The plugin generates:
+
+- Cluster objective
+- Pillar page
+- Supporting pages
+- Recommended publishing order
+- Dependencies
+- Internal-link blueprint
+- Anchor-text recommendations
+- Content briefs
+- Evidence requests
+- Original media requests
+- CTA recommendations
+- Schema recommendations
+- Refresh schedule
+- Measurement plan
+
+9.3 Publishing Sequence
+
+The system should not publish 20 generic articles at once.
+
+It should create a logical sequence based on:
+
+- Existing authority
+- Search intent
+- Internal-link dependencies
+- Content quality capacity
+- Business value
+- Seasonal timing
+- User publishing limits
+
+Example:
+
+Wave One: Foundation
+
+- Outdoor Kitchen Cabinets Guide
+- HDPE Outdoor Cabinets
+- Outdoor Kitchen Cost Guide
+
+Wave Two: Supporting Expertise
+
+- HDPE vs. Aluminum Cabinets
+- How Outdoor Cabinets Handle UV Exposure
+- Outdoor Cabinet Maintenance Guide
+
+Wave Three: Commercial Support
+
+- Outdoor Kitchen Design Consultation
+- Cabinet Warranty Guide
+- Outdoor Kitchen Installation Process
+
+9.4 Cluster Progress
+
+Show:
+
+- Total planned pages
+- Briefs completed
+- Drafts completed
+- Pages approved
+- Pages published
+- Internal links completed
+- Required evidence outstanding
+- Original media outstanding
+- Performance measurement status
+
+
+10. MODULE SIX: STRATEGIC CONTENT BRIEFS
+
+10.1 Purpose
+
+Create a complete plan before drafting an article.
+
+10.2 Brief Contents
+
+Every brief should contain:
+
+- Article objective
+- Primary audience
+- Search intent
+- Funnel stage
+- Primary query
+- Supporting queries
+- User questions
+- Recommended page type
+- Unique angle
+- Existing-page relationship
+- Suggested title options
+- Recommended URL slug
+- Proposed structure
+- Required sections
+- Optional sections
+- Internal links to include
+- Pages that should link to this article
+- Relevant products or services
+- Required factual sources
+- Claims requiring business verification
+- Firsthand experience opportunities
+- Original media plan
+- CTA
+- Schema recommendation
+- Content risks
+- Success metrics
+
+10.3 Information Gain Requirement
+
+Every proposed article must answer:
+
+“What will this page add that is not already repeated across the current search results?”
+
+Possible information-gain sources:
+
+- Company experience
+- Expert explanation
+- Proprietary data
+- Original measurements
+- Customer questions
+- Real project examples
+- Product testing
+- Comparison methodology
+- Local insight
+- Process details
+- Pricing methodology
+- Photos from real work
+- Mistakes the company commonly sees
+- Decision frameworks
+- Downloadable tools
+
+If no meaningful unique contribution can be identified, the system should warn against generating the article.
+
+
+11. MODULE SEVEN: BUSINESS KNOWLEDGE AND EVIDENCE VAULT
+
+11.1 Purpose
+
+Prevent hallucinations and make content genuinely specific to the business.
+
+11.2 Knowledge Categories
+
+Store verified information such as:
+
+- Company profile
+- Products
+- Services
+- Materials
+- Specifications
+- Pricing rules
+- Warranty
+- Shipping
+- Returns
+- Installation process
+- Service area
+- Certifications
+- Team members
+- Author credentials
+- Frequently asked questions
+- Customer objections
+- Approved claims
+- Prohibited claims
+- Brand terminology
+- Competitor names
+- Case studies
+- Source documents
+- Approved external sources
+
+11.3 Claim Status
+
+Every factual item should have:
+
+- Claim text
+- Source
+- Verification status
+- Verified date
+- Expiration date where relevant
+- Allowed contexts
+- Associated product or service
+- Reviewer
+- Notes
+
+Statuses:
+
+- Verified
+- User-provided
+- Externally sourced
+- Needs verification
+- Expired
+- Disallowed
+
+11.4 Article Research Requests
+
+Before drafting, the system may ask the user targeted questions:
+
+- What mistakes do customers commonly make?
+- What does your warranty actually cover?
+- How long does installation usually take?
+- What would make someone choose this material?
+- Do you have a project that demonstrates this?
+- Do you have an original photo for this section?
+- Can you provide a real pricing example?
+- Who should be quoted as the expert?
+
+This is essential to prevent generic AI content.
+
+
+12. MODULE EIGHT: HIGH-QUALITY ARTICLE BUILDER
+
+12.1 Drafting Workflow
+
+The drafting system should operate in stages:
+
+1. Confirm strategy.
+2. Load approved brief.
+3. Retrieve verified business knowledge.
+4. Retrieve approved research sources.
+5. Create outline.
+6. Run duplication and intent checks.
+7. Generate section drafts.
+8. Validate factual claims.
+9. Validate links.
+10. Check brand voice.
+11. Check internal links.
+12. Check usefulness.
+13. Run quality and risk review.
+14. Create a WordPress draft.
+15. Present an approval proposal.
+
+12.2 Section-Based Generation
+
+Generate articles section by section rather than in one large prompt.
+
+For each section, provide the model:
+
+- Section goal
+- Audience question
+- Required facts
+- Approved sources
+- Business context
+- Related sections
+- Prohibited claims
+- Desired examples
+- Internal links
+- Maximum length guidance
+
+12.3 Quality Controls
+
+The system should detect and flag:
+
+- Generic introductions
+- Excessive scene-setting
+- Repetitive conclusions
+- Unsupported claims
+- Fabricated quotes
+- Fabricated experience
+- Unverified numbers
+- Keyword stuffing
+- Artificial exact-match repetition
+- Redundant headings
+- Empty definitions
+- Excessive bullet lists
+- Overuse of “it is important”
+- Excessive em dashes
+- Formulaic AI phrasing
+- Unnatural transitions
+- Repeated paragraph structures
+- Content that adds no new information
+- Abrupt product promotion
+- Weak or missing calls to action
+
+12.4 Source Handling
+
+Store source information at the claim or section level.
+
+Sources should include:
+
+- URL
+- Publisher
+- Page title
+- Access date
+- Extracted supporting statement
+- Reliability classification
+- Whether citation is required in the published article
+
+Do not instruct the model to browse freely without recording its sources.
+
+12.5 Draft Statuses
+
+- Brief pending
+- Research pending
+- Business input required
+- Ready to draft
+- Drafting
+- Quality review
+- User review
+- Revision requested
+- Approved
+- Scheduled
+- Published
+- Measuring
+
+
+13. MODULE NINE: ORIGINAL MEDIA PLANNER
+
+13.1 No Image Generation
+
+Do not include image-generation APIs or prompts intended to create synthetic editorial images.
+
+13.2 Media Recommendations
+
+For each article, recommend useful media assets.
+
+Example:
+
+Section: Why HDPE Cabinets Resist Moisture
+
+Recommended asset:
+
+“Photograph the inside corner of a real HDPE cabinet near a sink or grill. Show the material edge and construction method clearly.”
+
+Purpose:
+
+- Demonstrates real construction
+- Supports firsthand experience
+- Differentiates the article
+- Provides evidence beyond generic manufacturer claims
+
+13.3 Media Task Fields
+
+Each media request should store:
+
+- Article
+- Section
+- Asset type
+- Description
+- Purpose
+- Orientation
+- Suggested dimensions
+- Required details
+- Caption suggestion
+- Alt-text draft
+- Assigned person
+- Status
+- Uploaded attachment ID
+- Approval status
+
+13.4 Allowed Generated Visuals
+
+The plugin may generate charts or tables only when they are based on verified data.
+
+Examples:
+
+- Search Console performance chart
+- Cost comparison table using user-approved pricing
+- Material specification table
+- Process timeline
+- Decision matrix
+- Checklist
+- Flowchart based on verified business processes
+
+These should not impersonate documentary photography.
+
+
+14. MODULE TEN: EXISTING CONTENT IMPROVEMENT ENGINE
+
+14.1 Opportunity Types
+
+The plugin should identify:
+
+- High impressions with low CTR
+- Ranking positions 4–20
+- Traffic decline
+- Query loss
+- Missing query coverage
+- Stale content
+- Weak search intent alignment
+- Cannibalization
+- Thin sections
+- Poor heading structure
+- Missing answers
+- Unsupported claims
+- Weak internal linking
+- Broken external references
+- Missing original evidence
+- Missing conversion path
+- Weak author attribution
+
+14.2 Proposal Types
+
+Create narrowly scoped proposals such as:
+
+- Rewrite title
+- Rewrite meta description
+- Improve introduction
+- Add answer summary
+- Add FAQ section
+- Add comparison table
+- Add missing subsection
+- Clarify outdated paragraph
+- Add internal links
+- Update product information
+- Add firsthand example
+- Add author credentials
+- Consolidate overlapping pages
+
+Avoid replacing the entire article when a targeted change is sufficient.
+
+14.3 Change Approval
+
+Every proposal should show:
+
+- Current content
+- Proposed content
+- Word-level diff
+- Reason for change
+- Supporting Search Console data
+- Expected outcome
+- Confidence
+- Risks
+- Facts requiring verification
+- Accept
+- Edit
+- Reject
+- Postpone
+
+14.4 Safe Application
+
+Continue using:
+
+- WordPress revisions
+- Backups
+- One-click rollback
+- Role permissions
+- Nonces
+- Capability checks
+- Audit logs
+
+For Gutenberg content, changes must preserve block markup and block validity.
+
+
+15. MODULE ELEVEN: INTERNAL LINKING SYSTEM
+
+15.1 Link Graph
+
+Maintain a graph of:
+
+- Incoming links
+- Outgoing links
+- Anchor text
+- Link location
+- Topic relationship
+- Page importance
+- Orphan status
+- Crawl depth
+
+15.2 Recommendations
+
+Recommend links based on:
+
+- Genuine topical relationship
+- User usefulness
+- Cluster structure
+- Page importance
+- Existing anchor distribution
+- Search Console opportunity
+- Conversion path
+
+15.3 Safeguards
+
+Do not:
+
+- Repeatedly use exact-match anchors
+- Insert irrelevant links
+- Place multiple links to the same page unnecessarily
+- Alter shortcode contents
+- Insert links inside unsupported blocks
+- Link every repeated keyword
+- Create circular linking purely to satisfy a score
+
+15.4 Automation Levels
+
+Manual:
+- Show suggestions only.
+
+Assisted:
+- Select multiple links and approve them together.
+
+Automatic Low-Risk:
+Insert high-confidence internal links only when:
+
+- Relevance exceeds a configured threshold
+- The destination is canonical and published
+- Anchor text is natural
+- The block can be edited safely
+- No conflicting link exists
+- The change is logged and reversible
+
+
+16. MODULE TWELVE: OPPORTUNITY RADAR
+
+16.1 Scheduled Detection
+
+Run scheduled analyses for:
+
+- New Search Console queries
+- High-impression low-CTR queries
+- Pages entering positions 4–20
+- Declining pages
+- Pages losing queries
+- New cannibalization
+- Content decay
+- New orphan pages
+- Broken internal links
+- Cluster gaps
+- Published pages ready for measurement
+- Unexpected performance gains
+
+16.2 Opportunity Card
+
+Each alert should include:
+
+- What changed
+- Why it matters
+- Page or topic involved
+- Supporting data
+- Recommended response
+- Impact
+- Confidence
+- Effort
+- Expiration or urgency
+- Create proposal button
+
+16.3 Notification Controls
+
+Allow:
+
+- Dashboard only
+- Weekly email digest
+- Immediate high-priority email
+- Monthly strategy summary
+
+Do not overwhelm the user with daily low-value notifications.
+
+
+17. MODULE THIRTEEN: MEASUREMENT AND LEARNING ENGINE
+
+17.1 Change Ledger
+
+Every applied change must record:
+
+- URL
+- Post ID
+- Change type
+- Before content
+- After content
+- Applied date
+- User
+- Proposal ID
+- Target queries
+- Expected outcome
+- Search Console baseline
+- Measurement start date
+- Measurement windows
+- Rollback revision
+- Result status
+
+17.2 Measurement Windows
+
+Suggested defaults:
+
+- 14 days: early signal
+- 28 days: preliminary result
+- 56 days: primary evaluation
+- 90 days: extended evaluation
+
+Adjust for site size, crawl frequency, search volume, and seasonality.
+
+17.3 Result Classification
+
+- Strong improvement
+- Moderate improvement
+- No meaningful change
+- Mixed result
+- Decline
+- Insufficient data
+- Confounded by major site change
+- Awaiting measurement
+
+17.4 Learning Behavior
+
+The plugin should learn at the site level:
+
+- Which title styles improve CTR
+- Which topics gain impressions fastest
+- Which page types perform best
+- Which article lengths are appropriate
+- Which internal-link changes correlate with gains
+- Which topics fail to perform
+- Which content recommendations users reject
+- Which tone the user approves
+- Which claims require repeated correction
+
+Do not train a custom model in the first version. Store structured outcomes and use them as context for future recommendations.
+
+
+18. MODULE FOURTEEN: AUTOMATION CONTROLS
+
+18.1 Automation Modes
+
+Mode 1: Advisor
+
+- Analyze
+- Recommend
+- Never modify content
+
+Mode 2: Copilot
+
+- Generate proposals and drafts
+- Require approval for all changes
+
+Mode 3: Managed Automation
+
+- Automatically apply approved low-risk change categories
+- Require approval for new pages and major rewrites
+
+Mode 4: Advanced Autonomous
+
+- Run approved campaigns within strict limits
+- Create drafts automatically
+- Apply approved low-risk updates
+- Never autonomously publish high-risk content
+
+18.2 Per-Action Permissions
+
+Users should independently configure:
+
+- Create drafts
+- Update titles
+- Update meta descriptions
+- Insert internal links
+- Add FAQ sections
+- Update dates
+- Modify headings
+- Rewrite paragraphs
+- Schedule posts
+- Publish posts
+- Consolidate pages
+- Create redirects
+
+Major actions should remain off by default.
+
+18.3 Limits
+
+Support:
+
+- Maximum AI spending per month
+- Maximum proposals per day
+- Maximum drafts per month
+- Maximum automatic edits per day
+- Allowed post types
+- Excluded categories
+- Excluded URLs
+- Maintenance windows
+- Required user role
+
+
+19. RECOMMENDED TECHNICAL ARCHITECTURE
+
+19.1 WordPress Plugin Responsibilities
+
+The WordPress plugin should handle:
+
+- Admin interface
+- WordPress content inventory
+- Local content parsing
+- Proposal review
+- Diff display
+- Applying changes
+- Revisions and rollback
+- Permissions
+- Local settings
+- Job status
+- Connecting to RankAudit
+- Displaying recommendations
+- Syncing Search Console data through approved integrations
+
+19.2 RankAudit Backend Responsibilities
+
+Sensitive and proprietary logic should reside on the RankAudit backend:
+
+- Licensing
+- Plan enforcement
+- SERP provider integration
+- Topical-map algorithms
+- Competitor analysis
+- AI prompt orchestration
+- Research retrieval
+- Content quality evaluation
+- Opportunity scoring
+- Large scheduled analyses
+- Cross-site model improvements
+- Usage accounting
+- Provider key protection
+- Feature flags
+
+Do not place the most valuable algorithms or master prompts entirely inside the distributed WordPress plugin.
+
+19.3 API Pattern
+
+Suggested endpoints:
+
+- POST /v1/sites/register
+- POST /v1/sites/sync
+- POST /v1/sites/analyze
+- GET /v1/sites/{id}/roadmap
+- POST /v1/topical-maps
+- GET /v1/topical-maps/{id}
+- POST /v1/content-campaigns
+- POST /v1/briefs
+- POST /v1/drafts
+- POST /v1/content/analyze
+- POST /v1/proposals
+- POST /v1/results
+- GET /v1/opportunities
+- POST /v1/knowledge
+- POST /v1/media-plans
+
+All endpoints should use:
+
+- Authenticated requests
+- Signed site tokens
+- Rate limiting
+- Idempotency keys for writes
+- Structured error responses
+- API versioning
+- Request logging without unnecessary customer content exposure
+
+19.4 Asynchronous Jobs
+
+Long-running work should use queues:
+
+- Site crawl analysis
+- Topical-map generation
+- SERP collection
+- Cluster creation
+- Article drafting
+- Bulk content analysis
+- Measurement calculations
+
+The WordPress plugin should poll job status or receive a secure callback where supported.
+
+Do not depend on a single long-running WordPress request.
+
+
+20. SUGGESTED DATABASE ADDITIONS
+
+Reuse existing plugin tables where practical.
+
+Potential new tables:
+
+wp_ra_site_profiles
+
+- id
+- site_id
+- business_name
+- business_type
+- audience
+- target_locations
+- conversions
+- brand_voice
+- publishing_capacity
+- automation_mode
+- created_at
+- updated_at
+
+wp_ra_topics
+
+- id
+- site_id
+- parent_id
+- topic_name
+- primary_query
+- intent
+- funnel_stage
+- page_type
+- business_relevance
+- commercial_value
+- coverage_status
+- priority_score
+- existing_post_id
+- external_id
+- created_at
+- updated_at
+
+wp_ra_campaigns
+
+- id
+- site_id
+- name
+- objective
+- seed_topic
+- status
+- publishing_rate
+- start_date
+- target_end_date
+- created_at
+- updated_at
+
+wp_ra_campaign_items
+
+- id
+- campaign_id
+- topic_id
+- post_id
+- content_type
+- sequence_order
+- dependency_ids
+- brief_status
+- draft_status
+- media_status
+- publish_status
+- measurement_status
+
+wp_ra_knowledge_items
+
+- id
+- site_id
+- category
+- subject_id
+- claim_text
+- source_type
+- source_reference
+- verification_status
+- verified_at
+- expires_at
+- allowed_context
+- created_by
+
+wp_ra_media_tasks
+
+- id
+- site_id
+- post_id
+- brief_id
+- section_key
+- asset_type
+- description
+- purpose
+- requirements
+- attachment_id
+- assigned_user_id
+- status
+
+wp_ra_change_measurements
+
+- id
+- change_id
+- measurement_date
+- clicks
+- impressions
+- ctr
+- average_position
+- conversions
+- comparison_period
+- result_classification
+- confidence
+
+wp_ra_opportunities
+
+- id
+- site_id
+- post_id
+- topic_id
+- opportunity_type
+- evidence_json
+- impact_score
+- confidence_score
+- effort_score
+- risk_score
+- priority_score
+- status
+- expires_at
+- created_at
+
+Use proper indexes on:
+
+- site_id
+- post_id
+- topic_id
+- status
+- priority_score
+- created_at
+- campaign_id
+
+Do not store large prompt responses indiscriminately in WordPress options.
+
+
+21. SECURITY AND PRIVACY REQUIREMENTS
+
+Required protections:
+
+- Capability checks on every administrative action
+- Nonce verification
+- Sanitization and escaping
+- Prepared SQL statements
+- Strict REST permissions
+- Encrypted API credentials
+- No secrets in JavaScript
+- No unrestricted file writes
+- No arbitrary URL fetching
+- SSRF protections
+- Domain allowlists for backend requests
+- Rate limiting
+- Audit logs
+- Data retention controls
+- Customer content deletion workflow
+- Licensing checks performed server-side
+- Signed API responses where appropriate
+
+Prompt-injection defense is required when analyzing external pages.
+
+External page content must be treated as untrusted data and never as system instructions.
+
+
+22. AI PROMPT ARCHITECTURE
+
+Do not build one enormous prompt.
+
+Create separate agents or prompt stages:
+
+1. Site Analyst
+2. Topic Strategist
+3. Search Intent Classifier
+4. Content Brief Architect
+5. Evidence Researcher
+6. Business Knowledge Retriever
+7. Outline Builder
+8. Section Writer
+9. Fact and Claim Reviewer
+10. Helpfulness Reviewer
+11. Brand Voice Reviewer
+12. Internal-Link Planner
+13. Risk Reviewer
+14. Performance Analyst
+15. Roadmap Prioritizer
+
+Each stage should return validated structured JSON.
+
+Use JSON schemas and reject malformed responses.
+
+The final WordPress changes should never be based directly on unvalidated free-form model output.
+
+
+23. COMPETITIVE ADVANTAGES TO PROTECT
+
+The most defensible parts of the product should remain server-side:
+
+- Opportunity prioritization
+- Site knowledge graph
+- Outcome-learning system
+- Roadmap generation
+- Content-quality rubric
+- Trust and helpfulness analysis
+- Page-type selection
+- Evidence requirement engine
+- Cluster sequencing
+- Change measurement
+- Site-specific learning
+- Approval and rollback workflow
+
+The interface can be copied. The proprietary decision system should be difficult to reproduce.
+
+
+24. IMPLEMENTATION ROADMAP
+
+Phase 1: Foundation and Site Intelligence
+
+Build:
+
+- Business onboarding
+- Site profile
+- Full content inventory
+- Search Console normalization
+- Topic classification
+- Page intent classification
+- Initial site intelligence report
+- Opportunity table
+- Basic Growth Dashboard
+
+Do not build content generation first.
+
+Phase 1 Acceptance Criteria
+
+- Plugin analyzes all supported public content.
+- Every page receives a topic and intent classification.
+- Search Console data maps to the correct URLs.
+- User receives a prioritized list of opportunities.
+- No content is modified during analysis.
+- Large sites use queued or batched processing.
+- Analysis can resume after interruption.
+
+Phase 2: Roadmap and Opportunity Engine
+
+Build:
+
+- Growth roadmap
+- Opportunity scoring
+- Today’s Priority
+- Roadmap task states
+- Dependencies
+- User approval controls
+- Weekly strategy digest
+
+Phase 2 Acceptance Criteria
+
+- The system can explain why each task was prioritized.
+- Users can approve, reject, postpone, or lock recommendations.
+- The roadmap updates after tasks are completed.
+- Estimates are clearly identified as estimates.
+- Duplicate recommendations are suppressed.
+
+Phase 3: Topical Map
+
+Build:
+
+- Seed-topic workflow
+- Research backend
+- Topic clusters
+- Intent and page-type classification
+- Existing-page matching
+- Cannibalization prevention
+- Interactive map and list views
+- Cluster approval
+
+Phase 3 Acceptance Criteria
+
+- Every proposed topic has a recommended page type.
+- Existing coverage is identified before suggesting new content.
+- Topics can be approved individually or by cluster.
+- The system can recommend improving an existing page instead of creating a new page.
+- Each topic includes business relevance and evidence requirements.
+
+Phase 4: Content Campaigns and Briefs
+
+Build:
+
+- Campaign builder
+- Publishing sequence
+- Strategic briefs
+- Information-gain requirement
+- Evidence checklist
+- Original Media Plan
+- Internal-link blueprint
+
+Phase 4 Acceptance Criteria
+
+- No article draft is generated without an approved brief.
+- Every brief explains the unique value of the proposed page.
+- Every factual requirement is connected to a source or marked for verification.
+- Each article includes original-media recommendations.
+- The plugin does not generate AI images.
+
+Phase 5: Article Drafting
+
+Build:
+
+- Section-based generation
+- Knowledge Vault retrieval
+- Research source tracking
+- Quality review pipeline
+- WordPress draft creation
+- Proposal and diff workflow
+- Brand voice controls
+
+Phase 5 Acceptance Criteria
+
+- Unsupported factual claims are blocked or flagged.
+- Drafts preserve WordPress formatting.
+- Sources used during drafting are recorded.
+- Users can review each section.
+- The AI does not claim firsthand experience unless supplied by the business.
+- Drafts are created as unpublished WordPress drafts by default.
+
+Phase 6: Existing Content Automation
+
+Build:
+
+- CTR opportunities
+- Position 4–20 opportunities
+- Decay detection
+- Targeted proposal generation
+- Bulk low-risk actions
+- Internal-link insertion
+- Automation modes
+
+Phase 6 Acceptance Criteria
+
+- Major rewrites require approval.
+- Every applied change creates a revision.
+- Every change is reversible.
+- Gutenberg blocks remain valid.
+- Bulk actions show individual proposals.
+- Users can exclude URLs and post types.
+
+Phase 7: Measurement and Learning
+
+Build:
+
+- Change ledger
+- Search Console baselines
+- Measurement windows
+- Result classification
+- Site-level learning
+- Performance summaries
+- Roadmap reprioritization
+
+Phase 7 Acceptance Criteria
+
+- Every applied SEO change can be connected to later performance data.
+- The system does not falsely claim causation.
+- Insufficient data is clearly labeled.
+- Recommendations adjust based on observed outcomes.
+- Failed changes can be reviewed and rolled back.
+
+Phase 8: Advanced Autonomous Operations
+
+Build:
+
+- Managed campaigns
+- Scheduled opportunity scans
+- Low-risk automatic changes
+- Notifications
+- Budget and usage controls
+- Team assignments
+- Agency dashboard later
+
+Phase 8 Acceptance Criteria
+
+- Automation respects user-configured permissions.
+- Spending limits cannot be bypassed.
+- Automated changes are logged and reversible.
+- High-risk actions remain approval-gated.
+- Failed jobs do not leave partially modified pages.
+
+
+25. INITIAL MVP SCOPE
+
+The recommended MVP should include:
+
+1. Site onboarding
+2. WordPress content inventory
+3. Search Console import
+4. Site topic classification
+5. Opportunity prioritization
+6. Growth Dashboard
+7. Basic roadmap
+8. Seed-topic Topical Map
+9. Existing-page matching
+10. Cluster content briefs
+11. Original Media Plans
+12. WordPress draft generation
+13. Approval and rollback
+14. Change measurement
+
+Defer the following until later:
+
+- Fully automatic publishing
+- Backlink tracking
+- AI visibility monitoring across many engines
+- Agency multitenancy
+- Complex competitor alerting
+- Custom model training
+- Fully autonomous page consolidation
+- Automatic redirects
+- External outreach
+- Automatic image generation
+
+
+26. INSTRUCTIONS FOR CLAUDE FABLE
+
+Before writing code:
+
+1. Inspect the complete enhanced-content-plugin directory.
+2. Create an architectural summary of the current plugin.
+3. Identify existing components that can be reused.
+4. Identify missing abstractions.
+5. Identify security risks and technical debt.
+6. Map current database tables, scheduled events, services, controllers, admin screens, and provider interfaces.
+7. Do not rewrite working systems unnecessarily.
+8. Propose migrations that preserve existing customer data.
+9. Break implementation into small, reviewable commits.
+10. Add automated tests for every major service.
+11. Maintain backward compatibility unless explicitly documented.
+12. Do not expose proprietary orchestration prompts in the plugin.
+13. Do not add AI image generation.
+14. Do not apply broad content rewrites without an approval proposal.
+15. Do not publish content automatically by default.
+
+For each development phase, Claude should deliver:
+
+- Architecture notes
+- Files to add
+- Files to modify
+- Database migrations
+- REST endpoints
+- Admin screens
+- Background jobs
+- Security review
+- Test plan
+- Acceptance criteria
+- Rollback plan
+- Migration concerns
+
+Claude should stop after preparing the architecture and Phase 1 implementation plan before making broad codebase changes.
+
+
+27. RECOMMENDED FIRST DEVELOPMENT ASSIGNMENT
+
+Begin with the following assignment:
+
+“Inspect the existing Enhanced Content plugin and design Phase 1 of the Autonomous SEO Growth System. Phase 1 includes business onboarding, site profiling, content inventory, Search Console data normalization, page topic and search-intent classification, an opportunity model, and the first version of the Growth Dashboard. Reuse the existing provider, proposal, background-job, database, capability, revision, and audit systems whenever practical. Do not implement article generation, topical-map generation, or automatic content changes yet. First return an architectural assessment, schema migration plan, service boundaries, API contracts, admin-screen wireframe description, security analysis, test strategy, and a file-by-file implementation plan.”
+
+
+28. FINAL PRODUCT STANDARD
+
+The product should not reward users for publishing the greatest number of articles.
+
+It should reward them for publishing the smallest number of genuinely useful pages necessary to establish authority and help customers.
+
+The finished system should consistently prefer:
+
+- Improving an existing useful page over creating a duplicate
+- Original experience over generic summaries
+- Verified information over plausible AI language
+- Clear recommendations over overwhelming audit lists
+- Measured outcomes over arbitrary scores
+- Safe automation over uncontrolled publishing
+- Business value over raw keyword volume
+- Quality campaigns over mass-generated content
+
+The end result should feel like an experienced SEO strategist is continuously analyzing the site, maintaining the plan, preparing the work, and learning from the outcome—while the business owner retains control over every meaningful change.
