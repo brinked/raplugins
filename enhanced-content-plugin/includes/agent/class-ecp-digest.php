@@ -167,6 +167,7 @@ class ECP_Digest {
             'roadmap'        => ECP_Roadmap::next_steps(3),
             'roadmap_done'   => ECP_Roadmap::completed_since($since),
             'roadmap_stats'  => ECP_Roadmap::stats(),
+            'map_stats'      => ECP_Topical_Map::stats(),
         );
     }
 
@@ -369,6 +370,22 @@ class ECP_Digest {
                             (int) $data['roadmap_stats']['active']
                         );
                         ?>
+                    </a>
+                </p>
+            <?php endif; ?>
+
+            <?php if (!empty($data['map_stats']['mapped'])) : ?>
+                <p style="margin:0 0 24px;color:#50575e;font-size:14px;">
+                    <?php
+                    printf(
+                        /* translators: 1: approved topics, 2: topics ruled out */
+                        esc_html__('Topical map: %1$d approved topics are waiting for briefs, and the restraint engine has ruled out %2$d pages that did not deserve to exist.', 'enhanced-content-plugin'),
+                        (int) $data['map_stats']['approved'],
+                        (int) $data['map_stats']['skipped']
+                    );
+                    ?>
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-map')); ?>" style="color:#2271b1;">
+                        <?php esc_html_e('See the map', 'enhanced-content-plugin'); ?>
                     </a>
                 </p>
             <?php endif; ?>
