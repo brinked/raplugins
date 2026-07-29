@@ -169,6 +169,7 @@ class ECP_Digest {
             'roadmap_stats'  => ECP_Roadmap::stats(),
             'map_stats'      => ECP_Topical_Map::stats(),
             'brief_stats'    => ECP_Briefs::stats(),
+            'draft_stats'    => ECP_Briefs::draft_stats(),
         );
     }
 
@@ -417,6 +418,26 @@ class ECP_Digest {
                     ?>
                     <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-plan')); ?>" style="color:#2271b1;">
                         <?php esc_html_e('Open the plan', 'enhanced-content-plugin'); ?>
+                    </a>
+                </p>
+            <?php endif; ?>
+
+            <?php if (!empty($data['draft_stats']['awaiting_publish'])) : ?>
+                <p style="margin:0 0 24px;color:#50575e;font-size:14px;">
+                    <?php
+                    printf(
+                        /* translators: %d: number of unpublished drafts */
+                        esc_html(_n(
+                            '%d finished article is sitting unpublished in your drafts, waiting for your read-through.',
+                            '%d finished articles are sitting unpublished in your drafts, waiting for your read-through.',
+                            (int) $data['draft_stats']['awaiting_publish'],
+                            'enhanced-content-plugin'
+                        )),
+                        (int) $data['draft_stats']['awaiting_publish']
+                    );
+                    ?>
+                    <a href="<?php echo esc_url(admin_url('edit.php?post_status=draft&post_type=post')); ?>" style="color:#2271b1;">
+                        <?php esc_html_e('Open your drafts', 'enhanced-content-plugin'); ?>
                     </a>
                 </p>
             <?php endif; ?>

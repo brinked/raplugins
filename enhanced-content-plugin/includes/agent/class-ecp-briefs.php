@@ -657,6 +657,39 @@ class ECP_Briefs {
     }
 
     /**
+     * Where the drafted articles stand, for the digest: created, still
+     * waiting unpublished, and published.
+     *
+     * @return array { drafted, awaiting_publish, published }
+     */
+    public static function draft_stats() {
+        global $wpdb;
+
+        if (!ECP_DB::tables_exist()) {
+            return array('drafted' => 0, 'awaiting_publish' => 0, 'published' => 0);
+        }
+
+        $briefs = ECP_DB::briefs_table();
+        $posts = $wpdb->posts;
+
+        $row = $wpdb->get_row(
+            "SELECT COUNT(*) AS drafted,
+                    SUM(p.post_status = 'draft') AS awaiting,
+                    SUM(p.post_status = 'publish') AS published
+               FROM {$briefs} b
+              INNER JOIN {$posts} p ON p.ID = b.draft_post_id
+              WHERE b.draft_post_id > 0",
+            ARRAY_A
+        );
+
+        return array(
+            'drafted'          => (int) $row['drafted'],
+            'awaiting_publish' => (int) $row['awaiting'],
+            'published'        => (int) $row['published'],
+        );
+    }
+
+    /**
      * Site-wide counters for the digest.
      *
      * @return array { briefed, approved, gated }
