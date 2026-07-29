@@ -91,8 +91,13 @@ class ECP_Digest {
 
         $data = self::gather();
 
-        // Don't email someone to tell them nothing happened.
-        if (0 === $data['pending'] && 0 === $data['applied_recent'] && !$data['failures']) {
+        // Don't email someone to tell them nothing happened. A weekly
+        // send with a plan to talk about is the strategy digest and goes
+        // out even when the queue is empty; a daily send stays activity-only
+        // so an unchanged roadmap never becomes a daily nag.
+        $has_strategy = 7 === (int) $data['window_days'] && !empty($data['roadmap']);
+
+        if (0 === $data['pending'] && 0 === $data['applied_recent'] && !$data['failures'] && !$has_strategy) {
             return false;
         }
 
@@ -159,6 +164,9 @@ class ECP_Digest {
             'budget'         => ECP_AI_Client::budget_status(),
             'failures'       => $failures ? $failures : array(),
             'suggestions'    => ECP_Trust_Ladder::suggestions(),
+            'roadmap'        => ECP_Roadmap::next_steps(3),
+            'roadmap_done'   => ECP_Roadmap::completed_since($since),
+            'roadmap_stats'  => ECP_Roadmap::stats(),
         );
     }
 
@@ -315,6 +323,53 @@ class ECP_Digest {
                         (int) $data['applied_recent']
                     );
                     ?>
+                </p>
+            <?php endif; ?>
+
+            <?php if (!empty($data['roadmap'])) : ?>
+                <h3 style="font-size:15px;margin:0 0 8px;"><?php esc_html_e('The plan', 'enhanced-content-plugin'); ?></h3>
+                <?php if (!empty($data['roadmap_done'])) : ?>
+                    <p style="margin:0 0 8px;color:#50575e;">
+                        <?php
+                        printf(
+                            /* translators: %d: number of completed roadmap steps */
+                            esc_html(_n('%d roadmap step was completed in this period. Next up:', '%d roadmap steps were completed in this period. Next up:', (int) $data['roadmap_done'], 'enhanced-content-plugin')),
+                            (int) $data['roadmap_done']
+                        );
+                        ?>
+                    </p>
+                <?php endif; ?>
+                <ol style="margin:0 0 8px;padding-left:20px;color:#50575e;">
+                    <?php foreach ($data['roadmap'] as $step) : ?>
+                        <li style="margin-bottom:6px;">
+                            <strong><?php echo esc_html($step['title']); ?></strong>
+                            <?php if (isset($step['why']['primary']) && $step['why']['primary']) : ?>
+                                — <?php echo esc_html(ECP_Opportunity_Engine::reason_label($step['why']['primary'])); ?>
+                            <?php endif; ?>
+                            <?php if ((float) $step['potential_clicks'] > 0) : ?>
+                                <span style="color:#646970;font-size:13px;">
+                                    <?php
+                                    printf(
+                                        /* translators: %s: click estimate */
+                                        esc_html__('(worth roughly %s extra monthly clicks — an estimate, not a promise)', 'enhanced-content-plugin'),
+                                        esc_html(number_format_i18n((int) round((float) $step['potential_clicks'])))
+                                    );
+                                    ?>
+                                </span>
+                            <?php endif; ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ol>
+                <p style="margin:0 0 24px;">
+                    <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-roadmap')); ?>" style="color:#2271b1;">
+                        <?php
+                        printf(
+                            /* translators: %d: number of active roadmap steps */
+                            esc_html(_n('See the full plan — %d step', 'See the full plan — %d steps', (int) $data['roadmap_stats']['active'], 'enhanced-content-plugin')),
+                            (int) $data['roadmap_stats']['active']
+                        );
+                        ?>
+                    </a>
                 </p>
             <?php endif; ?>
 

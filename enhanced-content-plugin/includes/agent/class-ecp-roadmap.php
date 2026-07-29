@@ -586,6 +586,26 @@ class ECP_Roadmap {
     }
 
     /**
+     * Steps completed since a moment — the digest's "what moved" line.
+     *
+     * @param string $since MySQL datetime.
+     * @return int
+     */
+    public static function completed_since($since) {
+        global $wpdb;
+
+        if (!ECP_DB::tables_exist()) {
+            return 0;
+        }
+
+        return (int) $wpdb->get_var($wpdb->prepare(
+            'SELECT COUNT(*) FROM ' . ECP_DB::roadmap_table() . ' WHERE status = %s AND completed_at >= %s',
+            self::DONE,
+            $since
+        ));
+    }
+
+    /**
      * Counters for the screen header.
      */
     public static function stats() {
