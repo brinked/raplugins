@@ -183,9 +183,17 @@ class ECP_Briefs {
         $link_targets = self::link_targets($topic);
         $facts = self::vault_facts($topic);
 
+        // What actually ranks for the main query, when SERP data is
+        // connected. This is what turns the information-gain question
+        // from inference into measurement: the model sees exactly what
+        // the current results repeat.
+        $serp = ECP_Serp::is_connected()
+            ? ECP_Serp::serp($topic['main_query'])
+            : array('results' => array(), 'questions' => array());
+
         $response = ECP_AI_Client::request(
             self::system_prompt(),
-            self::user_prompt($topic, $link_targets, $facts),
+            self::user_prompt($topic, $link_targets, $facts, $serp),
             self::schema(),
             array(
                 'job_type'       => 'brief',
@@ -325,7 +333,7 @@ class ECP_Briefs {
         return implode("\n", $lines);
     }
 
-    private static function user_prompt(array $topic, array $link_targets, array $facts) {
+    private static function user_prompt(array $topic, array $link_targets, array $facts, array $serp = array()) {
         $out = array();
 
         $profile = ECP_Site_Profile::prompt_context();
@@ -362,6 +370,31 @@ class ECP_Briefs {
 
             foreach ($facts as $fact) {
                 $out[] = '- ' . ($fact['question'] ? $fact['question'] . ' → ' : '') . $fact['fact'];
+            }
+        }
+
+        if (!empty($serp['results'])) {
+            $out[] = '';
+            $out[] = '## What already ranks for the main query (live search results)';
+            $out[] = 'The information-gain question is now concrete: the article must add something these results do not already repeat. If everything worth saying is already said here, say so honestly with source "none".';
+
+            foreach ($serp['results'] as $result) {
+                $out[] = sprintf(
+                    '- %s (%s) — %s',
+                    $result['title'],
+                    $result['domain'],
+                    mb_substr($result['description'], 0, 160)
+                );
+            }
+        }
+
+        if (!empty($serp['questions'])) {
+            $out[] = '';
+            $out[] = '## Questions searchers actually ask (People Also Ask)';
+            $out[] = 'Measured, not guessed. Fold the relevant ones into user_questions and the structure.';
+
+            foreach ($serp['questions'] as $question) {
+                $out[] = '- ' . $question;
             }
         }
 
