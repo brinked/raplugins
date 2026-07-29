@@ -104,6 +104,7 @@ class Enhanced_Content_Plugin {
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-vault.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-topical-map.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-briefs.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-drafter.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-clusters.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-rankings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-gaps.php';

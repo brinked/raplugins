@@ -56,10 +56,9 @@ class ECP_Limits {
                 'period'  => 'month',
                 'label'   => __('Content briefs per month', 'enhanced-content-plugin'),
             ),
-            // Reserved for later phases.
             'drafts' => array(
                 'setting' => 'drafts_per_month',
-                'default' => 0,
+                'default' => 5,
                 'period'  => 'month',
                 'label'   => __('Article drafts per month', 'enhanced-content-plugin'),
             ),

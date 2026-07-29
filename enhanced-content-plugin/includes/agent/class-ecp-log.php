@@ -36,6 +36,7 @@ class ECP_Log {
     const MAP_BUILT         = 'map.built';
     const BRIEF_CREATED     = 'brief.created';
     const BRIEF_DECIDED     = 'brief.decided';
+    const DRAFT_CREATED     = 'draft.created';
 
     /**
      * Write an event.
@@ -203,6 +204,7 @@ class ECP_Log {
             self::MAP_BUILT         => __('Topical map built', 'enhanced-content-plugin'),
             self::BRIEF_CREATED     => __('Brief written', 'enhanced-content-plugin'),
             self::BRIEF_DECIDED     => __('Brief decision', 'enhanced-content-plugin'),
+            self::DRAFT_CREATED     => __('Article drafted', 'enhanced-content-plugin'),
         );
 
         return isset($labels[$event]) ? $labels[$event] : $event;

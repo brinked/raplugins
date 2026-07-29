@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.13.0';
+    const SCHEMA_VERSION = '2.14.0';
 
     /* --------------------------------------------------------------------
      * Table names
@@ -480,6 +480,9 @@ class ECP_DB {
             info_gain text NULL,
             info_gain_ok tinyint(1) NOT NULL DEFAULT 0,
             facts_outstanding smallint(5) unsigned NOT NULL DEFAULT 0,
+            draft_post_id bigint(20) unsigned NOT NULL DEFAULT 0,
+            drafted_at datetime NULL,
+            draft_quality longtext NULL,
             status varchar(20) NOT NULL DEFAULT 'proposed',
             decided_by bigint(20) unsigned NOT NULL DEFAULT 0,
             decided_at datetime NULL,
