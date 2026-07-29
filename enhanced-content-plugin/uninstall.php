@@ -20,7 +20,7 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 global $wpdb;
 
 // --- Agent tables ---------------------------------------------------------
-foreach (array('ecp_runs', 'ecp_opportunities', 'ecp_proposals', 'ecp_events', 'ecp_metrics', 'ecp_clusters') as $table) {
+foreach (array('ecp_runs', 'ecp_opportunities', 'ecp_proposals', 'ecp_events', 'ecp_metrics', 'ecp_clusters', 'ecp_inventory', 'ecp_roadmap') as $table) {
     $wpdb->query('DROP TABLE IF EXISTS ' . $wpdb->prefix . $table); // phpcs:ignore WordPress.DB.PreparedSQL
 }
 
@@ -31,6 +31,7 @@ $options = array(
     'ecp_db_version',
     'ecp_onboarded',
     'ecp_scan_offset',
+    'ecp_roadmap_built_at',
     'ecp_trust_record',
     'ecp_site_id',
     'ecp_csv_import_meta',

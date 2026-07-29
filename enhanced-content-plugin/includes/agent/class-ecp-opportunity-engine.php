@@ -512,6 +512,21 @@ class ECP_Opportunity_Engine {
         $posts = $wpdb->posts;
         $now = ECP_DB::now();
 
+        // Roadmap steps the owner approved jump the queue: approval is an
+        // explicit request for those proposals, and the score ordering
+        // only decides among pages nobody has asked about.
+        $approved = class_exists('ECP_Roadmap') ? ECP_Roadmap::approved_post_ids() : array();
+        $approved_sql = '';
+        $params = array(self::STATUS_OPEN, $now);
+
+        if ($approved) {
+            $placeholders = implode(',', array_fill(0, count($approved), '%d'));
+            $approved_sql = "(o.post_id IN ({$placeholders})) DESC, ";
+            $params = array_merge($params, $approved);
+        }
+
+        $params[] = max(1, (int) $limit);
+
         $rows = $wpdb->get_results($wpdb->prepare(
             "SELECT o.post_id
              FROM {$table} o
@@ -523,11 +538,9 @@ class ECP_Opportunity_Engine {
                   OR o.last_analyzed_at < o.last_scanned_at
                )
                AND (o.snoozed_until IS NULL OR o.snoozed_until <= %s)
-             ORDER BY o.score DESC
+             ORDER BY {$approved_sql}o.score DESC
              LIMIT %d",
-            self::STATUS_OPEN,
-            $now,
-            max(1, (int) $limit)
+            $params
         ));
 
         return array_map('intval', wp_list_pluck((array) $rows, 'post_id'));

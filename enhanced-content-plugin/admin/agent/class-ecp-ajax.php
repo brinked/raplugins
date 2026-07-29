@@ -50,6 +50,8 @@ class ECP_Ajax {
             'detect_clusters'  => 'detect_clusters',
             'analyze_cluster'  => 'analyze_cluster',
             'cluster_status'   => 'cluster_status',
+            'roadmap_action'   => 'roadmap_action',
+            'rebuild_roadmap'  => 'rebuild_roadmap',
         );
 
         foreach ($actions as $action => $method) {
@@ -116,6 +118,63 @@ class ECP_Ajax {
         wp_send_json_success(array(
             'message' => __('Rejected.', 'enhanced-content-plugin'),
             'pending' => ECP_Proposals::pending_count(),
+        ));
+    }
+
+    /* --------------------------------------------------------------------
+     * Roadmap
+     * ----------------------------------------------------------------- */
+
+    /**
+     * A decision on a roadmap step: approve, postpone, dismiss, reopen,
+     * complete, lock or unlock.
+     */
+    public function roadmap_action() {
+        $this->guard();
+
+        $id = isset($_POST['id']) ? absint($_POST['id']) : 0;
+        $act = isset($_POST['act']) ? sanitize_key($_POST['act']) : '';
+
+        if ('lock' === $act || 'unlock' === $act) {
+            $result = ECP_Roadmap::set_locked($id, 'lock' === $act);
+        } else {
+            $result = ECP_Roadmap::decide($id, $act);
+        }
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        $messages = array(
+            'approve'  => __('Approved — the agent will prepare these changes next.', 'enhanced-content-plugin'),
+            'postpone' => __('Postponed two weeks.', 'enhanced-content-plugin'),
+            'dismiss'  => __('Dismissed.', 'enhanced-content-plugin'),
+            'reopen'   => __('Back on the plan.', 'enhanced-content-plugin'),
+            'complete' => __('Marked complete.', 'enhanced-content-plugin'),
+            'lock'     => __('Locked in place.', 'enhanced-content-plugin'),
+            'unlock'   => __('Unlocked.', 'enhanced-content-plugin'),
+        );
+
+        wp_send_json_success(array(
+            'message' => isset($messages[$act]) ? $messages[$act] : __('Done.', 'enhanced-content-plugin'),
+        ));
+    }
+
+    /**
+     * Re-derive the roadmap on demand. Free — reads stored data only.
+     */
+    public function rebuild_roadmap() {
+        $this->guard();
+
+        delete_transient('ecp_roadmap_fresh');
+        $active = ECP_Roadmap::rebuild();
+
+        wp_send_json_success(array(
+            'message' => sprintf(
+                /* translators: %d: number of steps */
+                _n('Plan refreshed — %d step.', 'Plan refreshed — %d steps.', $active, 'enhanced-content-plugin'),
+                $active
+            ),
         ));
     }
 

@@ -186,6 +186,11 @@ class ECP_Scheduler {
                 __('Finished a full pass over %d posts.', 'enhanced-content-plugin'),
                 (int) $result['total']
             ));
+
+            // The scores just changed under the plan — re-derive it now so
+            // the roadmap the owner opens tomorrow reflects tonight's scan.
+            delete_transient('ecp_roadmap_fresh');
+            ECP_Roadmap::rebuild();
         }
 
         update_option('ecp_scan_offset', $next_offset, false);

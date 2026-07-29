@@ -842,6 +842,51 @@
 				});
 		});
 
+		// Growth Roadmap: every button is a decision on one step. A decision
+		// re-sequences the whole plan, so the page reloads to show the new
+		// order rather than pretending the local row is the only thing that
+		// changed.
+		$(document).on('click', '.ecp-roadmap-act', function () {
+			var $button = $(this);
+			var $step = $button.closest('.ecp-roadmap-step');
+			var $status = $step.find('.ecp-row-status');
+
+			$step.find('button').prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('roadmap_action', { id: $button.data('id'), act: $button.data('act') })
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 800);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$step.find('button').prop('disabled', false);
+				});
+		});
+
+		$('#ecp-rebuild-roadmap').on('click', function () {
+			var $button = $(this);
+			var $status = $('.ecp-roadmap-rebuild-status');
+
+			$button.prop('disabled', true);
+			$status.text(t('saving'));
+
+			post('rebuild_roadmap')
+				.done(function (data) {
+					$status.text(data.message);
+					window.setTimeout(function () {
+						window.location.reload();
+					}, 800);
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
 		$('#ecp-classify-now').on('click', function () {
 			var $button = $(this);
 			var $result = $('#ecp-classify-result');

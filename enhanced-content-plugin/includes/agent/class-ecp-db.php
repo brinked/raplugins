@@ -25,7 +25,7 @@ class ECP_DB {
      * Bump this when a CREATE TABLE statement below changes. dbDelta then
      * runs on the next request and migrates existing installs in place.
      */
-    const SCHEMA_VERSION = '2.9.1';
+    const SCHEMA_VERSION = '2.10.0';
 
     /* --------------------------------------------------------------------
      * Table names
@@ -66,6 +66,11 @@ class ECP_DB {
         return $wpdb->prefix . 'ecp_inventory';
     }
 
+    public static function roadmap_table() {
+        global $wpdb;
+        return $wpdb->prefix . 'ecp_roadmap';
+    }
+
     /**
      * All table names, for uninstall.
      *
@@ -80,6 +85,7 @@ class ECP_DB {
             self::metrics_table(),
             self::clusters_table(),
             self::inventory_table(),
+            self::roadmap_table(),
         );
     }
 
@@ -107,6 +113,7 @@ class ECP_DB {
         $metrics = self::metrics_table();
         $clusters = self::clusters_table();
         $inventory = self::inventory_table();
+        $roadmap = self::roadmap_table();
 
         // ---- Runs -------------------------------------------------------
         // job_type: scan | analyze | measure | manual
@@ -326,6 +333,44 @@ class ECP_DB {
             UNIQUE KEY cluster_key (cluster_key),
             KEY status_score (status,score),
             KEY primary_post_id (primary_post_id)
+        ) {$charset};");
+
+        // ---- Roadmap --------------------------------------------------------
+        // The sequenced growth plan (Phase 2). Items are derived from
+        // opportunities and clusters on every rebuild, but the columns a
+        // human touched — status, locked, the decision trail — are ground
+        // truth and survive rebuilds untouched. `item_key` is stable across
+        // rebuilds ("opportunity:123:content"), so re-deriving updates rows
+        // in place instead of accumulating duplicates.
+        //
+        // source: opportunity | cluster
+        // track:  technical | consolidation | snippet | links | content
+        // status: proposed | approved | postponed | dismissed | done
+        dbDelta("CREATE TABLE {$roadmap} (
+            id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+            item_key varchar(64) NOT NULL,
+            source varchar(20) NOT NULL DEFAULT 'opportunity',
+            post_id bigint(20) unsigned NOT NULL DEFAULT 0,
+            cluster_id bigint(20) unsigned NOT NULL DEFAULT 0,
+            track varchar(20) NOT NULL DEFAULT 'content',
+            title varchar(255) NOT NULL DEFAULT '',
+            why longtext NULL,
+            score decimal(6,2) NOT NULL DEFAULT 0.00,
+            potential_clicks decimal(10,2) NOT NULL DEFAULT 0.00,
+            step_order smallint(5) unsigned NOT NULL DEFAULT 0,
+            depends_on longtext NULL,
+            status varchar(20) NOT NULL DEFAULT 'proposed',
+            locked tinyint(1) NOT NULL DEFAULT 0,
+            postponed_until datetime NULL,
+            decided_by bigint(20) unsigned NOT NULL DEFAULT 0,
+            decided_at datetime NULL,
+            completed_at datetime NULL,
+            created_at datetime NOT NULL,
+            updated_at datetime NOT NULL,
+            PRIMARY KEY  (id),
+            UNIQUE KEY item_key (item_key),
+            KEY status_order (status,step_order),
+            KEY post_id (post_id)
         ) {$charset};");
     }
 

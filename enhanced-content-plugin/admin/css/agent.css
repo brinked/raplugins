@@ -1670,3 +1670,93 @@ a.ecp-band-badge:hover {
 	color: #646970;
 	max-width: 640px;
 }
+
+/* Growth Roadmap — the sequenced plan ----------------------------------- */
+
+.ecp-roadmap-list {
+	margin: 0;
+	list-style: none;
+	counter-reset: none;
+}
+
+.ecp-roadmap-step {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 14px 0;
+	border-bottom: 1px solid var(--ecp-line);
+}
+
+.ecp-roadmap-step:last-child {
+	border-bottom: none;
+}
+
+.ecp-roadmap-step.is-approved {
+	background: #f6fbf7;
+}
+
+.ecp-roadmap-number {
+	flex: 0 0 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	background: #f0f0f1;
+	font-weight: 600;
+	font-size: 13px;
+}
+
+.ecp-roadmap-main {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.ecp-roadmap-title {
+	margin: 0 0 4px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.ecp-roadmap-why,
+.ecp-roadmap-worth,
+.ecp-roadmap-depends {
+	margin: 0 0 4px;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.ecp-roadmap-depends {
+	font-style: italic;
+}
+
+.ecp-roadmap-actions {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+	max-width: 320px;
+}
+
+.ecp-roadmap-actions .ecp-row-status {
+	font-size: 12px;
+}
+
+.ecp-roadmap-muted .ecp-roadmap-step {
+	color: #50575e;
+}
+
+.ecp-roadmap-muted .ecp-roadmap-main {
+	display: flex;
+	align-items: baseline;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.ecp-roadmap-rebuild-status {
+	margin-left: 8px;
+	font-size: 12px;
+}

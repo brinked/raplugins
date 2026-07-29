@@ -84,6 +84,15 @@ class ECP_Admin_Menu {
             array('ECP_Screen_Opportunities', 'render')
         );
 
+        $this->hooks['roadmap'] = add_submenu_page(
+            'ecp-dashboard',
+            __('Growth Roadmap', 'enhanced-content-plugin'),
+            __('Growth Roadmap', 'enhanced-content-plugin'),
+            self::CAP,
+            'ecp-roadmap',
+            array('ECP_Screen_Roadmap', 'render')
+        );
+
         $this->hooks['rankings'] = add_submenu_page(
             'ecp-dashboard',
             __('Rankings', 'enhanced-content-plugin'),
@@ -314,6 +323,7 @@ class ECP_Admin_Menu {
             'ecp-dashboard'     => __('Dashboard', 'enhanced-content-plugin'),
             'ecp-review'        => __('Review Changes', 'enhanced-content-plugin'),
             'ecp-opportunities' => __('Opportunities', 'enhanced-content-plugin'),
+            'ecp-roadmap'       => __('Roadmap', 'enhanced-content-plugin'),
             'ecp-rankings'      => __('Rankings', 'enhanced-content-plugin'),
         );
 

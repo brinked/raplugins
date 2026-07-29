@@ -100,6 +100,7 @@ class Enhanced_Content_Plugin {
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-signals.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-search-data.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-opportunity-engine.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-roadmap.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-clusters.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-rankings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-gaps.php';
@@ -130,6 +131,7 @@ class Enhanced_Content_Plugin {
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-dashboard.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-review.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-opportunities.php';
+            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-roadmap.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-rankings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-clusters.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-intelligence.php';

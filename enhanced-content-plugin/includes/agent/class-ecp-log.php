@@ -32,6 +32,7 @@ class ECP_Log {
     const BUDGET_EXHAUSTED  = 'budget.exhausted';
     const AUTOPILOT_APPLIED = 'autopilot.applied';
     const SETTINGS_CHANGED  = 'settings.changed';
+    const ROADMAP_DECIDED   = 'roadmap.decided';
 
     /**
      * Write an event.
@@ -195,6 +196,7 @@ class ECP_Log {
             self::BUDGET_EXHAUSTED  => __('Budget exhausted', 'enhanced-content-plugin'),
             self::AUTOPILOT_APPLIED => __('Auto-applied', 'enhanced-content-plugin'),
             self::SETTINGS_CHANGED  => __('Settings changed', 'enhanced-content-plugin'),
+            self::ROADMAP_DECIDED   => __('Roadmap decision', 'enhanced-content-plugin'),
         );
 
         return isset($labels[$event]) ? $labels[$event] : $event;
