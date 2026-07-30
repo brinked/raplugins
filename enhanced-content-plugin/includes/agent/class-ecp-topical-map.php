@@ -129,7 +129,44 @@ class ECP_Topical_Map {
      * ----------------------------------------------------------------- */
 
     /**
+     * Structural pages: URLs that exist for navigation, not as content —
+     * the homepage, the blog index, the privacy page. They are never
+     * coverage of a topic and never candidates for "expand this page":
+     * a homepage earning a query is evidence of demand and authority,
+     * not of the topic being answered.
+     *
+     * @return int[] Post ids, keyed by id => human label.
+     */
+    public static function structural_pages() {
+        $pages = array();
+
+        $front = (int) get_option('page_on_front');
+        if ($front) {
+            $pages[$front] = __('homepage', 'enhanced-content-plugin');
+        }
+
+        $posts_page = (int) get_option('page_for_posts');
+        if ($posts_page) {
+            $pages[$posts_page] = __('blog page', 'enhanced-content-plugin');
+        }
+
+        $privacy = (int) get_option('wp_page_for_privacy_policy');
+        if ($privacy) {
+            $pages[$privacy] = __('privacy page', 'enhanced-content-plugin');
+        }
+
+        /**
+         * Pages the topical map must never treat as content — cart,
+         * checkout, landing pages a theme owns, and so on.
+         *
+         * @param array<int,string> $pages post_id => label
+         */
+        return apply_filters('ecp_structural_pages', $pages);
+    }
+
+    /**
      * The published pages the map must respect, from the inventory.
+     * Structural pages are excluded — they are not coverage.
      *
      * @return array[] { post_id, title, topic, intent, word_count }
      */
@@ -140,13 +177,25 @@ class ECP_Topical_Map {
             return array();
         }
 
+        $structural = array_keys(self::structural_pages());
+        $exclude_sql = '';
+        $params = array();
+
+        if ($structural) {
+            $placeholders = implode(',', array_fill(0, count($structural), '%d'));
+            $exclude_sql = "AND post_id NOT IN ({$placeholders})";
+            $params = $structural;
+        }
+
+        $params[] = self::MAX_PAGES;
+
         return (array) $wpdb->get_results($wpdb->prepare(
             'SELECT post_id, title, topic, intent, word_count
                FROM ' . ECP_DB::inventory_table() . "
-              WHERE post_status = 'publish'
+              WHERE post_status = 'publish' {$exclude_sql}
               ORDER BY word_count DESC
               LIMIT %d",
-            self::MAX_PAGES
+            $params
         ), ARRAY_A);
     }
 
@@ -563,6 +612,32 @@ class ECP_Topical_Map {
         }
 
         // --- The verdict ---------------------------------------------------
+        // A structural page earning the query changes what the evidence
+        // means. The homepage surfacing for a term proves demand and
+        // authority, not coverage — and "expand your homepage into an
+        // article" is never the advice. The verdict is a dedicated page,
+        // which would be expected to take the ranking over, not fight it.
+        $structural = self::structural_pages();
+
+        if ($owner_id && isset($structural[$owner_id])) {
+            $basis['structural_owner'] = array('post_id' => $owner_id, 'label' => $structural[$owner_id]);
+
+            return array(
+                'coverage' => self::WEAK,
+                'verdict'  => self::WRITE,
+                'reason'   => sprintf(
+                    /* translators: 1: structural page label, 2: query, 3: position */
+                    __('Your %1$s currently surfaces for "%2$s" at position %3$s. A %1$s is not an article — a dedicated page can actually answer this intent and should take the ranking over.', 'enhanced-content-plugin'),
+                    $structural[$owner_id],
+                    $main_query,
+                    number_format_i18n($owner_position, 1)
+                ),
+                'post_id'  => 0,
+                'score'    => $score,
+                'basis'    => $basis,
+            );
+        }
+
         // Query ownership is measured behaviour and beats title similarity.
         if ($owner_id && $owner_position > 0 && $owner_position <= 10) {
             return array(
