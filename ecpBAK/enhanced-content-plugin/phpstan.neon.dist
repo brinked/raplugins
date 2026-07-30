@@ -1,0 +1,15 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+    level: 5
+    paths:
+        - multi-author-plugin.php
+        - includes/
+        - uninstall.php
+    excludePaths:
+        - vendor/
+        - docs/
+    ignoreErrors:
+        # Templates pull variables from the including scope
+        - '#Variable \$[a-zA-Z_]+ might not be defined#'

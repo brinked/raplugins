@@ -3,7 +3,7 @@
  * Plugin Name: Enhanced Content
  * Plugin URI: https://rankaudit.com/enhanced-content
  * Description: An autonomous SEO content agent for WordPress. Scores your articles, finds ranking opportunities, drafts evidence-based improvements with AI, and applies them only after you approve each change. Includes the full E-E-A-T contributor, sources, FAQ and schema toolkit.
- * Version: 2.15.1
+ * Version: 2.8.3
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: RankAudit
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('ECP_VERSION', '2.15.1');
+define('ECP_VERSION', '2.8.3');
 define('ECP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ECP_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ECP_PLUGIN_FILE', __FILE__);
@@ -90,22 +90,12 @@ class Enhanced_Content_Plugin {
         // --- SEO agent ---
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-db.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-log.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-limits.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-site-profile.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-agent-settings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-capabilities.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-map.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-inventory.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-classifier.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-signals.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-search-data.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-opportunity-engine.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-roadmap.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-vault.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-topical-map.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-briefs.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-drafter.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-serp.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-clusters.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-rankings.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-content-gaps.php';
@@ -124,7 +114,6 @@ class Enhanced_Content_Plugin {
         // real page with an unsaved change applied.
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-preview.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-trust-ladder.php';
-        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-memory.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-measurement.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-refresh.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-scheduler.php';
@@ -136,13 +125,8 @@ class Enhanced_Content_Plugin {
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-dashboard.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-review.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-opportunities.php';
-            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-roadmap.php';
-            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-vault.php';
-            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-map.php';
-            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-plan.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-rankings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-clusters.php';
-            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-intelligence.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-history.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-agent-settings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-ajax.php';
@@ -280,12 +264,6 @@ class Enhanced_Content_Plugin {
                 $saved['enabled_change_types'][] = 'section_trim';
                 update_option('ecp_agent_settings', $saved);
             }
-        }
-
-        // 2.11.0: owner answers move from per-post meta into the Knowledge
-        // Vault, where every page (and the owner) can see them.
-        if (version_compare($installed, '2.11.0', '<')) {
-            ECP_Vault::migrate_meta();
         }
 
         update_option('ecp_db_version', ECP_DB::SCHEMA_VERSION, false);

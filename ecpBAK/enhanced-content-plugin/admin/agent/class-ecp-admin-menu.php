@@ -84,33 +84,6 @@ class ECP_Admin_Menu {
             array('ECP_Screen_Opportunities', 'render')
         );
 
-        $this->hooks['roadmap'] = add_submenu_page(
-            'ecp-dashboard',
-            __('Growth Roadmap', 'enhanced-content-plugin'),
-            __('Growth Roadmap', 'enhanced-content-plugin'),
-            self::CAP,
-            'ecp-roadmap',
-            array('ECP_Screen_Roadmap', 'render')
-        );
-
-        $this->hooks['map'] = add_submenu_page(
-            'ecp-dashboard',
-            __('Topical Map', 'enhanced-content-plugin'),
-            __('Topical Map', 'enhanced-content-plugin'),
-            self::CAP,
-            'ecp-map',
-            array('ECP_Screen_Map', 'render')
-        );
-
-        $this->hooks['plan'] = add_submenu_page(
-            'ecp-dashboard',
-            __('Content Plan', 'enhanced-content-plugin'),
-            __('Content Plan', 'enhanced-content-plugin'),
-            self::CAP,
-            'ecp-plan',
-            array('ECP_Screen_Plan', 'render')
-        );
-
         $this->hooks['rankings'] = add_submenu_page(
             'ecp-dashboard',
             __('Rankings', 'enhanced-content-plugin'),
@@ -130,24 +103,6 @@ class ECP_Admin_Menu {
                 array('ECP_Screen_Clusters', 'render')
             );
         }
-
-        $this->hooks['intelligence'] = add_submenu_page(
-            'ecp-dashboard',
-            __('Site Intelligence', 'enhanced-content-plugin'),
-            __('Site Intelligence', 'enhanced-content-plugin'),
-            self::CAP,
-            'ecp-intelligence',
-            array('ECP_Screen_Intelligence', 'render')
-        );
-
-        $this->hooks['vault'] = add_submenu_page(
-            'ecp-dashboard',
-            __('Knowledge Vault', 'enhanced-content-plugin'),
-            __('Knowledge Vault', 'enhanced-content-plugin'),
-            self::CAP,
-            'ecp-vault',
-            array('ECP_Screen_Vault', 'render')
-        );
 
         $this->hooks['history'] = add_submenu_page(
             'ecp-dashboard',
@@ -243,14 +198,6 @@ class ECP_Admin_Menu {
                 'findingLinks'   => __('Looking for pages that could link here…', 'enhanced-content-plugin'),
                 'saving'         => __('Saving…', 'enhanced-content-plugin'),
                 'answerEmpty'    => __('Type an answer first.', 'enhanced-content-plugin'),
-                'factEmpty'      => __('Type the fact first.', 'enhanced-content-plugin'),
-                'seedEmpty'      => __('Type a seed topic first.', 'enhanced-content-plugin'),
-                'mapping'        => __('Mapping the topic… this can take a minute.', 'enhanced-content-plugin'),
-                'briefing'       => __('Writing the brief… this can take a minute.', 'enhanced-content-plugin'),
-                'drafting'       => __('Drafting the article… this can take a few minutes.', 'enhanced-content-plugin'),
-                'stillWorking'   => __('Taking longer than your server allows for one request — the work continues in the background. Watching for the result…', 'enhanced-content-plugin'),
-                'finishedAfterAll' => __('Done — it finished in the background. Refreshing…', 'enhanced-content-plugin'),
-                'checkHistory'   => __('No result after three minutes. Refresh the page in a little while; if nothing appears, the History screen will have the error.', 'enhanced-content-plugin'),
             ),
         ));
     }
@@ -358,9 +305,6 @@ class ECP_Admin_Menu {
             'ecp-dashboard'     => __('Dashboard', 'enhanced-content-plugin'),
             'ecp-review'        => __('Review Changes', 'enhanced-content-plugin'),
             'ecp-opportunities' => __('Opportunities', 'enhanced-content-plugin'),
-            'ecp-roadmap'       => __('Roadmap', 'enhanced-content-plugin'),
-            'ecp-map'           => __('Topical Map', 'enhanced-content-plugin'),
-            'ecp-plan'          => __('Content Plan', 'enhanced-content-plugin'),
             'ecp-rankings'      => __('Rankings', 'enhanced-content-plugin'),
         );
 
@@ -368,8 +312,6 @@ class ECP_Admin_Menu {
             $tabs['ecp-clusters'] = __('Competing Pages', 'enhanced-content-plugin');
         }
 
-        $tabs['ecp-intelligence'] = __('Site Intelligence', 'enhanced-content-plugin');
-        $tabs['ecp-vault'] = __('Knowledge Vault', 'enhanced-content-plugin');
         $tabs['ecp-history'] = __('History', 'enhanced-content-plugin');
 
         if (ECP_Capabilities::can_manage()) {

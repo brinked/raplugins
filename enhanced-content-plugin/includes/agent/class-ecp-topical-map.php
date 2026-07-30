@@ -89,6 +89,10 @@ class ECP_Topical_Map {
                 'meter'          => 'maps',
                 'trigger_source' => $args['trigger_source'],
                 'max_tokens'     => 24000,
+                // Mapping is breadth work, not prose. Medium effort cuts
+                // the build to a fraction of the time — which also keeps
+                // it inside shared-host request limits.
+                'effort'         => 'medium',
             )
         );
 
