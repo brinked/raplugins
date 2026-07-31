@@ -129,6 +129,10 @@ class ECP_Drafter {
 
         update_post_meta((int) $post_id, '_ecp_brief_id', (int) $brief_id);
 
+        // Citations the plugin can actually stand behind go into the
+        // existing Sources feature, which renders them under the article.
+        self::attach_sources((int) $post_id, $quality['claims'], $facts);
+
         $now = ECP_DB::now();
 
         $wpdb->update(
@@ -155,6 +159,44 @@ class ECP_Drafter {
             'post_id'   => (int) $post_id,
             'edit_link' => get_edit_post_link((int) $post_id, 'raw'),
             'quality'   => $quality,
+        );
+    }
+
+    /**
+     * The competitor list from the site profile, split into names (for
+     * the prompt and the text scan) and domains (for filtering any URL
+     * that would ever be attached as a source).
+     *
+     * @return array { names: string[], domains: string[] }
+     */
+    public static function competitor_terms() {
+        $names = array();
+        $domains = array();
+
+        foreach ((array) ECP_Site_Profile::get('competitors') as $entry) {
+            $entry = trim((string) $entry);
+
+            if ('' === $entry) {
+                continue;
+            }
+
+            if (false !== strpos($entry, '.')) {
+                $host = strtolower(preg_replace('#^https?://(www\.)?#', '', $entry));
+                $domains[] = rtrim($host, '/');
+                // "acme.com" also yields "acme" for the text scan.
+                $stem = explode('.', $host)[0];
+
+                if (strlen($stem) >= 4) {
+                    $names[] = $stem;
+                }
+            } else {
+                $names[] = $entry;
+            }
+        }
+
+        return array(
+            'names'   => array_values(array_unique($names)),
+            'domains' => array_values(array_unique($domains)),
         );
     }
 
@@ -203,6 +245,13 @@ class ECP_Drafter {
 
         $lines[] = '- No fabricated quotes, ever.';
         $lines[] = '- Every factual claim you make gets listed in that section\'s claims array with its support: vault_fact (a provided verified fact), brief (stated in the brief), general_knowledge (uncontroversial, needs no citation), or needs_verification.';
+        $lines[] = '- When a claim deserves an external citation — a statistic, a standard, a regulation, a study — name the kind of authority the owner should link in suggested_authority (e.g. "OSHA", "the manufacturer\'s specification sheet"). Never write a URL: you cannot verify one exists, so the owner supplies the link.';
+
+        $competitors = self::competitor_terms();
+
+        if ($competitors['names']) {
+            $lines[] = '- These are the business\'s direct competitors. Never cite them, quote them, recommend them, or suggest them as a source, under any circumstances: ' . implode(', ', $competitors['names']) . '.';
+        }
         $lines[] = '- Open every section by answering its question. No throat-clearing, no "in today\'s world", no restating the heading, no paragraph that merely announces what the next paragraph will say.';
         $lines[] = '- Vary paragraph structure. Avoid formulaic transitions ("Moreover", "Furthermore", "It is important to note"). Write like the site\'s own author on a good day, not like a model.';
         $lines[] = '- Do not repeat the main query verbatim more than a natural handful of times. This article ranks by answering, not by chanting.';
@@ -332,8 +381,9 @@ class ECP_Drafter {
                     'statement' => array('type' => 'string', 'description' => 'The factual claim as made in the text.'),
                     'support'   => array('type' => 'string', 'enum' => array('vault_fact', 'brief', 'general_knowledge', 'needs_verification')),
                     'source_note' => array('type' => 'string', 'description' => 'Which fact or brief line supports it; what verification is needed when unsupported.'),
+                    'suggested_authority' => array('type' => 'string', 'description' => 'When the claim deserves an external citation: the NAME of an authoritative source the owner should link (an organisation, standard, or publication). Never a URL. Empty when no citation is needed.'),
                 ),
-                'required' => array('statement', 'support', 'source_note'),
+                'required' => array('statement', 'support', 'source_note', 'suggested_authority'),
                 'additionalProperties' => false,
             ),
         );
@@ -476,6 +526,46 @@ class ECP_Drafter {
             );
         }
 
+        // --- Claims that deserve a real citation ---------------------------
+        // The model names the authority; the owner supplies the link in
+        // the Sources box. A URL from the model's memory is never trusted.
+        foreach ($claims as $claim) {
+            if (!empty($claim['suggested_authority'])
+                && in_array($claim['support'], array('general_knowledge', 'needs_verification'), true)
+            ) {
+                $flags[] = array(
+                    'code'     => 'citation_needed',
+                    'severity' => 'low',
+                    'detail'   => sprintf(
+                        /* translators: 1: claim, 2: suggested authority */
+                        __('"%1$s" deserves a citation — add a link to %2$s (or better) in the Sources box.', 'enhanced-content-plugin'),
+                        $claim['statement'],
+                        $claim['suggested_authority']
+                    ),
+                );
+            }
+        }
+
+        // --- Competitors ---------------------------------------------------
+        // Reading competitors (the SERP grounding) is research; naming or
+        // recommending them in the owner's own article is not.
+        $competitors = self::competitor_terms();
+
+        foreach (array_merge($competitors['names'], $competitors['domains']) as $term) {
+            if (false !== stripos($all_text, $term)) {
+                $flags[] = array(
+                    'code'     => 'competitor_reference',
+                    'severity' => 'high',
+                    'detail'   => sprintf(
+                        /* translators: %s: competitor name */
+                        __('Mentions your competitor "%s". Remove or reword before publishing.', 'enhanced-content-plugin'),
+                        $term
+                    ),
+                );
+                break;
+            }
+        }
+
         // --- Banned phrases and brand terms --------------------------------
         foreach (ECP_Guardrails::find_banned_phrases($all_text) as $phrase) {
             $flags[] = array(
@@ -507,6 +597,76 @@ class ECP_Drafter {
             'needs_verification' => $needs_verification,
             'sources'            => $sources,
         );
+    }
+
+    /**
+     * Populate the article's Sources box (the v1 citation feature, shown
+     * under the published article) with the citations that are actually
+     * verifiable: pages of this site that vault facts used in the draft
+     * were mined from, quote and all. External authorities are never
+     * auto-added — the model only names them (citation_needed flags) and
+     * the owner supplies real links in the same Sources box. Competitor
+     * domains are filtered even here, so no future source path can
+     * ever cite one.
+     */
+    private static function attach_sources($post_id, array $claims, array $facts) {
+        $competitors = self::competitor_terms();
+        $sources = array();
+
+        foreach ($claims as $claim) {
+            if ('vault_fact' !== $claim['support']) {
+                continue;
+            }
+
+            // Which vault fact backs this claim, and does it trace to a
+            // page on this site?
+            foreach ($facts as $fact) {
+                $against = trim($fact['question'] . ' ' . $fact['fact']);
+
+                if (ECP_Topical_Map::overlap($claim['statement'] . ' ' . $claim['source_note'], $against) < 0.4) {
+                    continue;
+                }
+
+                $evidence = ECP_DB::decode(isset($fact['evidence']) ? $fact['evidence'] : '');
+
+                if (empty($evidence['source_post_id'])) {
+                    continue;   // Owner-typed fact: the business is the source.
+                }
+
+                $source_post = get_post((int) $evidence['source_post_id']);
+
+                if (!$source_post || 'publish' !== $source_post->post_status || (int) $source_post->ID === (int) $post_id) {
+                    continue;
+                }
+
+                $url = get_permalink($source_post);
+                $host = strtolower((string) wp_parse_url($url, PHP_URL_HOST));
+
+                foreach ($competitors['domains'] as $domain) {
+                    if ($host && false !== strpos($host, $domain)) {
+                        continue 2;   // Never, regardless of how it got here.
+                    }
+                }
+
+                $sources[$url] = array(
+                    'url'         => $url,
+                    'label'       => $source_post->post_title,
+                    'description' => !empty($evidence['quote'])
+                        ? sprintf(
+                            /* translators: %s: quoted sentence */
+                            __('Supports: "%s"', 'enhanced-content-plugin'),
+                            $evidence['quote']
+                        )
+                        : '',
+                );
+
+                break;
+            }
+        }
+
+        if ($sources) {
+            update_post_meta($post_id, '_article_sources', array_values($sources));
+        }
     }
 
     /* --------------------------------------------------------------------
