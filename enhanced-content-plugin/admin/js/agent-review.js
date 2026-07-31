@@ -1120,6 +1120,32 @@
 				});
 		});
 
+		// Mine the site's own pages for answers to the open questions.
+		$('#ecp-mine-answers').on('click', function () {
+			var $button = $(this);
+			var $status = $('.ecp-mine-status');
+
+			$button.prop('disabled', true);
+			$status.text(t('mining'));
+
+			post('mine_answers')
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.found > 0) {
+						window.setTimeout(function () {
+							window.location.reload();
+						}, 1500);
+					} else {
+						$button.prop('disabled', false);
+					}
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
 		// Confirm / retire / restore a fact.
 		$(document).on('click', '.ecp-fact-act', function () {
 			var $button = $(this);

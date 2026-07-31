@@ -23,6 +23,7 @@ class ECP_Screen_Vault {
 
         $active = ECP_Vault::query(array('status' => ECP_Vault::ACTIVE, 'limit' => 100));
         $retired = ECP_Vault::query(array('status' => ECP_Vault::RETIRED, 'limit' => 20));
+        $pending = ECP_Vault::query(array('status' => ECP_Vault::PENDING, 'limit' => 50));
         $questions = ECP_Content_Gaps::open_questions(8);
         $topics = ECP_Inventory::topics(50);
         $can_review = ECP_Capabilities::can_review();
@@ -37,12 +38,67 @@ class ECP_Screen_Vault {
                 <?php esc_html_e('Everything the agent knows about your business, on the record. It quotes these facts when it writes; it never invents new ones. Retire anything that stops being true and it disappears from every future analysis.', 'enhanced-content-plugin'); ?>
             </p>
 
+            <?php if ($pending['items']) : ?>
+                <div class="ecp-panel ecp-panel-suggestion">
+                    <h2><?php esc_html_e('Found on your own site — confirm to teach the agent', 'enhanced-content-plugin'); ?></h2>
+                    <p class="ecp-muted">
+                        <?php esc_html_e('The agent searched your published pages for answers to its open questions and found these, each with the exact sentence it relied on. Nothing here is believed until you confirm it.', 'enhanced-content-plugin'); ?>
+                    </p>
+                    <ul class="ecp-question-list">
+                        <?php foreach ($pending['items'] as $fact) : ?>
+                            <?php $evidence = ECP_DB::decode($fact['evidence']); ?>
+                            <li data-id="<?php echo esc_attr($fact['id']); ?>" class="ecp-mined-fact">
+                                <div class="ecp-question-head">
+                                    <strong><?php echo esc_html($fact['question']); ?></strong>
+                                </div>
+                                <p><?php echo esc_html($fact['fact']); ?></p>
+                                <?php if (!empty($evidence['quote'])) : ?>
+                                    <blockquote class="ecp-mined-quote">
+                                        &ldquo;<?php echo esc_html($evidence['quote']); ?>&rdquo;
+                                        <?php if (!empty($evidence['source_post_id'])) : ?>
+                                            — <a href="<?php echo esc_url(get_permalink((int) $evidence['source_post_id'])); ?>" target="_blank" rel="noopener">
+                                                <?php echo esc_html(get_the_title((int) $evidence['source_post_id'])); ?>
+                                            </a>
+                                        <?php endif; ?>
+                                    </blockquote>
+                                <?php endif; ?>
+                                <?php if ($can_review) : ?>
+                                    <p>
+                                        <button type="button" class="button button-small button-primary ecp-fact-act" data-act="confirm_site" data-id="<?php echo esc_attr($fact['id']); ?>">
+                                            <?php esc_html_e('True — use site-wide', 'enhanced-content-plugin'); ?>
+                                        </button>
+                                        <button type="button" class="button button-small ecp-fact-act" data-act="confirm" data-id="<?php echo esc_attr($fact['id']); ?>">
+                                            <?php esc_html_e('True for that page only', 'enhanced-content-plugin'); ?>
+                                        </button>
+                                        <button type="button" class="button-link ecp-fact-act" data-act="reject_mined" data-id="<?php echo esc_attr($fact['id']); ?>">
+                                            <?php esc_html_e('Not right', 'enhanced-content-plugin'); ?>
+                                        </button>
+                                        <span class="ecp-row-status" aria-live="polite"></span>
+                                    </p>
+                                <?php endif; ?>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif; ?>
+
             <?php if ($questions) : ?>
                 <div class="ecp-panel ecp-panel-questions">
                     <h2><?php esc_html_e('Questions waiting for you', 'enhanced-content-plugin'); ?></h2>
                     <p class="ecp-muted">
                         <?php esc_html_e('The agent found questions readers ask that it refuses to answer on your behalf. Each answer becomes a vault fact.', 'enhanced-content-plugin'); ?>
                     </p>
+                    <?php if ($can_review && ECP_Agent_Settings::is_ready()) : ?>
+                        <p>
+                            <button type="button" class="button" id="ecp-mine-answers">
+                                <?php esc_html_e('Check my site for answers first', 'enhanced-content-plugin'); ?>
+                            </button>
+                            <span class="ecp-mine-status" aria-live="polite"></span>
+                        </p>
+                        <p class="ecp-muted">
+                            <?php esc_html_e('One AI pass over your published pages — including ones the agent does not normally manage, like your warranty and FAQ pages. Anything it finds appears above for your confirmation.', 'enhanced-content-plugin'); ?>
+                        </p>
+                    <?php endif; ?>
                     <ul class="ecp-question-list">
                         <?php foreach ($questions as $item) : ?>
                             <li>

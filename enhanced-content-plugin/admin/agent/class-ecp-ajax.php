@@ -54,6 +54,7 @@ class ECP_Ajax {
             'rebuild_roadmap'  => 'rebuild_roadmap',
             'save_fact'        => 'save_fact',
             'fact_action'      => 'fact_action',
+            'mine_answers'     => 'mine_answers',
             'build_map'        => 'build_map',
             'topic_action'     => 'topic_action',
             'approve_cluster'  => 'approve_cluster',
@@ -434,6 +435,39 @@ class ECP_Ajax {
      * ----------------------------------------------------------------- */
 
     /**
+     * Search the site's own pages for answers to the open questions.
+     * One AI call; findings arrive as pending facts.
+     */
+    public function mine_answers() {
+        $this->guard();
+        $this->prepare_long_job();
+
+        $result = ECP_Answer_Miner::mine(array('trigger_source' => 'manual'));
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        if (0 === $result['examined']) {
+            wp_send_json_success(array(
+                'message' => __('No open questions to look into right now.', 'enhanced-content-plugin'),
+                'found'   => 0,
+            ));
+        }
+
+        wp_send_json_success(array(
+            'message' => $result['found'] > 0
+                ? sprintf(
+                    /* translators: %d: number of answers found */
+                    _n('Found %d answer on your site — confirm it above.', 'Found %d answers on your site — confirm them above.', $result['found'], 'enhanced-content-plugin'),
+                    $result['found']
+                )
+                : __('Searched the site; these questions genuinely are not answered anywhere yet.', 'enhanced-content-plugin'),
+            'found'   => (int) $result['found'],
+        ));
+    }
+
+    /**
      * Add a fact to the vault.
      */
     public function save_fact() {
@@ -485,6 +519,16 @@ class ECP_Ajax {
                     'fact' => isset($_POST['fact']) ? wp_unslash($_POST['fact']) : '',
                 ));
                 $message = __('Updated and re-confirmed.', 'enhanced-content-plugin');
+                break;
+
+            case 'confirm_site':
+                $result = ECP_Vault::confirm_site_wide($id);
+                $message = __('Confirmed — every analysis on the site can use it now.', 'enhanced-content-plugin');
+                break;
+
+            case 'reject_mined':
+                $result = ECP_Vault::discard($id);
+                $message = __('Discarded. The question goes back on the open list.', 'enhanced-content-plugin');
                 break;
 
             default:

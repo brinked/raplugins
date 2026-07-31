@@ -244,6 +244,7 @@ class ECP_Admin_Menu {
                 'saving'         => __('Saving…', 'enhanced-content-plugin'),
                 'answerEmpty'    => __('Type an answer first.', 'enhanced-content-plugin'),
                 'factEmpty'      => __('Type the fact first.', 'enhanced-content-plugin'),
+                'mining'         => __('Reading your site… this can take a minute.', 'enhanced-content-plugin'),
                 'seedEmpty'      => __('Type a seed topic first.', 'enhanced-content-plugin'),
                 'mapping'        => __('Mapping the topic… this can take a minute.', 'enhanced-content-plugin'),
                 'briefing'       => __('Writing the brief… this can take a minute.', 'enhanced-content-plugin'),

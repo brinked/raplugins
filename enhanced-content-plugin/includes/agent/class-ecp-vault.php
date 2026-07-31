@@ -24,9 +24,13 @@ if (!defined('ABSPATH')) {
 
 class ECP_Vault {
 
-    /* A fact is active (fed to prompts) or retired (kept as history). */
+    /* A fact is active (fed to prompts), retired (kept as history), or
+     * pending — mined from the site's own content and waiting for a
+     * human to confirm it. Pending facts never feed a prompt: the vault
+     * holds nothing as true that a person has not signed off on. */
     const ACTIVE  = 'active';
     const RETIRED = 'retired';
+    const PENDING = 'pending';
 
     /** Facts older than this read as "worth re-confirming" in the UI. */
     const STALE_DAYS = 365;
@@ -60,6 +64,8 @@ class ECP_Vault {
             'topic'       => '',
             'source'      => 'manual',
             'verified_at' => '',   // Migration passes the original answer date.
+            'status'      => self::ACTIVE,   // The miner submits PENDING.
+            'evidence'    => array(),        // Provenance: { source_post_id, quote }.
         ));
 
         $fact = trim(sanitize_textarea_field($args['fact']));
@@ -72,15 +78,24 @@ class ECP_Vault {
         $table = ECP_DB::facts_table();
         $now = ECP_DB::now();
         $verified = '' !== $args['verified_at'] ? $args['verified_at'] : $now;
+        $status = self::PENDING === $args['status'] ? self::PENDING : self::ACTIVE;
 
-        // Same question, same scope: replace, don't stack.
+        // Same question, same scope: replace, don't stack. With one hard
+        // rule: a machine-mined PENDING submission never overwrites or
+        // duplicates what already exists — a human's answer outranks the
+        // miner, and a question already queued stays queued once.
         if ('' !== $question) {
             $existing = $wpdb->get_var($wpdb->prepare(
-                "SELECT id FROM {$table} WHERE post_id = %d AND question = %s AND status = %s",
+                "SELECT id FROM {$table} WHERE post_id = %d AND question = %s AND status IN (%s, %s)",
                 (int) $args['post_id'],
                 $question,
-                self::ACTIVE
+                self::ACTIVE,
+                self::PENDING
             ));
+
+            if ($existing && self::PENDING === $status) {
+                return (int) $existing;
+            }
 
             if ($existing) {
                 $wpdb->update(
@@ -88,11 +103,12 @@ class ECP_Vault {
                     array(
                         'fact'        => $fact,
                         'topic'       => sanitize_text_field($args['topic']),
+                        'status'      => self::ACTIVE,
                         'verified_at' => $verified,
                         'updated_at'  => $now,
                     ),
                     array('id' => (int) $existing),
-                    array('%s', '%s', '%s', '%s'),
+                    array('%s', '%s', '%s', '%s', '%s'),
                     array('%d')
                 );
 
@@ -108,13 +124,14 @@ class ECP_Vault {
                 'fact'        => $fact,
                 'topic'       => sanitize_text_field($args['topic']),
                 'source'      => sanitize_key($args['source']),
-                'status'      => self::ACTIVE,
-                'verified_at' => $verified,
+                'evidence'    => ECP_DB::encode($args['evidence']),
+                'status'      => $status,
+                'verified_at' => self::PENDING === $status ? null : $verified,
                 'created_by'  => get_current_user_id(),
                 'created_at'  => $now,
                 'updated_at'  => $now,
             ),
-            array('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s')
+            array('%d', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s')
         );
 
         return (int) $wpdb->insert_id;
@@ -181,6 +198,33 @@ class ECP_Vault {
      */
     public static function confirm($id) {
         return self::set_status($id, self::ACTIVE, array('verified_at' => ECP_DB::now()));
+    }
+
+    /**
+     * Confirm a mined fact as true for the whole site rather than just
+     * the page whose analysis raised the question.
+     */
+    public static function confirm_site_wide($id) {
+        return self::set_status($id, self::ACTIVE, array(
+            'post_id'     => 0,
+            'verified_at' => ECP_DB::now(),
+        ));
+    }
+
+    /**
+     * Delete a fact outright. Only sensible for pending mined noise a
+     * human rejected — real facts are retired, which keeps history.
+     */
+    public static function discard($id) {
+        global $wpdb;
+
+        $deleted = $wpdb->delete(ECP_DB::facts_table(), array('id' => (int) $id), array('%d'));
+
+        if (!$deleted) {
+            return new WP_Error('ecp_not_found', __('That fact no longer exists.', 'enhanced-content-plugin'));
+        }
+
+        return true;
     }
 
     private static function set_status($id, $status, array $extra = array()) {

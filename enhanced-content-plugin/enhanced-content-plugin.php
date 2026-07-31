@@ -3,7 +3,7 @@
  * Plugin Name: Enhanced Content
  * Plugin URI: https://rankaudit.com/enhanced-content
  * Description: An autonomous SEO content agent for WordPress. Scores your articles, finds ranking opportunities, drafts evidence-based improvements with AI, and applies them only after you approve each change. Includes the full E-E-A-T contributor, sources, FAQ and schema toolkit.
- * Version: 2.15.2
+ * Version: 2.16.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: RankAudit
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('ECP_VERSION', '2.15.2');
+define('ECP_VERSION', '2.16.0');
 define('ECP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ECP_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ECP_PLUGIN_FILE', __FILE__);
@@ -102,6 +102,7 @@ class Enhanced_Content_Plugin {
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-opportunity-engine.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-roadmap.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-vault.php';
+        require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-answer-miner.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-topical-map.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-briefs.php';
         require_once ECP_PLUGIN_DIR . 'includes/agent/class-ecp-drafter.php';

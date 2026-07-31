@@ -681,6 +681,16 @@ class ECP_Content_Gaps {
 
         $rows = $params ? $wpdb->get_results($wpdb->prepare($sql, $params), ARRAY_A) : $wpdb->get_results($sql, ARRAY_A);
 
+        // Questions whose answer was mined from the site and now waits in
+        // the vault's confirmation queue stop nagging here — they are the
+        // owner's to confirm, not to re-answer.
+        $pending = ECP_Vault::query(array('status' => ECP_Vault::PENDING, 'limit' => 200));
+        $mined = array();
+
+        foreach ($pending['items'] as $fact) {
+            $mined[(int) $fact['post_id']][] = strtolower(trim($fact['question']));
+        }
+
         $questions = array();
 
         foreach ((array) $rows as $row) {
@@ -696,6 +706,12 @@ class ECP_Content_Gaps {
             foreach ($report['for_you'] as $item) {
                 if (in_array(strtolower(trim($item['question'])), $answered, true)) {
                     continue;   // Already answered.
+                }
+
+                if (isset($mined[(int) $row['post_id']])
+                    && in_array(strtolower(trim($item['question'])), $mined[(int) $row['post_id']], true)
+                ) {
+                    continue;   // A mined answer awaits confirmation.
                 }
 
                 $questions[] = array(

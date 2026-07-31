@@ -1980,3 +1980,19 @@ a.ecp-band-badge:hover {
 	margin: 0 0 6px;
 	font-size: 13px;
 }
+
+/* Mined answers awaiting confirmation ----------------------------------- */
+
+.ecp-mined-quote {
+	margin: 6px 0 8px;
+	padding: 6px 12px;
+	border-left: 3px solid #dcdcde;
+	color: #50575e;
+	font-size: 13px;
+	font-style: italic;
+}
+
+.ecp-mine-status {
+	margin-left: 8px;
+	font-size: 12px;
+}
