@@ -37,7 +37,7 @@ class ECP_Screen_Opportunities {
 
         ?>
         <div class="wrap ecp-wrap">
-            <h1><?php esc_html_e('Opportunities', 'enhanced-content-plugin'); ?></h1>
+            <h1><?php esc_html_e('Opportunities', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Every page scored by the upside an edit could unlock: what is demonstrably wrong, times how much search traffic is realistically within reach, times confidence. Analyzing from the top of this list is where AI budget goes furthest.', 'enhanced-content-plugin')); ?></h1>
 
             <?php ECP_Admin_Menu::header('ecp-opportunities'); ?>
 

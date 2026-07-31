@@ -33,7 +33,7 @@ class ECP_Screen_History {
 
         ?>
         <div class="wrap ecp-wrap">
-            <h1><?php esc_html_e('History', 'enhanced-content-plugin'); ?></h1>
+            <h1><?php esc_html_e('History', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The append-only audit trail: everything the agent did, who approved what, and one-click rollback for every applied change. This is the record you show a client.', 'enhanced-content-plugin')); ?></h1>
 
             <?php ECP_Admin_Menu::header('ecp-history'); ?>
 

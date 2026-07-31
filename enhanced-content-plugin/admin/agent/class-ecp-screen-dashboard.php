@@ -79,7 +79,7 @@ class ECP_Screen_Dashboard {
 
                     <?php if ($suggestions) : ?>
                         <div class="ecp-panel ecp-panel-suggestion">
-                            <h2><?php esc_html_e('Save yourself some clicks', 'enhanced-content-plugin'); ?></h2>
+                            <h2><?php esc_html_e('Save yourself some clicks', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The trust ladder: change types you have approved at least five times and never had to undo. Turning one on lets the agent auto-apply just that type; a single rollback sends it straight back to manual review.', 'enhanced-content-plugin')); ?></h2>
                             <p><?php esc_html_e('You have approved these kinds of change consistently and never had to undo one. The agent can apply them without asking. If one ever gets rolled back, it goes straight back to manual review.', 'enhanced-content-plugin'); ?></p>
                             <ul class="ecp-suggestion-list">
                                 <?php foreach ($suggestions as $type => $stats) : ?>
@@ -113,7 +113,7 @@ class ECP_Screen_Dashboard {
                     <?php self::render_orphans_panel(); ?>
 
                     <div class="ecp-panel">
-                        <h2><?php esc_html_e('Pages with the most waiting', 'enhanced-content-plugin'); ?></h2>
+                        <h2><?php esc_html_e('Pages with the most waiting', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Pages whose prepared changes are stacking up in Review Changes. The chips show risk: safe (metadata, links), moderate (content edits), and ones worth reading closely.', 'enhanced-content-plugin')); ?></h2>
                         <?php $pending_posts = ECP_Proposals::pending_posts(8); ?>
 
                         <?php if (!$pending_posts) : ?>
@@ -156,7 +156,7 @@ class ECP_Screen_Dashboard {
                     </div>
 
                     <div class="ecp-panel">
-                        <h2><?php esc_html_e('Recent agent activity', 'enhanced-content-plugin'); ?></h2>
+                        <h2><?php esc_html_e('Recent agent activity', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The newest entries in the audit trail. Every scan, analysis, approval, application and rollback is recorded; the complete record lives under History.', 'enhanced-content-plugin')); ?></h2>
                         <?php $events = ECP_Log::query(array('per_page' => 10)); ?>
 
                         <?php if (!$events['items']) : ?>
@@ -272,7 +272,7 @@ class ECP_Screen_Dashboard {
         $chips = self::priority_chips($priority, $issues, $metrics);
         ?>
         <div class="ecp-panel ecp-priority-card">
-            <h2><?php esc_html_e("Today's priority", 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e("Today's priority", 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The one action the data says is most worth taking today, chosen from every scored page. When a cheap snippet fix is nearly as valuable as the top item, the cheap fix wins - quickest win first.', 'enhanced-content-plugin')); ?></h2>
 
             <p class="ecp-priority-headline">
                 <strong><?php echo esc_html($priority['post_title']); ?></strong>
@@ -445,7 +445,7 @@ class ECP_Screen_Dashboard {
         }
         ?>
         <div class="ecp-panel ecp-panel-results">
-            <h2><?php esc_html_e('Results of applied changes', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Results of applied changes', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Approved changes are measured against Search Console at 7, 14, 28, 56 and 90 days after going live. Improved means the page did better afterwards - evidence the change worked, not proof.', 'enhanced-content-plugin')); ?></h2>
 
             <?php if ($summary) : ?>
                 <p class="ecp-results-headline">
@@ -525,7 +525,7 @@ class ECP_Screen_Dashboard {
 
         ?>
         <div class="ecp-panel ecp-panel-questions">
-            <h2><?php esc_html_e('Questions only you can answer', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Questions only you can answer', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Reader questions the agent refuses to answer on your behalf - prices, warranties, policies. Answer once and it becomes a permanent verified fact in the Knowledge Vault, used everywhere from then on.', 'enhanced-content-plugin')); ?></h2>
             <p>
                 <?php esc_html_e('Readers arrive wanting to know these things, and the agent will not make them up. Tell it once and it can use the answer from then on.', 'enhanced-content-plugin'); ?>
             </p>
@@ -599,7 +599,7 @@ class ECP_Screen_Dashboard {
 
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Pages nothing links to', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Pages nothing links to', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Orphaned pages get crawled less and rank worse. Find links searches your existing articles for ones that already mention the topic and proposes internal links - nothing new gets written.', 'enhanced-content-plugin')); ?></h2>
             <p class="ecp-muted">
                 <?php esc_html_e('Orphaned pages get crawled less and rank worse. The agent can find existing articles that already mention the topic and propose linking the phrase — no new writing, and nothing invented.', 'enhanced-content-plugin'); ?>
             </p>
@@ -715,7 +715,7 @@ class ECP_Screen_Dashboard {
 
         ?>
         <div class="ecp-panel ecp-panel-division">
-            <h2><?php esc_html_e('Who does what', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Who does what', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Generated live from your current settings, so it is always the truth: exactly what the agent does unattended, and every point where it stops and waits for you.', 'enhanced-content-plugin')); ?></h2>
 
             <h3><?php esc_html_e('Runs by itself', 'enhanced-content-plugin'); ?></h3>
             <ul class="ecp-division-list">
@@ -738,7 +738,7 @@ class ECP_Screen_Dashboard {
         $next = ECP_Scheduler::next_runs();
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Status', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Status', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The agent\'s vitals: whether it is running, who approves changes, where search data comes from, and this month\'s AI spend against your cap.', 'enhanced-content-plugin')); ?></h2>
 
             <dl class="ecp-status-list">
                 <dt><?php esc_html_e('Agent', 'enhanced-content-plugin'); ?></dt>
@@ -911,7 +911,7 @@ class ECP_Screen_Dashboard {
     private static function render_actions_panel() {
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Run something now', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Run something now', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Manual triggers. Scanning is free and re-scores every page from stored data. Analysis is the step that costs AI budget - it is what fills the review queue.', 'enhanced-content-plugin')); ?></h2>
 
             <p>
                 <button type="button" class="button button-primary" id="ecp-run-scan">

@@ -352,6 +352,21 @@ class ECP_Admin_Menu {
     }
 
     /**
+     * A question-mark help tip. Hover or focus shows it; a click or tap
+     * pins it open (the JS toggle). Every screen uses this one helper so
+     * help looks and behaves identically everywhere.
+     *
+     * @param string $text Plain-text explanation.
+     */
+    public static function help($text) {
+        printf(
+            '<span class="ecp-help" tabindex="0" role="button" aria-expanded="false" aria-label="%s"><span class="ecp-help-icon" aria-hidden="true">?</span><span class="ecp-help-tip">%s</span></span>',
+            esc_attr__('What is this?', 'enhanced-content-plugin'),
+            esc_html($text)
+        );
+    }
+
+    /**
      * The workflow groups behind the two-level navigation. Eleven flat
      * tabs wrapped onto two lines and explained nothing; these groups
      * are the product's actual mental model — watch the whole thing,

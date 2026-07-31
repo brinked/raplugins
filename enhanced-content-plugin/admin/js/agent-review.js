@@ -887,6 +887,25 @@
 				});
 		});
 
+		// Help tips: hover and focus are CSS; click or tap pins one open,
+		// clicking anywhere else closes it. One open at a time.
+		$(document).on('click', '.ecp-help', function (event) {
+			event.stopPropagation();
+
+			var $tip = $(this);
+			var open = $tip.hasClass('is-open');
+
+			$('.ecp-help.is-open').removeClass('is-open').attr('aria-expanded', 'false');
+
+			if (!open) {
+				$tip.addClass('is-open').attr('aria-expanded', 'true');
+			}
+		});
+
+		$(document).on('click', function () {
+			$('.ecp-help.is-open').removeClass('is-open').attr('aria-expanded', 'false');
+		});
+
 		// The long AI builds (map, brief, draft) can outlive what a shared
 		// host allows one request: the gateway cuts the connection while
 		// PHP finishes the job and stores the result. So a failed build

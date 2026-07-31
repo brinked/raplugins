@@ -45,7 +45,7 @@ class ECP_Screen_Review {
 
         ?>
         <div class="wrap ecp-wrap">
-            <h1><?php esc_html_e('Review Changes', 'enhanced-content-plugin'); ?></h1>
+            <h1><?php esc_html_e('Review Changes', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Every change the agent prepares waits here as a before/after diff. Approve applies it (a revision is kept, so History can undo it in one click). Edit lets you adjust the text first. Reject teaches the agent - rejections feed Site Memory and shape future proposals.', 'enhanced-content-plugin')); ?></h1>
 
             <?php ECP_Admin_Menu::header('ecp-review'); ?>
 

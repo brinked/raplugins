@@ -2061,3 +2061,62 @@ a.ecp-band-badge:hover {
 	position: absolute;
 	left: 2px;
 }
+
+/* Help tips -------------------------------------------------------------- */
+
+.ecp-help {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	margin-left: 6px;
+	vertical-align: middle;
+	cursor: help;
+}
+
+.ecp-help-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: #dcdcde;
+	color: #50575e;
+	font-size: 11px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.ecp-help:hover .ecp-help-icon,
+.ecp-help:focus .ecp-help-icon,
+.ecp-help.is-open .ecp-help-icon {
+	background: #2271b1;
+	color: #fff;
+}
+
+.ecp-help-tip {
+	display: none;
+	position: absolute;
+	top: 24px;
+	left: 50%;
+	transform: translateX(-60%);
+	z-index: 10010;
+	width: 280px;
+	padding: 10px 12px;
+	background: #1d2327;
+	color: #f0f0f1;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 1.5;
+	text-transform: none;
+	letter-spacing: normal;
+	white-space: normal;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.ecp-help:hover .ecp-help-tip,
+.ecp-help:focus .ecp-help-tip,
+.ecp-help.is-open .ecp-help-tip {
+	display: block;
+}

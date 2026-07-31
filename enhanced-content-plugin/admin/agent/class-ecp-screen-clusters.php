@@ -34,7 +34,7 @@ class ECP_Screen_Clusters {
 
         ?>
         <div class="wrap ecp-wrap">
-            <h1><?php esc_html_e('Competing Pages', 'enhanced-content-plugin'); ?></h1>
+            <h1><?php esc_html_e('Competing Pages', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Groups of your own pages competing for the same topic in search. Decide which page owns the topic before improving members individually - otherwise the improvements pull in opposite directions.', 'enhanced-content-plugin')); ?></h1>
 
             <?php ECP_Admin_Menu::header('ecp-clusters'); ?>
 

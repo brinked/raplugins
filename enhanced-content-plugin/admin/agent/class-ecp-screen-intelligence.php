@@ -130,7 +130,7 @@ class ECP_Screen_Intelligence {
         $base = admin_url('admin.php?page=ecp-intelligence');
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Topic coverage', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Topic coverage', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Your pages grouped by classified topic with their measured clicks. A topic with many pages and few clicks usually needs consolidation, not more articles.', 'enhanced-content-plugin')); ?></h2>
             <p class="description">
                 <?php esc_html_e('What this site actually covers, and which subjects earn its traffic. One page on a topic is a mention; several are a claim to authority.', 'enhanced-content-plugin'); ?>
             </p>
@@ -173,7 +173,7 @@ class ECP_Screen_Intelligence {
         $insights = ECP_Memory::insights();
         ?>
         <div class="ecp-panel ecp-memory-panel">
-            <h2><?php esc_html_e('What the agent has learned here', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('What the agent has learned here', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Site Memory: your approval and rejection track record per change type, and how applied changes measured. Exactly this information is included in every analysis prompt - the agent is told what you accept.', 'enhanced-content-plugin')); ?></h2>
 
             <?php if (!$insights) : ?>
                 <p class="ecp-muted">
@@ -237,7 +237,7 @@ class ECP_Screen_Intelligence {
         };
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Content mix', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Content mix', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('How your pages split by search intent and funnel stage, from the classifier.', 'enhanced-content-plugin')); ?></h2>
             <?php
             $render(__('By search intent', 'enhanced-content-plugin'), $intent);
             $render(__('By funnel stage', 'enhanced-content-plugin'), $funnel);
@@ -261,7 +261,7 @@ class ECP_Screen_Intelligence {
         $covered = ECP_Search_Data::covered_post_count();
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Health', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Health', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Structural checks across the whole inventory: thin pages, orphans, missing metadata.', 'enhanced-content-plugin')); ?></h2>
             <ul class="ecp-health-list">
                 <li>
                     <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-opportunities')); ?>">
@@ -321,7 +321,7 @@ class ECP_Screen_Intelligence {
         $base = admin_url('admin.php?page=ecp-intelligence');
         ?>
         <div class="ecp-panel">
-            <h2><?php esc_html_e('Every page', 'enhanced-content-plugin'); ?></h2>
+            <h2><?php esc_html_e('Every page', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The full inventory. Click a topic label to correct it - your correction is locked and the classifier never overwrites it.', 'enhanced-content-plugin')); ?></h2>
 
             <form method="get" class="ecp-intel-filters">
                 <input type="hidden" name="page" value="ecp-intelligence">

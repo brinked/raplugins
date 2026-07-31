@@ -64,7 +64,7 @@ class ECP_Screen_Map {
 
             <?php if ($can_review && ECP_Agent_Settings::is_ready()) : ?>
                 <div class="ecp-panel">
-                    <h2><?php esc_html_e('Grow a map', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Grow a map', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('One AI call, metered monthly. The agent maps 15-25 topics around your seed using your own pages, your Search Console queries and licensed volume data, then judges every topic - including Not worth a new page when something you already have owns it.', 'enhanced-content-plugin')); ?></h2>
                     <div class="ecp-map-form">
                         <label class="screen-reader-text" for="ecp-map-seed"><?php esc_html_e('Seed topic', 'enhanced-content-plugin'); ?></label>
                         <input type="text" id="ecp-map-seed" class="regular-text" list="ecp-map-seed-options"

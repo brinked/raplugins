@@ -246,7 +246,7 @@ class ECP_Screen_Rankings {
         <div class="ecp-dimensions">
             <?php if (!empty($summary['devices'])) : ?>
                 <div class="ecp-panel ecp-dimension-panel">
-                    <h2><?php esc_html_e('By device', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('By device', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('The same search performance split by device over the selected window.', 'enhanced-content-plugin')); ?></h2>
                     <table class="widefat striped">
                         <thead>
                             <tr>
@@ -274,7 +274,7 @@ class ECP_Screen_Rankings {
 
             <?php if (!empty($summary['countries'])) : ?>
                 <div class="ecp-panel ecp-dimension-panel">
-                    <h2><?php esc_html_e('Top countries', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Top countries', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Where your impressions come from.', 'enhanced-content-plugin')); ?></h2>
                     <table class="widefat striped">
                         <thead>
                             <tr>

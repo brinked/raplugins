@@ -57,7 +57,7 @@ class ECP_Screen_Roadmap {
             <?php endif; ?>
 
             <div class="ecp-panel">
-                <h2><?php esc_html_e('Next steps', 'enhanced-content-plugin'); ?></h2>
+                <h2><?php esc_html_e('Next steps', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Sequenced by a stated rule, not vibes: visibility problems first, consolidation decisions before per-page work, cheap snippet wins before restructures. Approving a step sends that page to the front of the analysis queue.', 'enhanced-content-plugin')); ?></h2>
 
                 <?php if (!$active) : ?>
                     <p class="ecp-muted"><?php esc_html_e('Nothing on the plan yet. Run a content scan so the agent has something to sequence.', 'enhanced-content-plugin'); ?></p>
@@ -72,7 +72,7 @@ class ECP_Screen_Roadmap {
 
             <?php if ($postponed) : ?>
                 <div class="ecp-panel">
-                    <h2><?php esc_html_e('Postponed', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Postponed', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Steps you pushed back. Each returns to the plan automatically when its date passes.', 'enhanced-content-plugin')); ?></h2>
                     <ul class="ecp-roadmap-list ecp-roadmap-muted">
                         <?php foreach ($postponed as $row) : ?>
                             <li class="ecp-roadmap-step" data-id="<?php echo esc_attr($row['id']); ?>">
@@ -106,7 +106,7 @@ class ECP_Screen_Roadmap {
 
             <?php if ($done) : ?>
                 <div class="ecp-panel">
-                    <h2><?php esc_html_e('Completed', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Completed', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Steps whose underlying work got resolved - usually changes applied through Review Changes. The plan re-sequences itself as these land.', 'enhanced-content-plugin')); ?></h2>
                     <p class="ecp-muted"><?php esc_html_e('Steps whose work went through the review queue and got resolved. The plan re-sequences itself as these land.', 'enhanced-content-plugin'); ?></p>
                     <ul class="ecp-roadmap-list ecp-roadmap-muted">
                         <?php foreach ($done as $row) : ?>

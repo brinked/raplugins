@@ -40,7 +40,7 @@ class ECP_Screen_Vault {
 
             <?php if ($pending['items']) : ?>
                 <div class="ecp-panel ecp-panel-suggestion">
-                    <h2><?php esc_html_e('Found on your own site — confirm to teach the agent', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Found on your own site — confirm to teach the agent', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Answers extracted from your published pages, each with the exact sentence relied on - checked mechanically against the page, so an invented quote cannot appear here. Nothing is used until you confirm it.', 'enhanced-content-plugin')); ?></h2>
                     <p class="ecp-muted">
                         <?php esc_html_e('The agent searched your published pages for answers to its open questions and found these, each with the exact sentence it relied on. Nothing here is believed until you confirm it.', 'enhanced-content-plugin'); ?>
                     </p>
@@ -84,7 +84,7 @@ class ECP_Screen_Vault {
 
             <?php if ($questions) : ?>
                 <div class="ecp-panel ecp-panel-questions">
-                    <h2><?php esc_html_e('Questions waiting for you', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Questions waiting for you', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Questions readers ask that the agent will not answer for you. Try Check my site for answers first - anything it finds moves to the confirmation queue instead of needing you to type it.', 'enhanced-content-plugin')); ?></h2>
                     <p class="ecp-muted">
                         <?php esc_html_e('The agent found questions readers ask that it refuses to answer on your behalf. Each answer becomes a vault fact.', 'enhanced-content-plugin'); ?>
                     </p>
@@ -143,7 +143,7 @@ class ECP_Screen_Vault {
 
             <?php if ($can_review) : ?>
                 <div class="ecp-panel">
-                    <h2><?php esc_html_e('Tell the agent something', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Tell the agent something', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('Facts added here are quotable everywhere: page analyses, gap-fill sections and article drafts. Scope a fact to a topic and it applies to every page classified under that topic.', 'enhanced-content-plugin')); ?></h2>
                     <p class="ecp-muted">
                         <?php esc_html_e('Prices, policies, delivery times, dimensions, guarantees — anything you would want quoted accurately. Site-wide facts apply everywhere; a topic fact applies to every page classified under that topic.', 'enhanced-content-plugin'); ?>
                     </p>
@@ -221,7 +221,7 @@ class ECP_Screen_Vault {
 
             <?php if ($retired['items']) : ?>
                 <div class="ecp-panel">
-                    <h2><?php esc_html_e('Retired facts', 'enhanced-content-plugin'); ?></h2>
+                    <h2><?php esc_html_e('Retired facts', 'enhanced-content-plugin'); ?><?php ECP_Admin_Menu::help(__('No longer used anywhere, kept as history. Restore puts one back in service, freshly confirmed.', 'enhanced-content-plugin')); ?></h2>
                     <p class="ecp-muted"><?php esc_html_e('No longer used anywhere. Kept so you can see what the agent used to be told.', 'enhanced-content-plugin'); ?></p>
                     <table class="widefat striped ecp-vault-table">
                         <tbody>
