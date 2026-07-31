@@ -55,6 +55,7 @@ class ECP_Ajax {
             'save_fact'        => 'save_fact',
             'fact_action'      => 'fact_action',
             'mine_answers'     => 'mine_answers',
+            'draft_policy'     => 'draft_policy',
             'build_map'        => 'build_map',
             'topic_action'     => 'topic_action',
             'approve_cluster'  => 'approve_cluster',
@@ -433,6 +434,30 @@ class ECP_Ajax {
     /* --------------------------------------------------------------------
      * Knowledge Vault
      * ----------------------------------------------------------------- */
+
+    /**
+     * Draft a policy page (editorial / review / affiliate disclosure)
+     * as an unpublished page for the owner's review.
+     */
+    public function draft_policy() {
+        $this->guard();
+        $this->prepare_long_job();
+
+        $check = isset($_POST['check']) ? sanitize_key($_POST['check']) : '';
+
+        $result = ECP_Policy_Drafter::draft($check, array('trigger_source' => 'manual'));
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array('message' => $result->get_error_message()));
+        }
+
+        wp_send_json_success(array(
+            'message'  => $result['existing']
+                ? __('A draft already exists — opening it.', 'enhanced-content-plugin')
+                : __('Drafted. Read it, fill the [OWNER: …] prompts, and publish when it is true.', 'enhanced-content-plugin'),
+            'redirect' => $result['edit_link'],
+        ));
+    }
 
     /**
      * Search the site's own pages for answers to the open questions.

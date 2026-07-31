@@ -79,6 +79,22 @@ class ECP_Screen_Trust {
                                             <a class="button button-small" href="<?php echo esc_url($check['fix_url']); ?>">
                                                 <?php echo esc_html($check['fix_label']); ?>
                                             </a>
+
+                                            <?php $draftable = array_key_exists($check['id'], ECP_Policy_Drafter::draftable()); ?>
+                                            <?php if ($draftable && ECP_Capabilities::can_review() && ECP_Agent_Settings::is_ready()) : ?>
+                                                <?php $draft = ECP_Policy_Drafter::existing_draft($check['id']); ?>
+                                                <?php if ($draft) : ?>
+                                                    <a class="button button-small button-primary" href="<?php echo esc_url(get_edit_post_link($draft->ID)); ?>">
+                                                        <?php esc_html_e('Review the draft', 'enhanced-content-plugin'); ?>
+                                                    </a>
+                                                <?php else : ?>
+                                                    <button type="button" class="button button-small button-primary ecp-draft-policy" data-check="<?php echo esc_attr($check['id']); ?>"
+                                                            title="<?php esc_attr_e('One AI call drafts this page from what the plugin verifiably knows about your site. Anything only you can answer arrives as an [OWNER: …] prompt. Created as an unpublished draft — the check passes once you publish it.', 'enhanced-content-plugin'); ?>">
+                                                        <?php esc_html_e('Draft it for me', 'enhanced-content-plugin'); ?>
+                                                    </button>
+                                                <?php endif; ?>
+                                                <span class="ecp-row-status" aria-live="polite"></span>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     </td>
                                 </tr>

@@ -1139,6 +1139,31 @@
 				});
 		});
 
+		// Draft a policy page from the Trust Foundations checklist, then
+		// jump straight into the editor to review it.
+		$(document).on('click', '.ecp-draft-policy', function () {
+			var $button = $(this);
+			var $status = $button.closest('td').find('.ecp-row-status');
+
+			$button.prop('disabled', true);
+			$status.text(t('drafting'));
+
+			post('draft_policy', { check: $button.data('check') })
+				.done(function (data) {
+					$status.text(data.message);
+
+					if (data.redirect) {
+						window.setTimeout(function () {
+							window.location.href = data.redirect;
+						}, 1200);
+					}
+				})
+				.fail(function (message) {
+					$status.text(message);
+					$button.prop('disabled', false);
+				});
+		});
+
 		// Mine the site's own pages for answers to the open questions.
 		$('#ecp-mine-answers').on('click', function () {
 			var $button = $(this);

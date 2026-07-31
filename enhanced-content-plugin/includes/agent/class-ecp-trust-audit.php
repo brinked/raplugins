@@ -59,6 +59,7 @@ class ECP_Trust_Audit {
         }
 
         $checks = array_merge(
+            self::site_checks(),
             self::author_checks(),
             self::article_checks(),
             self::policy_checks()
@@ -106,6 +107,57 @@ class ECP_Trust_Audit {
         return array_values(array_filter(self::run(), function ($check) {
             return self::FAIL === $check['status'];
         }));
+    }
+
+    /* --------------------------------------------------------------------
+     * The site itself
+     * ----------------------------------------------------------------- */
+
+    private static function site_checks() {
+        $checks = array();
+
+        // HTTPS. Table stakes; its absence discounts everything.
+        $https = 'https' === wp_parse_url(home_url(), PHP_URL_SCHEME);
+
+        $checks[] = array(
+            'id'        => 'site_https',
+            'group'     => 'site',
+            'label'     => __('The site runs on HTTPS', 'enhanced-content-plugin'),
+            'status'    => $https ? self::PASS : self::FAIL,
+            'detail'    => $https
+                ? __('Every page is served encrypted.', 'enhanced-content-plugin')
+                : __('The site address is plain http. Browsers mark it "Not secure" on every visit — no content survives that first impression.', 'enhanced-content-plugin'),
+            'fix_label' => __('General settings', 'enhanced-content-plugin'),
+            'fix_url'   => admin_url('options-general.php'),
+        );
+
+        // Organization schema: does the site tell machines who publishes it?
+        $own_schema = !ECP_Settings::get_setting('disable_article_schema', 0);
+        $yoast = (array) get_option('wpseo_titles', array());
+        $yoast_org = !empty($yoast['company_name']);
+        $has_logo = has_custom_logo();
+
+        if ($own_schema || $yoast_org) {
+            $status = $has_logo ? self::PASS : self::WARN;
+            $detail = $has_logo
+                ? __('Articles carry Organization publisher schema with your site logo.', 'enhanced-content-plugin')
+                : __('Organization schema is emitted, but no site logo is set — the publisher entry ships without an image. Set one under Appearance → Customize → Site Identity.', 'enhanced-content-plugin');
+        } else {
+            $status = self::WARN;
+            $detail = __('No Organization schema found: the plugin\'s article schema is disabled and no SEO plugin declares an organization. Machines cannot tell who publishes this site.', 'enhanced-content-plugin');
+        }
+
+        $checks[] = array(
+            'id'        => 'org_schema',
+            'group'     => 'site',
+            'label'     => __('Organization schema identifies the publisher', 'enhanced-content-plugin'),
+            'status'    => $status,
+            'detail'    => $detail,
+            'fix_label' => __('Site identity', 'enhanced-content-plugin'),
+            'fix_url'   => admin_url('customize.php'),
+        );
+
+        return $checks;
     }
 
     /* --------------------------------------------------------------------
@@ -213,6 +265,8 @@ class ECP_Trust_Audit {
             self::FAIL
         );
 
+        $checks[] = self::authority_check();
+
         $checks[] = self::people_check(
             'author_role',
             __('Every author states a role', 'enhanced-content-plugin'),
@@ -223,6 +277,65 @@ class ECP_Trust_Audit {
         );
 
         return $checks;
+    }
+
+    /**
+     * Does the plumbing article carry the plumber's byline? For every
+     * substantial topic, at least one of its authors' bios or roles
+     * should claim that ground. Where none does, either the bios are
+     * underselling real expertise (fix the bio) or the wrong person is
+     * on the byline (fix the byline) — both are the owner's call.
+     */
+    private static function authority_check() {
+        global $wpdb;
+
+        $unclaimed = array();
+
+        if (ECP_DB::tables_exist()) {
+            $topics = (array) $wpdb->get_results(
+                'SELECT topic, GROUP_CONCAT(DISTINCT author_id) AS authors, COUNT(*) AS pages
+                   FROM ' . ECP_DB::inventory_table() . "
+                  WHERE post_status = 'publish' AND topic != '' AND author_id > 0
+                  GROUP BY topic
+                 HAVING pages >= 3",
+                ARRAY_A
+            );
+
+            foreach ($topics as $row) {
+                $claimed = false;
+
+                foreach (array_filter(array_map('intval', explode(',', $row['authors']))) as $author_id) {
+                    $claim = get_user_meta($author_id, '_user_short_bio', true) . ' '
+                        . get_user_meta($author_id, 'description', true) . ' '
+                        . get_user_meta($author_id, 'job_title', true);
+
+                    if (ECP_Topical_Map::overlap($row['topic'], $claim) >= 0.34) {
+                        $claimed = true;
+                        break;
+                    }
+                }
+
+                if (!$claimed) {
+                    $unclaimed[] = $row['topic'];
+                }
+            }
+        }
+
+        return array(
+            'id'        => 'author_topic_authority',
+            'group'     => 'authors',
+            'label'     => __('Authors claim the topics they cover', 'enhanced-content-plugin'),
+            'status'    => $unclaimed ? self::WARN : self::PASS,
+            'detail'    => $unclaimed
+                ? sprintf(
+                    /* translators: %s: topic list */
+                    __('No author bio or role claims expertise on: %s. Either the bios undersell real experience — update them to claim it — or the wrong byline is on those articles.', 'enhanced-content-plugin'),
+                    implode(', ', array_slice($unclaimed, 0, 4))
+                )
+                : __('Every substantial topic has at least one author whose bio or role claims that ground.', 'enhanced-content-plugin'),
+            'fix_label' => __('Edit user profiles', 'enhanced-content-plugin'),
+            'fix_url'   => admin_url('users.php'),
+        );
     }
 
     /**
@@ -445,7 +558,98 @@ class ECP_Trust_Audit {
             );
         }
 
+        // Findable, not just existing: a policy nothing links to might as
+        // well not exist. Every policy page that does exist should be in
+        // some menu — footers are where readers and raters look.
+        $unlinked = array();
+        $linked_ids = self::menu_linked_page_ids();
+
+        $privacy_id = (int) get_option('wp_page_for_privacy_policy');
+        $existing = array();
+
+        if ($privacy_id && 'publish' === get_post_status($privacy_id)) {
+            $existing[$privacy_id] = get_the_title($privacy_id);
+        }
+
+        $slug_sets = array(
+            array('about', 'about-us', 'our-story', 'who-we-are'),
+            array('contact', 'contact-us'),
+            array('editorial-policy', 'editorial-guidelines', 'editorial-standards', 'how-we-write'),
+            array('review-policy', 'how-we-review', 'how-we-test', 'review-process'),
+            array('affiliate-disclosure', 'affiliate-disclaimer', 'disclosure', 'disclaimer', 'advertising-disclosure'),
+        );
+
+        foreach ($slug_sets as $slugs) {
+            foreach ($slugs as $slug) {
+                $page = get_page_by_path($slug);
+
+                if ($page && 'publish' === $page->post_status) {
+                    $existing[$page->ID] = $page->post_title;
+                    break;
+                }
+            }
+        }
+
+        foreach ($existing as $page_id => $title) {
+            if (!in_array((int) $page_id, $linked_ids, true)) {
+                $unlinked[] = $title;
+            }
+        }
+
+        if ($existing) {
+            $checks[] = array(
+                'id'        => 'policies_findable',
+                'group'     => 'policies',
+                'label'     => __('Policy pages are linked from a menu', 'enhanced-content-plugin'),
+                'status'    => $unlinked ? self::WARN : self::PASS,
+                'detail'    => $unlinked
+                    ? sprintf(
+                        /* translators: %s: page titles */
+                        __('These exist but no menu links to them: %s. A policy nobody can find might as well not exist — add them to the footer menu.', 'enhanced-content-plugin'),
+                        implode(', ', $unlinked)
+                    )
+                    : __('Every policy page is reachable from a menu.', 'enhanced-content-plugin'),
+                'fix_label' => __('Edit menus', 'enhanced-content-plugin'),
+                'fix_url'   => admin_url('nav-menus.php'),
+            );
+        }
+
         return $checks;
+    }
+
+    /**
+     * Page ids linked from any classic menu or block navigation.
+     *
+     * @return int[]
+     */
+    private static function menu_linked_page_ids() {
+        $ids = array();
+
+        foreach (wp_get_nav_menus() as $menu) {
+            foreach ((array) wp_get_nav_menu_items($menu) as $item) {
+                if ('page' === $item->object) {
+                    $ids[] = (int) $item->object_id;
+                }
+            }
+        }
+
+        // Block themes keep navigation in wp_navigation posts, where a
+        // page link serialises as "id":123 in the block attributes.
+        $navs = get_posts(array(
+            'post_type'      => 'wp_navigation',
+            'post_status'    => 'publish',
+            'posts_per_page' => 10,
+        ));
+
+        foreach ($navs as $nav) {
+            if (preg_match_all('/"id":(\d+)/', $nav->post_content, $matches)) {
+                foreach ($matches[1] as $id) {
+                    $ids[] = (int) $id;
+                }
+            }
+        }
+
+        return array_values(array_unique($ids));
     }
 
     /**
@@ -528,6 +732,7 @@ class ECP_Trust_Audit {
 
     public static function group_label($group) {
         $labels = array(
+            'site'     => __('The site itself', 'enhanced-content-plugin'),
             'authors'  => __('The people behind the content', 'enhanced-content-plugin'),
             'articles' => __('Trust on every article', 'enhanced-content-plugin'),
             'policies' => __('Site policies', 'enhanced-content-plugin'),
