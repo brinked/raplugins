@@ -3,7 +3,7 @@
  * Plugin Name: Enhanced Content
  * Plugin URI: https://rankaudit.com/enhanced-content
  * Description: An autonomous SEO content agent for WordPress. Scores your articles, finds ranking opportunities, drafts evidence-based improvements with AI, and applies them only after you approve each change. Includes the full E-E-A-T contributor, sources, FAQ and schema toolkit.
- * Version: 2.17.0
+ * Version: 2.18.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: RankAudit
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('ECP_VERSION', '2.17.0');
+define('ECP_VERSION', '2.18.0');
 define('ECP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ECP_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ECP_PLUGIN_FILE', __FILE__);

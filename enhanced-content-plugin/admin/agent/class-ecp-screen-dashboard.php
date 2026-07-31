@@ -184,6 +184,7 @@ class ECP_Screen_Dashboard {
                 </div>
 
                 <div class="ecp-col-side">
+                    <?php self::render_division_panel(); ?>
                     <?php self::render_status_panel($budget, $search); ?>
                     <?php if (ECP_Capabilities::can_review()) : ?>
                         <?php self::render_actions_panel(); ?>
@@ -323,8 +324,9 @@ class ECP_Screen_Dashboard {
 
             <p class="ecp-priority-actions">
                 <?php if (ECP_Capabilities::can_analyze((int) $priority['post_id']) && ECP_Agent_Settings::is_ready()) : ?>
-                    <button type="button" class="button button-primary ecp-build-plan" data-post="<?php echo esc_attr($priority['post_id']); ?>">
-                        <?php esc_html_e('Build improvement plan', 'enhanced-content-plugin'); ?>
+                    <button type="button" class="button button-primary ecp-build-plan" data-post="<?php echo esc_attr($priority['post_id']); ?>"
+                            title="<?php esc_attr_e('Runs one AI analysis of this page and queues its suggested edits in Review Changes. Nothing is applied until you approve each one.', 'enhanced-content-plugin'); ?>">
+                        <?php esc_html_e('Prepare changes for my review', 'enhanced-content-plugin'); ?>
                     </button>
                 <?php endif; ?>
                 <a class="button"
@@ -340,7 +342,7 @@ class ECP_Screen_Dashboard {
                 <span class="ecp-priority-status" aria-live="polite"></span>
             </p>
             <p class="description">
-                <?php esc_html_e('Building the plan runs one AI analysis and puts the resulting changes in your review queue — nothing touches the page until you approve.', 'enhanced-content-plugin'); ?>
+                <?php esc_html_e('One AI analysis of this page. Its suggested edits land in Review Changes as individual before/after diffs — you approve, edit or reject each one, and nothing touches the live page until you do.', 'enhanced-content-plugin'); ?>
             </p>
         </div>
         <?php
@@ -672,6 +674,62 @@ class ECP_Screen_Dashboard {
                     </li>
                 <?php endforeach; ?>
             </ol>
+        </div>
+        <?php
+    }
+
+    /**
+     * Who does what. The single most-asked question about an agent is
+     * "what will it do without me?" — this panel answers it from the
+     * live settings, so it is always the truth rather than a promise.
+     */
+    private static function render_division_panel() {
+        $auto = array();
+        $yours = array();
+
+        $auto[] = __('Scans and scores every page, around the clock. Free — no AI.', 'enhanced-content-plugin');
+
+        if (ECP_Agent_Settings::is_on('analysis_enabled') && ECP_Agent_Settings::is_ready()) {
+            $auto[] = sprintf(
+                /* translators: %d: analyses per day */
+                __('Prepares up to %d improvement analyses a day and queues the changes for you.', 'enhanced-content-plugin'),
+                (int) ECP_Limits::limit('analyze')
+            );
+        } else {
+            $auto[] = __('Prepares changes only when you ask — automatic analysis is off.', 'enhanced-content-plugin');
+        }
+
+        $mode = ECP_Agent_Settings::get('approval_mode', 'always');
+
+        if ('always' === $mode) {
+            $auto[] = __('Applies nothing. Every change waits in Review Changes for your decision.', 'enhanced-content-plugin');
+        } else {
+            $auto[] = __('Applies only the change types you have explicitly trusted; everything else waits for you.', 'enhanced-content-plugin');
+        }
+
+        $auto[] = __('Measures every applied change against Search Console for 90 days.', 'enhanced-content-plugin');
+
+        $yours[] = __('Approve, edit or reject the queued changes — nothing touches a page without you.', 'enhanced-content-plugin');
+        $yours[] = __('Answer its questions and confirm mined facts in the Knowledge Vault.', 'enhanced-content-plugin');
+        $yours[] = __('Approve topics and briefs under Create New; read and publish the drafts it writes.', 'enhanced-content-plugin');
+
+        ?>
+        <div class="ecp-panel ecp-panel-division">
+            <h2><?php esc_html_e('Who does what', 'enhanced-content-plugin'); ?></h2>
+
+            <h3><?php esc_html_e('Runs by itself', 'enhanced-content-plugin'); ?></h3>
+            <ul class="ecp-division-list">
+                <?php foreach ($auto as $line) : ?>
+                    <li><?php echo esc_html($line); ?></li>
+                <?php endforeach; ?>
+            </ul>
+
+            <h3><?php esc_html_e('Waits for you', 'enhanced-content-plugin'); ?></h3>
+            <ul class="ecp-division-list">
+                <?php foreach ($yours as $line) : ?>
+                    <li><?php echo esc_html($line); ?></li>
+                <?php endforeach; ?>
+            </ul>
         </div>
         <?php
     }

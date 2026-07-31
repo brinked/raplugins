@@ -1996,3 +1996,68 @@ a.ecp-band-badge:hover {
 	margin-left: 8px;
 	font-size: 12px;
 }
+
+/* Two-level navigation --------------------------------------------------- */
+
+.ecp-subtabs {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+	margin: 10px 0 4px;
+}
+
+.ecp-subtab {
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 14px;
+	background: #f0f0f1;
+	color: #2c3338;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.ecp-subtab:hover {
+	background: #e0e0e2;
+	color: #1d2327;
+}
+
+.ecp-subtab.is-active {
+	background: #2271b1;
+	color: #fff;
+}
+
+.ecp-subtab-tagline {
+	margin-left: 10px;
+	color: #646970;
+	font-size: 12px;
+}
+
+/* Who does what --------------------------------------------------------- */
+
+.ecp-panel-division h3 {
+	margin: 12px 0 4px;
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #646970;
+}
+
+.ecp-division-list {
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #50575e;
+}
+
+.ecp-division-list li {
+	margin: 0 0 6px;
+	padding-left: 14px;
+	position: relative;
+}
+
+.ecp-division-list li::before {
+	content: "•";
+	position: absolute;
+	left: 2px;
+}

@@ -352,46 +352,126 @@ class ECP_Admin_Menu {
     }
 
     /**
-     * Shared page header with the nav tabs.
+     * The workflow groups behind the two-level navigation. Eleven flat
+     * tabs wrapped onto two lines and explained nothing; these groups
+     * are the product's actual mental model — watch the whole thing,
+     * approve what it proposes, improve what exists, create what is
+     * missing, manage what it knows.
+     *
+     * @return array group_key => { label, tagline, screens: slug => label }
      */
-    public static function header($current) {
-        $tabs = array(
-            'ecp-dashboard'     => __('Dashboard', 'enhanced-content-plugin'),
-            'ecp-review'        => __('Review Changes', 'enhanced-content-plugin'),
-            'ecp-opportunities' => __('Opportunities', 'enhanced-content-plugin'),
-            'ecp-roadmap'       => __('Roadmap', 'enhanced-content-plugin'),
-            'ecp-map'           => __('Topical Map', 'enhanced-content-plugin'),
-            'ecp-plan'          => __('Content Plan', 'enhanced-content-plugin'),
-            'ecp-rankings'      => __('Rankings', 'enhanced-content-plugin'),
+    private static function nav_groups() {
+        $groups = array(
+            'overview' => array(
+                'label'   => __('Dashboard', 'enhanced-content-plugin'),
+                'tagline' => '',
+                'screens' => array('ecp-dashboard' => __('Dashboard', 'enhanced-content-plugin')),
+            ),
+            'review' => array(
+                'label'   => __('Review Changes', 'enhanced-content-plugin'),
+                'tagline' => '',
+                'screens' => array('ecp-review' => __('Review Changes', 'enhanced-content-plugin')),
+            ),
+            'improve' => array(
+                'label'   => __('Improve Existing', 'enhanced-content-plugin'),
+                'tagline' => __('Make the pages you already have earn more: what to fix, in what order, and how it is ranking.', 'enhanced-content-plugin'),
+                'screens' => array(
+                    'ecp-opportunities' => __('Opportunities', 'enhanced-content-plugin'),
+                    'ecp-roadmap'       => __('Roadmap', 'enhanced-content-plugin'),
+                    'ecp-rankings'      => __('Rankings', 'enhanced-content-plugin'),
+                ),
+            ),
+            'create' => array(
+                'label'   => __('Create New', 'enhanced-content-plugin'),
+                'tagline' => __('Decide what deserves to exist, brief it properly, then draft it — every step waits for your approval.', 'enhanced-content-plugin'),
+                'screens' => array(
+                    'ecp-map'  => __('1. Topical Map', 'enhanced-content-plugin'),
+                    'ecp-plan' => __('2. Content Plan', 'enhanced-content-plugin'),
+                ),
+            ),
+            'knowledge' => array(
+                'label'   => __('Site Knowledge', 'enhanced-content-plugin'),
+                'tagline' => __('What the agent knows: how your pages are classified, and the verified facts it may state about your business.', 'enhanced-content-plugin'),
+                'screens' => array(
+                    'ecp-intelligence' => __('Site Intelligence', 'enhanced-content-plugin'),
+                    'ecp-vault'        => __('Knowledge Vault', 'enhanced-content-plugin'),
+                ),
+            ),
+            'activity' => array(
+                'label'   => __('History', 'enhanced-content-plugin'),
+                'tagline' => '',
+                'screens' => array('ecp-history' => __('History', 'enhanced-content-plugin')),
+            ),
         );
 
         if (ECP_Agent_Settings::is_on('clusters_enabled')) {
-            $tabs['ecp-clusters'] = __('Competing Pages', 'enhanced-content-plugin');
+            $groups['improve']['screens']['ecp-clusters'] = __('Competing Pages', 'enhanced-content-plugin');
         }
-
-        $tabs['ecp-intelligence'] = __('Site Intelligence', 'enhanced-content-plugin');
-        $tabs['ecp-vault'] = __('Knowledge Vault', 'enhanced-content-plugin');
-        $tabs['ecp-history'] = __('History', 'enhanced-content-plugin');
 
         if (ECP_Capabilities::can_manage()) {
-            $tabs['ecp-agent-settings'] = __('Settings', 'enhanced-content-plugin');
+            $groups['settings'] = array(
+                'label'   => __('Settings', 'enhanced-content-plugin'),
+                'tagline' => '',
+                'screens' => array('ecp-agent-settings' => __('Settings', 'enhanced-content-plugin')),
+            );
         }
 
+        return $groups;
+    }
+
+    /**
+     * Shared page header: one row of workflow groups, and the active
+     * group's screens as a second, smaller row only when it has any.
+     */
+    public static function header($current) {
+        $groups = self::nav_groups();
         $pending = ECP_Proposals::pending_count();
+
+        $active_group = 'overview';
+
+        foreach ($groups as $key => $group) {
+            if (isset($group['screens'][$current])) {
+                $active_group = $key;
+                break;
+            }
+        }
 
         echo '<nav class="nav-tab-wrapper ecp-tabs">';
 
-        foreach ($tabs as $slug => $label) {
+        foreach ($groups as $key => $group) {
+            $first = array_key_first($group['screens']);
+
             printf(
                 '<a href="%s" class="nav-tab%s">%s%s</a>',
-                esc_url(admin_url('admin.php?page=' . $slug)),
-                $slug === $current ? ' nav-tab-active' : '',
-                esc_html($label),
-                ('ecp-review' === $slug && $pending) ? ' <span class="ecp-tab-count">' . esc_html(number_format_i18n($pending)) . '</span>' : ''
+                esc_url(admin_url('admin.php?page=' . $first)),
+                $key === $active_group ? ' nav-tab-active' : '',
+                esc_html($group['label']),
+                ('review' === $key && $pending) ? ' <span class="ecp-tab-count">' . esc_html(number_format_i18n($pending)) . '</span>' : ''
             );
         }
 
         echo '</nav>';
+
+        $active = $groups[$active_group];
+
+        if (count($active['screens']) > 1) {
+            echo '<div class="ecp-subtabs">';
+
+            foreach ($active['screens'] as $slug => $label) {
+                printf(
+                    '<a href="%s" class="ecp-subtab%s">%s</a>',
+                    esc_url(admin_url('admin.php?page=' . $slug)),
+                    $slug === $current ? ' is-active' : '',
+                    esc_html($label)
+                );
+            }
+
+            if ($active['tagline']) {
+                printf('<span class="ecp-subtab-tagline">%s</span>', esc_html($active['tagline']));
+            }
+
+            echo '</div>';
+        }
 
         // A view-only reviewer needs to know why the Apply buttons are gone
         // before they go looking for a bug.
