@@ -231,7 +231,7 @@ class ECP_Screen_Agent_Settings {
     private static function tab_general(array $s) {
         $key_source = ECP_Agent_Settings::api_key_source();
         ?>
-        <h2 id="ecp-section-provider"><?php esc_html_e('Switch', 'enhanced-content-plugin'); ?></h2>
+        <h2 id="ecp-section-provider"><?php esc_html_e('Running the agent', 'enhanced-content-plugin'); ?></h2>
         <table class="form-table" role="presentation">
             <tr>
                 <th scope="row"><?php esc_html_e('Run the agent', 'enhanced-content-plugin'); ?></th>
