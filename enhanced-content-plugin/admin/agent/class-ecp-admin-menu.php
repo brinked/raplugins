@@ -149,6 +149,15 @@ class ECP_Admin_Menu {
             array('ECP_Screen_Vault', 'render')
         );
 
+        $this->hooks['trust'] = add_submenu_page(
+            'ecp-dashboard',
+            __('Trust Foundations', 'enhanced-content-plugin'),
+            __('Trust Foundations', 'enhanced-content-plugin'),
+            self::CAP,
+            'ecp-trust',
+            array('ECP_Screen_Trust', 'render')
+        );
+
         $this->hooks['history'] = add_submenu_page(
             'ecp-dashboard',
             __('History', 'enhanced-content-plugin'),
@@ -412,6 +421,7 @@ class ECP_Admin_Menu {
                 'label'   => __('Site Knowledge', 'enhanced-content-plugin'),
                 'tagline' => __('What the agent knows: how your pages are classified, and the verified facts it may state about your business.', 'enhanced-content-plugin'),
                 'screens' => array(
+                    'ecp-trust'        => __('Trust Foundations', 'enhanced-content-plugin'),
                     'ecp-intelligence' => __('Site Intelligence', 'enhanced-content-plugin'),
                     'ecp-vault'        => __('Knowledge Vault', 'enhanced-content-plugin'),
                 ),

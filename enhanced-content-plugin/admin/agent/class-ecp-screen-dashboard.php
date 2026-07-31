@@ -39,6 +39,8 @@ class ECP_Screen_Dashboard {
 
             <?php self::render_narrative($opportunities, $counts); ?>
 
+            <?php self::render_trust_line(); ?>
+
             <?php self::render_priority(); ?>
 
             <div class="ecp-stat-grid">
@@ -251,6 +253,39 @@ class ECP_Screen_Dashboard {
 
         ?>
         <p class="ecp-narrative"><?php echo esc_html(implode(__(', and ', 'enhanced-content-plugin'), $parts) . '.'); ?></p>
+        <?php
+    }
+
+    /**
+     * The trust warning. Shown only when foundations are missing,
+     * because that is the one condition under which everything else on
+     * this dashboard matters less than it looks.
+     */
+    private static function render_trust_line() {
+        $summary = ECP_Trust_Audit::summary();
+
+        if ($summary['failing'] < 1) {
+            return;
+        }
+
+        ?>
+        <div class="ecp-panel ecp-panel-trust-warning">
+            <p>
+                <strong>
+                    <?php
+                    printf(
+                        /* translators: %d: number of failing trust checks */
+                        esc_html(_n('%d trust foundation is missing.', '%d trust foundations are missing.', (int) $summary['failing'], 'enhanced-content-plugin')),
+                        (int) $summary['failing']
+                    );
+                    ?>
+                </strong>
+                <?php esc_html_e('Readers and search engines discount content on a site they cannot verify — these gate everything below.', 'enhanced-content-plugin'); ?>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-trust')); ?>">
+                    <?php esc_html_e('See the checklist', 'enhanced-content-plugin'); ?> &rarr;
+                </a>
+            </p>
+        </div>
         <?php
     }
 

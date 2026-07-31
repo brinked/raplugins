@@ -183,6 +183,11 @@ class ECP_Screen_Roadmap {
                         );
                         ?>
                     </p>
+                <?php elseif (isset($why['note'])) : ?>
+                    <p class="ecp-muted ecp-roadmap-why">
+                        <?php echo esc_html($why['note']); ?>
+                        <a href="<?php echo esc_url(admin_url('admin.php?page=ecp-trust')); ?>"><?php esc_html_e('Trust Foundations', 'enhanced-content-plugin'); ?> &rarr;</a>
+                    </p>
                 <?php elseif (isset($why['member_count'])) : ?>
                     <p class="ecp-muted ecp-roadmap-why">
                         <?php

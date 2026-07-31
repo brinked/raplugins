@@ -34,7 +34,9 @@ class ECP_Roadmap {
     const DISMISSED = 'dismissed';
     const DONE      = 'done';
 
-    /* Tracks, in the order work should happen. */
+    /* Tracks, in the order work should happen. Trust is first on
+     * purpose: an untrustworthy site discounts every other fix. */
+    const TRACK_TRUST         = 'trust';
     const TRACK_TECHNICAL     = 'technical';
     const TRACK_CONSOLIDATION = 'consolidation';
     const TRACK_SNIPPET       = 'snippet';
@@ -166,6 +168,29 @@ class ECP_Roadmap {
 
         $candidates = array();
         $post_cluster = array();   // post_id => cluster item key
+
+        // Failing trust foundations lead the plan. They are cheap, they
+        // are site-wide, and every content improvement below them earns
+        // less until they exist.
+        foreach (ECP_Trust_Audit::failing() as $check) {
+            $key = 'trust:' . $check['id'];
+
+            $candidates[$key] = array(
+                'source'           => 'trust',
+                'post_id'          => 0,
+                'cluster_id'       => 0,
+                'track'            => self::TRACK_TRUST,
+                'title'            => sprintf(
+                    /* translators: %s: trust check label */
+                    __('Trust: %s', 'enhanced-content-plugin'),
+                    $check['label']
+                ),
+                'why'              => array('note' => $check['detail']),
+                'score'            => 100,   // Within-track ordering only.
+                'potential_clicks' => 0,
+                'depends_on'       => array(),
+            );
+        }
 
         // Open clusters first: which page owns a topic is decided before
         // any per-page work on the pages involved.
@@ -361,6 +386,24 @@ class ECP_Roadmap {
 
         $source_status = null;
 
+        if ('trust' === $row['source']) {
+            // A trust step leaves the candidate list only when its check
+            // started passing — that IS completion.
+            $check_id = substr($row['item_key'], strlen('trust:'));
+
+            if (ECP_Trust_Audit::check_passes($check_id)) {
+                $wpdb->update(
+                    $table,
+                    array('status' => self::DONE, 'completed_at' => $now, 'updated_at' => $now),
+                    array('id' => (int) $row['id']),
+                    array('%s', '%s', '%s'),
+                    array('%d')
+                );
+            }
+
+            return;
+        }
+
         if ('cluster' === $row['source']) {
             $source_status = $wpdb->get_var($wpdb->prepare(
                 'SELECT status FROM ' . ECP_DB::clusters_table() . ' WHERE id = %d',
@@ -426,11 +469,12 @@ class ECP_Roadmap {
         ), ARRAY_A);
 
         $rank = array(
-            self::TRACK_TECHNICAL     => 0,
-            self::TRACK_CONSOLIDATION => 1,
-            self::TRACK_SNIPPET       => 2,
-            self::TRACK_LINKS         => 3,
-            self::TRACK_CONTENT       => 4,
+            self::TRACK_TRUST         => 0,
+            self::TRACK_TECHNICAL     => 1,
+            self::TRACK_CONSOLIDATION => 2,
+            self::TRACK_SNIPPET       => 3,
+            self::TRACK_LINKS         => 4,
+            self::TRACK_CONTENT       => 5,
         );
 
         usort($rows, function ($a, $b) use ($rank) {
@@ -747,6 +791,7 @@ class ECP_Roadmap {
      */
     public static function track_label($track) {
         $labels = array(
+            self::TRACK_TRUST         => __('Trust', 'enhanced-content-plugin'),
             self::TRACK_TECHNICAL     => __('Visibility', 'enhanced-content-plugin'),
             self::TRACK_CONSOLIDATION => __('Consolidation', 'enhanced-content-plugin'),
             self::TRACK_SNIPPET       => __('Snippet', 'enhanced-content-plugin'),

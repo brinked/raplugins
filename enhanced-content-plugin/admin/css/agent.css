@@ -2189,3 +2189,27 @@ a.ecp-band-badge:hover {
 	margin-top: 6px;
 	font-size: 12px;
 }
+
+/* Trust Foundations ------------------------------------------------------ */
+
+.ecp-panel-trust-warning {
+	border-left: 4px solid #d63638;
+}
+
+.ecp-panel-trust-warning p {
+	margin: 0;
+}
+
+.ecp-trust-table .ecp-trust-status-cell {
+	width: 110px;
+	white-space: nowrap;
+}
+
+.ecp-trust-table td p {
+	margin: 4px 0 0;
+	font-size: 12px;
+}
+
+.ecp-trust-na {
+	opacity: 0.6;
+}
