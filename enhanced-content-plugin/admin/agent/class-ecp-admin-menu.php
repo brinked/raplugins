@@ -186,7 +186,11 @@ class ECP_Admin_Menu {
     }
 
     public function enqueue($hook) {
-        if (!$this->is_agent_screen($hook)) {
+        // The editor-assist box needs the same assets on the post editor.
+        $editor = in_array($hook, array('post.php', 'post-new.php'), true)
+            && in_array(get_post_type(), (array) ECP_Agent_Settings::get('post_types', array('post')), true);
+
+        if (!$this->is_agent_screen($hook) && !$editor) {
             return;
         }
 

@@ -73,6 +73,7 @@ class ECP_Agent_Settings {
             'enabled_change_types' => array(
                 'meta_title',
                 'meta_description',
+                'post_title',
                 'intro_rewrite',
                 'section_rewrite',
                 'section_add',

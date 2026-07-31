@@ -3,7 +3,7 @@
  * Plugin Name: Enhanced Content
  * Plugin URI: https://rankaudit.com/enhanced-content
  * Description: An autonomous SEO content agent for WordPress. Scores your articles, finds ranking opportunities, drafts evidence-based improvements with AI, and applies them only after you approve each change. Includes the full E-E-A-T contributor, sources, FAQ and schema toolkit.
- * Version: 2.18.3
+ * Version: 2.19.0
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * Author: RankAudit
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('ECP_VERSION', '2.18.3');
+define('ECP_VERSION', '2.19.0');
 define('ECP_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('ECP_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('ECP_PLUGIN_FILE', __FILE__);
@@ -147,6 +147,7 @@ class Enhanced_Content_Plugin {
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-history.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-screen-agent-settings.php';
             require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-ajax.php';
+            require_once ECP_PLUGIN_DIR . 'admin/agent/class-ecp-editor-assist.php';
         }
 
         if (defined('WP_CLI') && WP_CLI) {
@@ -232,6 +233,7 @@ class Enhanced_Content_Plugin {
         if (is_admin()) {
             ECP_Admin_Menu::get_instance();
             ECP_Ajax::get_instance();
+            ECP_Editor_Assist::get_instance();
         }
     }
 
@@ -287,6 +289,19 @@ class Enhanced_Content_Plugin {
         // Vault, where every page (and the owner) can see them.
         if (version_compare($installed, '2.11.0', '<')) {
             ECP_Vault::migrate_meta();
+        }
+
+        // 2.19.0 introduces the page-title refresh change type; saved
+        // settings predate it, so absence is not a choice anyone made.
+        if (version_compare($installed, '2.19.0', '<')) {
+            $saved = get_option('ecp_agent_settings', array());
+
+            if (is_array($saved) && isset($saved['enabled_change_types']) && is_array($saved['enabled_change_types'])
+                && !in_array('post_title', $saved['enabled_change_types'], true)
+            ) {
+                $saved['enabled_change_types'][] = 'post_title';
+                update_option('ecp_agent_settings', $saved);
+            }
         }
 
         update_option('ecp_db_version', ECP_DB::SCHEMA_VERSION, false);

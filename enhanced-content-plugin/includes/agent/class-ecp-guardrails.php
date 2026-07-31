@@ -65,6 +65,10 @@ class ECP_Guardrails {
                 $result = self::check_meta($post, $type, $content, $signals);
                 break;
 
+            case 'title':
+                $result = self::check_post_title($post, $content);
+                break;
+
             case 'section':
                 $result = self::check_section($post, $type, $target, $content);
                 break;
@@ -176,6 +180,34 @@ class ECP_Guardrails {
     /* --------------------------------------------------------------------
      * Per-type validators
      * ----------------------------------------------------------------- */
+
+    /**
+     * The visible page title. The one field where the URL matters more
+     * than the words: the slug is locked at apply time, so a title
+     * refresh can never break a single inbound link.
+     */
+    private static function check_post_title($post, $content) {
+        $content = trim(wp_strip_all_tags($content));
+        $length = mb_strlen($content);
+
+        if ($length < 15 || $length > 120) {
+            return new WP_Error('ecp_post_title_length', sprintf(
+                /* translators: %d: character count */
+                __('The proposed page title is %d characters; it needs to be between 15 and 120.', 'enhanced-content-plugin'),
+                $length
+            ));
+        }
+
+        if ($content === $post->post_title) {
+            return new WP_Error('ecp_post_title_same', __('The proposed page title is identical to the current one.', 'enhanced-content-plugin'));
+        }
+
+        return array(
+            'before'  => $post->post_title,
+            'after'   => $content,
+            'payload' => array('field' => 'post_title'),
+        );
+    }
 
     private static function check_meta($post, $type, $content, array $signals) {
         $content = trim(wp_strip_all_tags($content));

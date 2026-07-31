@@ -895,6 +895,7 @@ class ECP_Analyzer {
         $out[] = '';
         $out[] = 'Per change type, the "target" field must be:';
         $out[] = '- meta_title, meta_description, schema_fix: leave target empty.';
+        $out[] = '- post_title: leave target empty. "content" is the new visible page title (the headline readers see). Propose this ONLY when the current title contains an outdated year or a claim the content no longer supports, and only alongside content updates that make the new title honest. Keep the title\'s promise and keywords; the URL never changes.';
         $out[] = '- intro_rewrite, section_rewrite, heading_rewrite, freshness_update: the section_id you are replacing.';
         $out[] = '- section_trim: the section_id you are tightening. "content" is the complete replacement HTML with the same facts, steps, caveats and meaning in fewer words. Cut only filler, repetition, throat-clearing and detours. Never cut a fact, an example that carries information, or a warning. If nothing is safely cuttable, skip the issue instead.';
         $out[] = '- section_add: the section_id your new section should follow, or empty to append at the end.';

@@ -96,6 +96,10 @@ class ECP_Applier {
                 $result = self::apply_meta($post, $proposal);
                 break;
 
+            case 'title':
+                $result = self::apply_title($post, $proposal);
+                break;
+
             case 'section':
                 $result = self::apply_section($post, $proposal);
                 break;
@@ -200,6 +204,37 @@ class ECP_Applier {
     /* --------------------------------------------------------------------
      * Writers
      * ----------------------------------------------------------------- */
+
+    /**
+     * The visible page title. The slug is pinned explicitly on every
+     * write — a title refresh must never move the URL.
+     *
+     * @return array|WP_Error revert_data on success.
+     */
+    private static function apply_title($post, array $proposal) {
+        $new_title = trim(wp_strip_all_tags((string) $proposal['after_value']));
+
+        if ('' === $new_title) {
+            return new WP_Error('ecp_empty_title', __('The proposed page title is empty.', 'enhanced-content-plugin'));
+        }
+
+        $previous = $post->post_title;
+
+        $updated = wp_update_post(array(
+            'ID'         => $post->ID,
+            'post_title' => $new_title,
+            'post_name'  => $post->post_name,
+        ), true);
+
+        if (is_wp_error($updated)) {
+            return $updated;
+        }
+
+        return array(
+            'kind'  => 'title',
+            'value' => $previous,
+        );
+    }
 
     /**
      * @return array|WP_Error revert_data on success.
@@ -607,6 +642,18 @@ class ECP_Applier {
         self::snapshot($post);
 
         switch ($revert['kind']) {
+            case 'title':
+                $updated = wp_update_post(array(
+                    'ID'         => $post->ID,
+                    'post_title' => $revert['value'],
+                    'post_name'  => $post->post_name,   // The slug stays, both ways.
+                ), true);
+
+                if (is_wp_error($updated)) {
+                    return $updated;
+                }
+                break;
+
             case 'content':
                 $updated = wp_update_post(array(
                     'ID'           => $post->ID,

@@ -59,6 +59,12 @@ class ECP_Proposals {
                 'target' => 'meta',
                 'help'   => __('Rewrites the search-result snippet.', 'enhanced-content-plugin'),
             ),
+            'post_title' => array(
+                'label'  => __('Page title refresh', 'enhanced-content-plugin'),
+                'risk'   => self::RISK_MODERATE,
+                'target' => 'title',
+                'help'   => __('Updates the visible page title — the headline readers see — typically to refresh an outdated year once the content genuinely reflects it. The URL never changes.', 'enhanced-content-plugin'),
+            ),
             'image_alt' => array(
                 'label'  => __('Image alt text', 'enhanced-content-plugin'),
                 'risk'   => self::RISK_SAFE,

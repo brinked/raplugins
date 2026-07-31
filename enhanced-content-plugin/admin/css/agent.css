@@ -2172,3 +2172,20 @@ a.ecp-band-badge:hover {
 .ecp-settings .form-table input[type="checkbox"] {
 	vertical-align: middle;
 }
+
+/* Editor assist box ------------------------------------------------------ */
+
+.ecp-editor-assist .ecp-assist-issues {
+	margin: 0 0 10px;
+	padding-left: 16px;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #50575e;
+	list-style: disc;
+}
+
+.ecp-editor-assist .ecp-priority-status {
+	display: block;
+	margin-top: 6px;
+	font-size: 12px;
+}

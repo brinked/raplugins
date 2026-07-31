@@ -961,7 +961,7 @@ class ECP_Signals {
                     (int) $signals['title_year'],
                     $current_year
                 ),
-                array('meta_title'));
+                array('meta_title', 'post_title'));
         }
 
         if (!empty($signals['dated_excerpts'])) {
