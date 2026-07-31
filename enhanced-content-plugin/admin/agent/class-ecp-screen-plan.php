@@ -65,6 +65,7 @@ class ECP_Screen_Plan {
                     esc_html__('Campaign: %s', 'enhanced-content-plugin'),
                     esc_html($campaign['seed'])
                 );
+                ECP_Admin_Menu::help(__('The approved topics from this seed\'s map, sequenced into publishing waves: foundation first, supporting expertise second, commercial pages last. Each page needs a brief written, then your approval of that brief, then drafting - nothing skips a step, and nothing publishes itself.', 'enhanced-content-plugin'));
                 ?>
             </h2>
 
