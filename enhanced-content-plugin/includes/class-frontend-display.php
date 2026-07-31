@@ -88,7 +88,55 @@ class ECP_Frontend_Display {
 
             // Remove Astra's post meta actions
             $this->remove_astra_post_meta();
+
+            // Builder and block bylines never pass through the classic
+            // filters above. get_the_author_meta('display_name') powers
+            // Elementor's Post Info and most builder author widgets; the
+            // core post-author/post-date blocks power block themes and
+            // Site/Theme Builder templates. Both are removed server-side
+            // — the markup is never rendered, not hidden with CSS. The
+            // plugin's own byline reads get_userdata() directly, so it
+            // is untouched by any of this.
+            add_filter('get_the_author_display_name', array($this, 'return_empty_on_singular'), 999);
+            add_filter('render_block', array($this, 'blank_theme_author_blocks'), 999, 2);
         }
+    }
+
+    /**
+     * Empty on the front of an enabled single post, untouched anywhere
+     * else. Looser than return_empty_for_theme on purpose: builder
+     * widgets render outside the classic loop.
+     */
+    public function return_empty_on_singular($value) {
+        if (is_admin() || !is_singular(ECP_Settings::get_enabled_post_types())) {
+            return $value;
+        }
+
+        return '';
+    }
+
+    /**
+     * Server-side removal of the author/date blocks a block theme or
+     * builder template renders around the article.
+     */
+    public function blank_theme_author_blocks($content, $block) {
+        if (is_admin() || !is_singular(ECP_Settings::get_enabled_post_types())) {
+            return $content;
+        }
+
+        $byline_blocks = array(
+            'core/post-author',
+            'core/post-author-name',
+            'core/post-author-biography',
+            'core/post-date',
+            'core/avatar',
+        );
+
+        if (isset($block['blockName']) && in_array($block['blockName'], $byline_blocks, true)) {
+            return '';
+        }
+
+        return $content;
     }
 
     /**
