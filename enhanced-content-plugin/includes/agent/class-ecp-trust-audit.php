@@ -464,18 +464,44 @@ class ECP_Trust_Audit {
     private static function policy_checks() {
         $checks = array();
 
-        // Privacy: WordPress has a canonical setting for this one.
+        // Privacy: WordPress has a canonical setting for this one. The
+        // common failure is not a missing page — it is a setting still
+        // pointing at a page deleted in some long-ago redesign, while a
+        // perfectly good privacy page sits unselected. Say which one.
         $privacy_id = (int) get_option('wp_page_for_privacy_policy');
         $privacy_ok = $privacy_id && 'publish' === get_post_status($privacy_id);
+
+        $orphan_privacy = null;
+
+        if (!$privacy_ok) {
+            foreach (array('privacy-policy', 'privacy') as $slug) {
+                $page = get_page_by_path($slug);
+
+                if ($page && 'publish' === $page->post_status) {
+                    $orphan_privacy = $page;
+                    break;
+                }
+            }
+        }
+
+        if ($privacy_ok) {
+            $privacy_detail = __('Published and registered in WordPress\'s privacy setting.', 'enhanced-content-plugin');
+        } elseif ($orphan_privacy) {
+            $privacy_detail = sprintf(
+                /* translators: %s: page title */
+                __('A page named "%s" exists, but WordPress\'s privacy setting does not point at it — likely stale since an old privacy page was deleted. Open Settings → Privacy, pick it in the dropdown, and click "Use This Page".', 'enhanced-content-plugin'),
+                $orphan_privacy->post_title
+            );
+        } else {
+            $privacy_detail = __('Missing or unpublished. Legally required in most jurisdictions, and its absence is a machine-readable distrust signal.', 'enhanced-content-plugin');
+        }
 
         $checks[] = array(
             'id'        => 'privacy_page',
             'group'     => 'policies',
             'label'     => __('Privacy policy, published and set', 'enhanced-content-plugin'),
             'status'    => $privacy_ok ? self::PASS : self::FAIL,
-            'detail'    => $privacy_ok
-                ? __('Published and registered in WordPress\'s privacy setting.', 'enhanced-content-plugin')
-                : __('Missing or unpublished. Legally required in most jurisdictions, and its absence is a machine-readable distrust signal.', 'enhanced-content-plugin'),
+            'detail'    => $privacy_detail,
             'fix_label' => __('Privacy settings', 'enhanced-content-plugin'),
             'fix_url'   => admin_url('options-privacy.php'),
         );
