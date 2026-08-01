@@ -43,6 +43,36 @@ class ECP_Trust_Audit {
     const NA   = 'na';
 
     /**
+     * The cache must never outlive the facts: any change that could
+     * flip a check — the privacy setting, a page saved, a profile
+     * edited, a menu changed, the customizer (logo) saved — clears it
+     * on the spot. Fix something, see it fixed.
+     */
+    public static function init() {
+        $bust = array(__CLASS__, 'bust');
+
+        add_action('update_option_wp_page_for_privacy_policy', $bust);
+        add_action('save_post_page', $bust);
+        add_action('profile_update', $bust);
+        add_action('deleted_user', $bust);
+        add_action('wp_update_nav_menu', $bust);
+        add_action('customize_save_after', $bust);
+    }
+
+    public static function bust() {
+        delete_transient('ecp_trust_audit');
+    }
+
+    /**
+     * When the cached audit was produced, for the screen's honesty line.
+     *
+     * @return int Unix timestamp, 0 when never run.
+     */
+    public static function checked_at() {
+        return (int) get_option('ecp_trust_checked_at', 0);
+    }
+
+    /**
      * Run the full audit. Cached briefly — every check is cheap, but
      * the avatar probe touches the network once per author.
      *
@@ -66,6 +96,7 @@ class ECP_Trust_Audit {
         );
 
         set_transient('ecp_trust_audit', $checks, 15 * MINUTE_IN_SECONDS);
+        update_option('ecp_trust_checked_at', (int) current_time('timestamp'), false);
 
         return $checks;
     }

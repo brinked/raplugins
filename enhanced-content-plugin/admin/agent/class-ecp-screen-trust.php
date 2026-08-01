@@ -54,7 +54,20 @@ class ECP_Screen_Trust {
                 <a class="button" href="<?php echo esc_url(wp_nonce_url(add_query_arg('refresh', 1, admin_url('admin.php?page=ecp-trust')), 'ecp_trust_refresh')); ?>">
                     <?php esc_html_e('Re-check now', 'enhanced-content-plugin'); ?>
                 </a>
-                <span class="ecp-muted"><?php esc_html_e('Free — reads your site and your author profiles; no AI.', 'enhanced-content-plugin'); ?></span>
+                <span class="ecp-muted">
+                    <?php esc_html_e('Free — reads your site and your author profiles; no AI.', 'enhanced-content-plugin'); ?>
+                    <?php
+                    $checked = ECP_Trust_Audit::checked_at();
+
+                    if ($checked) {
+                        printf(
+                            /* translators: %s: human-readable time difference */
+                            esc_html__('Last checked %s ago; fixes you make elsewhere refresh this automatically.', 'enhanced-content-plugin'),
+                            esc_html(human_time_diff($checked, (int) current_time('timestamp')))
+                        );
+                    }
+                    ?>
+                </span>
             </p>
 
             <?php foreach ($groups as $group => $items) : ?>
